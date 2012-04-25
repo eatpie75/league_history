@@ -1,0 +1,10 @@
+$(document).ready(->
+	$('.item').each(->
+		item=items[$(this).data('item').slice(1)]
+		$(this).popover({
+			content:item.description
+			title:item.name
+			placement:'bottom'
+		})
+	)
+)
