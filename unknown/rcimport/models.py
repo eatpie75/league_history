@@ -1,9 +1,21 @@
 from django.db import models
-from datetime import datetime
+from datetime import datetime, timedelta
+import requests
 
 MAPS=((0, 'Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'))
 MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'))
 REGIONS=((0, 'NA'), (1, 'EUW'), (2, 'EUNE'))
+
+
+class GameManager(models.Manager):
+	def with_players(self, max=25, *args, **kwargs):
+		qs=self.get_query_set().filter(*args, **kwargs)[:max]
+		allplayers=Player.objects.filter(game__in=qs).select_related('summoner').only('summoner__summoner_name', 'summoner__account_id')
+		i=0
+		for q in qs:
+			setattr(qs[i], 'players', allplayers.filter(game=q))
+			i+=1
+		return qs
 
 
 class Game(models.Model):
@@ -16,9 +28,18 @@ class Game(models.Model):
 	purple_team=models.ForeignKey('Team', related_name='pteam', db_index=True)
 	blue_team_won=models.IntegerField()
 
+	def _time_display(self):
+		return datetime.fromtimestamp(self.time)
+
+	def _get_players(self):
+		return Player.objects.filter(game=self).select_related()
+
 	def __unicode__(self):
 		#return datetime.utcfromtimestamp(self.time).isoformat()
 		return unicode(self.game_id)
+	time_display=property(_time_display)
+	objects=GameManager()
+	#players=property(_get_players)
 
 	class Meta:
 		db_table=u'game'
@@ -79,7 +100,7 @@ class Player(models.Model):
 	get_items=property(_get_items)
 
 	def __unicode__(self):
-		return '{0} - {1}'.format(self.game.game_id, self.summoner.summoner_name)
+		return unicode(self.summoner.summoner_name)
 
 	class Meta:
 		db_table=u'player'
@@ -123,8 +144,20 @@ class Summoner(models.Model):
 	time_created=models.IntegerField()
 	time_updated=models.IntegerField()
 
+	def _update(self):
+		print "Updating {}".format(self.summoner_name)
+		requests.get('http://127.0.0.1/API/Update/NA/{}'.format(self.account_id))
+		return self
+
+	def _get_and_update(self):
+		last_updated=datetime.utcfromtimestamp(self.time_updated)
+		if last_updated<(datetime.utcnow()-timedelta(hours=4)):
+			self._update()
+		return self
+	get_and_update=property(_get_and_update)
+
 	def __unicode__(self):
-		return self.summoner_name
+		return unicode(self.summoner_name)
 
 	class Meta:
 		db_table=u'summoner'

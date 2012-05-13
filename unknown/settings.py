@@ -98,7 +98,7 @@ SECRET_KEY = 'z6oyhza0dob#eue&amp;*2*_nsx79_-xa#3-05sitokb(l-07^pvuc'
 TEMPLATE_LOADERS = (
 	'django.template.loaders.filesystem.Loader',
 	'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+#	'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -131,10 +131,12 @@ INSTALLED_APPS = (
 	'django.contrib.sites',
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
+	'django.contrib.humanize',
 	# Uncomment the next line to enable the admin:
 	'django.contrib.admin',
 	# Uncomment the next line to enable admin documentation:
 	'django.contrib.admindocs',
+	'south',
 	'unknown.main',
 	'unknown.rcimport',
 )
