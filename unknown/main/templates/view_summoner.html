@@ -18,7 +18,7 @@
 			<div class='sprite-profile-{{summoner.profile_icon}}'></div>
 			<table class='table table-bordered table-condensed'>
 				<thead>
-					<tr><th>Date</th><th>Champion</th><th>Mode</th><th>K/D/A</th><th>Gold</th><th>Items</th>
+					<tr><th>Date</th><th style='width:32px;'>Champion</th><th>Mode</th><th>K/D/A</th><th>Gold</th><th>Items</th>
 				</thead>{% for player in games %}
 					{% if player.team == player.game.blue_team and player.game.blue_team_won %}<tr class='good'>{% elif player.team == player.game.purple_team and not player.game.blue_team_won %}<tr class='good'>{% else %}<tr class='bad'>{% endif %}
 						<td><a href='{% url 'view_game' player.game.game_id %}'>{{player.game.time_display|date:'N d'}}</a></td>

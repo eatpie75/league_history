@@ -27,7 +27,8 @@ def game_list(request):
 def view_game(request, id):
 	game=IGame.objects.get(game_id=id)
 	meta_game=Game.objects.get_or_create(game_id=id)[0]
-	players=IPlayer.objects.filter(game=game).order_by('team').select_related()
+	#players=IPlayer.objects.filter(game=game).order_by('team').select_related()
+	players=IPlayer.objects.filter(Q(team=game.blue_team)|Q(team=game.purple_team)).order_by('team').select_related()
 	if len(players)<10 and datetime.fromtimestamp(game.time)>(datetime.utcnow()-timedelta(days=2)) and not meta_game.updated:
 		uplayers=IUnknownPlayer.objects.filter(Q(team=game.blue_team)|Q(team=game.purple_team))
 		arg=','.join(map(str, uplayers.values_list('summoner_id', flat=True)))
