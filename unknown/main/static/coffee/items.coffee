@@ -169,7 +169,7 @@ items=
 		description:"+225 Health<br>+18 Attack Damage<br>UNIQUE Passive: Your basic attacks have a 25% chance to slow your target's Movement Speed by 30% for 2.5 seconds."
 	3046:
 		name:"Phantom Dancer"
-		description:"+55% Attack Speed<br>+30% Critical Strike Chance<br>+15% Movement Speed"
+		description:"+55% Attack Speed<br>+30% Critical Strike Chance<br>+12% Movement Speed"
 	3047:
 		name:"Ninja Tabi"
 		description:"+25 Armor<br>UNIQUE Passive: Reduces the damage taken from non-turret basic attacks by 10%.<br>UNIQUE Passive: Enhanced Movement 2 (does not stack with other Boots)."
@@ -217,7 +217,7 @@ items=
 		description:"+920 Health<br>+30 Health Regen per 5 seconds<br>Passive: Gain +3.5 health and +0.1 health regeneration per minion kill. Champion kills and assists grant +35 health and +1 health regeneration. Bonuses cap at +350 health and +10 health regeneration."
 	3086:
 		name:"Zeal"
-		description:"+20% Attack Speed<br>+10% Critical Strike Chance<br>+8% Movement Speed"
+		description:"+20% Attack Speed<br>+10% Critical Strike Chance<br>+6% Movement Speed"
 	3089:
 		name:"Rabadon's Deathcap"
 		description:"+140 Ability Power<br>UNIQUE Passive: Increases Ability Power by 30%."
@@ -256,7 +256,7 @@ items=
 		description:"+15 Attack Damage<br>+23 Armor<br>UNIQUE Passive: Your basic attacks against minions and monsters have a 20% chance to deal 300 bonus magic damage."
 	3108:
 		name:"Fiendish Codex"
-		description:"+30 Ability Power<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: +10% Cooldown Reduction"
+		description:"+30 Ability Power<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: +10% Cooldown Reduction."
 	3109:
 		name:"Force of Nature"
 		description:"+76 Magic Resist<br>+40 Health Regen per 5 seconds<br>+8% Movement Speed<br>UNIQUE Passive: Restores 0.35% of your maximum Health every second."
@@ -265,7 +265,7 @@ items=
 		description:"+99 Armor<br>+500 Mana<br>UNIQUE Passive: +20% Cooldown Reduction.<br>UNIQUE Aura: Reduces the Attack Speed of nearby enemies by 20%."
 	3111:
 		name:"Mercury's Treads"
-		description:"+25 Magic Resist<br>UNIQUE Passive: Enhanced Movement 2 (does not stack with other Boots)  UNIQUE Passive: +35 Tenacity (Tenacity reduces the duration of stuns, slows, taunts, fears, silences, blinds and immobilizes. Does not stack with other Tenacity items.)"
+		description:"+25 Magic Resist<br>UNIQUE Passive: Enhanced Movement 2 (does not stack with other Boots).<br>UNIQUE Passive: +35 Tenacity (Tenacity reduces the duration of stuns, slows, taunts, fears, silences, blinds and immobilizes. Does not stack with other Tenacity items)."
 	3114:
 		name:"Malady"
 		description:"+25 Ability Power<br>+50% Attack Speed<br>UNIQUE Passive: Your basic attacks deal 20 bonus magic damage and reduce the target's Magic Resist by 6 for 8 seconds (effect stacks up to 4 times)."
@@ -298,7 +298,7 @@ items=
 		description:"+250 Health<br>UNIQUE Passive: Gain an additional 5 Gold every 10 seconds."
 	3134:
 		name:"The Brutalizer"
-		description:"+25 Attack Damage<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +15 Armor Penetration"
+		description:"+25 Attack Damage<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +15 Armor Penetration."
 	3135:
 		name:"Void Staff"
 		description:"+70 Ability Power<br>UNIQUE Passive: +40% Magic Penetration."
@@ -359,6 +359,9 @@ items=
 	3173:
 		name:"Eleisa's Miracle"
 		description:"+25 Health Regen per 5 seconds<br>+20 Mana Regen per 5 seconds<br>UNIQUE Passive: +35 Tenacity (Tenacity reduces the duration of stuns, slows, taunts, fears, silences, blinds and immobilizes. Does not stack with other Tenacity items.)"
+	3174:
+		name:"Athene's Unholy Grail"
+		description:"+80 Ability Power<br>+36 Magic Resist<br>+15 Mana Regen per 5 seconds<br>UNIQUE Passive: 15% Cooldown Reduction.<br>UNIQUE Passive: Restores 12% of your max mana on kill or assist.<br>UNIQUE Passive: Increases your Mana Regeneration by 1% per 1% Mana you are missing."
 	3178:
 		name:"Ionic Spark"
 		description:"+50% Attack Speed<br>+250 Health<br>UNIQUE Passive: Every fourth basic attack unleashes a chain lightning, dealing 110 magic damage to up to 4 targets."

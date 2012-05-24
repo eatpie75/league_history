@@ -123,6 +123,7 @@ class LolClient extends EventEmitter
       else
         console.log 'Connect Process Completed' if @options.debug
         @emit 'connection'
+        @rtmp.ev.on('throttled', =>@emit('throttled'))
   
   getSummonerByName: (name, cb) =>
     console.log "Finding player by name: #{name}" if @options.debug

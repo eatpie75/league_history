@@ -1,34 +1,44 @@
 colors		= require('colors')
 events		= require('events')
 qs			= require('querystring')
-lol_client	= require('./lol-client')
+util		= require('util')
+uuid		= require('node-uuid')
 models		= require('./lib/models')
 
 _log=(text)->
-		d=new Date()
-		time="#{d.getFullYear()}/#{d.getMonth()+1}/#{d.getDate()} #{d.getHours()}:#{d.getMinutes()}".white
-		time=(time+'                          ').slice(0,26)
-		console.log(time+" | "+text)
+		process.send({event:'log', server:"#{options.region}:#{options.username}", text:text})
+# _log=(text)->
+# 	d=new Date()
+# 	time="#{d.getFullYear()}/#{d.getMonth()+1}/#{d.getDate()} #{d.getHours()}:#{if d.getMinutes()< 10 then '0'+d.getMinutes() else d.getMinutes()}:#{if d.getSeconds()< 10 then '0'+d.getSeconds() else d.getSeconds()}".white
+# 	time=(time+'                             ').slice(0,29)
+# 	console.log(time+" | "+text)
 has_key=(obj, key)->obj.hasOwnProperty(key)
+sleep=(ms)->
+	d=startTime=new Date().getTime()
+	while d<startTime+ms
+		d=new Date().getTime()
+	return true
 
 class GetNames
 	constructor:(query, local_client, ev, request, response)->
+		@uuid=uuid.v4()
 		@client=local_client
 		@ev=ev
 		@request=request
 		@response=response
 		@summoners=qs.parse(query)['ids'].split(',').map(Number)
 	go:=>
-		names=new models.PlayerNames({client:@client})
-		names.on('finished', (result)=>
-			data=status:200, body:result
+		@client.on('message', @get)
+		@client.send({event:'get', model:'PlayerNames', query:{summoners:@summoners}, uuid:@uuid})
+	get:(msg)=>
+		if msg.event=="#{@uuid}__finished"
+			data=status:200, body:msg.data
 			@ev.emit('finished', data, @request, @response)
-		)
-		names.get(@summoners)
-		return false
+			@client.removeListener('message', @get)
 
 class MassUpdate
 	constructor:(query, local_client, ev, request, response)->
+		@uuid=[uuid.v4(), uuid.v4(), uuid.v4()]
 		@client=local_client
 		@ev=ev
 		@request=request
@@ -45,38 +55,52 @@ class MassUpdate
 			@queue=@queue.concat(({'name':name} for name in @query['names'].split(',')))
 		if @query['games']? then @games=1 else @games=0
 		@ev.on('next', @_next)
+		@client.on('message', @get)
 	go:=>
 		@ev.emit('next')
+	get:(msg)=>
+		if msg.event=="#{@uuid[0]}__finished"
+			summoner=msg.data
+			if not has_key(@data.body.accounts, summoner.account_id)
+				@data.body.accounts[summoner.account_id]={}
+			@data.body.accounts[summoner.account_id].profile=summoner
+			@client.send({event:'get', model:'PlayerStats', query:{account_id:summoner.account_id}, uuid:@uuid[1]})
+			if @games
+				@running_queries+=1
+				@client.send({event:'get', model:'RecentGames', query:{account_id:summoner.account_id}, uuid:@uuid[2]})
+		else if msg.event=="#{@uuid[1]}__finished"
+			@data.body.accounts[msg.extra.account_id].stats=msg.data
+			@running_queries-=1
+			@ev.emit('next')
+		else if msg.event=="#{@uuid[2]}__finished"
+			@running_queries-=1
+			@data.body.accounts[msg.extra.account_id].games=msg.data
+			@ev.emit('next')
+		else if msg.event=='throttled'
+			@throttled()
 	_next:=>
 		if @running_queries<5 and @queue.length>0
 			@running_queries+=1
 			key=@queue.shift()
-			summoner=new models.Summoner({client:@client})
-			playerstats=new models.PlayerStats({client:@client})
-			summoner.on('finished', (result)=>
-				if not has_key(@data.body.accounts, summoner.account_id)
-					@data.body.accounts[summoner.account_id]={}
-				@data.body.accounts[summoner.account_id].profile=result
-				playerstats.get(summoner.account_id)
-				if @games
-					games=new models.RecentGames({client:@client})
-					@running_queries+=1
-					games.on('finished', (result)=>
-						@data.body.accounts[games.account_id].games=result
-						@running_queries-=1
-						@ev.emit('next')
-					)
-					games.get(summoner.account_id)
-			)
-			playerstats.on('finished', (result)=>
-				@data.body.accounts[summoner.account_id].stats=result
-				@running_queries-=1
-				@ev.emit('next')
-			)
-			summoner.get(key)
+			console.log(key)
+			try
+				@client.send({event:'get', model:'Summoner', query:key, uuid:@uuid[0]})
+			catch error
+				console.log(error)
+				# console.log(@client)
 		else if @running_queries==0 and @queue.length==0
 			@ev.emit('finished', @data, @request, @response)
-			@ev.removeAllListeners('fetched').removeAllListeners('next')
+			@ev.removeAllListeners('fetched').removeListener('next', @_next)
+			#console.log(util.inspect(@client.listeners('message')))
+			@client.removeListener('message', @get)
+			#console.log(util.inspect(@client.listeners('message')))
+	throttled:=>
+		@client.removeListener('message', @get)
+		@response.writeHead(500)
+		@response.end()
+		#console.log(@)
+		#sleep(2500)
+
 
 class RecentGames
 	constructor:(query, local_client, ev, request, response)->
@@ -120,10 +144,28 @@ class GetSummonerData
 		)
 		summoner_data.get(@key)
 
+class Search
+	constructor:(query, local_client, ev, request, response)->
+		@uuid=uuid.v4()
+		@client=local_client
+		@ev=ev
+		@request=request
+		@response=response
+		@name=qs.parse(query)['name']
+	go:=>
+		@client.on('message', @get)
+		@client.send({event:'get', model:'Search', query:{name:@name}, uuid:@uuid})
+	get:(msg)=>
+		if msg.event=="#{@uuid}__finished"
+			data=status:200, body:msg.data
+			@ev.emit('finished', data, @request, @response)
+			@client.removeListener('message', @get)
+
 views=
 	'/get_names/'		: GetNames
 	'/mass_update/'		: MassUpdate
 	'/recent_games/'	: RecentGames
 	'/get_data/'		: GetSummonerData
+	'/search/'			: Search
 
 module.exports=views

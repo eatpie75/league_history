@@ -49,5 +49,21 @@ class TellMeMore
 		@bind_toggle(el)
 
 $(document).ready(->
-	window.tell_me_more=new TellMeMore
+	window.tell_me_more=new TellMeMore()
+	# $('.interlude.win').hover(
+	# 	(e)->
+	# 		$('.player.win').addClass('highlight')
+	# 		$('.interlude.lose').addClass('top')
+	# 	, (e)->
+	# 		$('.player.win').removeClass('highlight')
+	# 		$('.interlude.lose').removeClass('top')
+	# )
+	# $('.interlude.lose').hover(
+	# 	(e)->
+	# 		$('.player.lose').addClass('highlight')
+	# 		#$('.interlude.lose').addClass('top')
+	# 	, (e)->
+	# 		$('.player.lose').removeClass('highlight')
+	# 		$('.interlude.lose').removeClass('top')
+	# )
 )
