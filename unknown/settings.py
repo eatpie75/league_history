@@ -1,8 +1,6 @@
 # Django settings for unknown project.
 import os.path
-import djcelery
-#from datetime import timedelta
-djcelery.setup_loader()
+
 PROJECT_DIR=os.path.dirname(__file__)
 
 DEBUG = False
@@ -16,13 +14,20 @@ MANAGERS = ADMINS
 
 DATABASES = {
 	'default': {
-		'ENGINE': 'django.db.backends.sqlite3', 	# Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-		'NAME': os.path.join(PROJECT_DIR, 'db.sqlite'),		# Or path to database file if using sqlite3.
-		'USER': '',								# Not used with sqlite3.
-		'PASSWORD': '',							# Not used with sqlite3.
-		'HOST': '',								# Set to empty string for localhost. Not used with sqlite3.
-		'PORT': '',								# Set to empty string for default. Not used with sqlite3.
-	},
+		'ENGINE':	'django.db.backends.postgresql_psycopg2',
+		'HOST':		'localhost',
+		'NAME':		'lol',
+		'USER':		'django',
+		'PASSWORD':	'ohsocool'
+	}
+	# 'default': {
+	# 	'ENGINE': 'django.db.backends.sqlite3', 	# Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+	# 	'NAME': os.path.join(PROJECT_DIR, 'db.sqlite'),		# Or path to database file if using sqlite3.
+	# 	'USER': '',								# Not used with sqlite3.
+	# 	'PASSWORD': '',							# Not used with sqlite3.
+	# 	'HOST': '',								# Set to empty string for localhost. Not used with sqlite3.
+	# 	'PORT': '',								# Set to empty string for default. Not used with sqlite3.
+	# },
 	# 'rcimport': {
 	# 	'ENGINE': 'django.db.backends.sqlite3', 	# Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
 	# 	'NAME': os.path.join('D:\\', 'Downloads', 's', 'RiotControl', 'RiotControl.sqlite'),		# Or path to database file if using sqlite3.
@@ -146,7 +151,7 @@ INSTALLED_APPS = (
 	# Uncomment the next line to enable admin documentation:
 	'django.contrib.admindocs',
 	'south',
-	'unknown.main',
+	# 'unknown.main',
 	# 'unknown.rcimport',
 	'unknown.lol',
 )

@@ -191,9 +191,11 @@ def get_names(query, region='NA'):
 
 def update_summoners(all_summoners, games=True, runes=False):
 	for region in xrange(0,3):
+		# if region==1:
+		# 	continue
 		summoners=all_summoners.filter(region=region)
 		if len(summoners)==0:
-			return False
+			continue
 		elif len(summoners)>5:
 			print 'running autoupdate for:{}'.format(', '.join(summoners.values_list('name', flat=True)))
 			queue=map(unicode, summoners.values_list('account_id', flat=True))
@@ -212,6 +214,8 @@ def update_summoners(all_summoners, games=True, runes=False):
 			res=get_data('mass_update', query, summoners[0].get_region_display())['accounts']
 		for account, data in res.iteritems():
 			summoner=Summoner.objects.get(account_id=int(account))
+			if summoner.internal_name!=data['profile']['internal_name']:
+				summoner.internal_name=data['profile']['internal_name']
 			if summoner.name!=data['profile']['name']:
 				summoner.name=data['profile']['name']
 			if summoner.level!=data['profile']['level']:
@@ -442,8 +446,9 @@ def fill_game(game, auto=False):
 			else:
 				parse_games(data['games'], summoner)
 			tmp=game.unfetched_players.split(',')
-			tmp.remove(str(summoner.summoner_id))
-			game.unfetched_players=','.join(tmp)
+			if str(summoner.summoner_id) in tmp:
+				tmp.remove(str(summoner.summoner_id))
+				game.unfetched_players=','.join(tmp)
 			summoner.time_updated=datetime.utcnow().replace(tzinfo=timezone('UTC'))
 			summoner.save()
 		game.fetched=True

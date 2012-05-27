@@ -62,20 +62,19 @@
 				</ul>
 			</div>
 			<div class='row span12'>
-				<table class='game_list table table-condensed'>
+				<table class='game-list table table-condensed'>
 					<thead>
-						<tr><!--616!-->
-							<th style='width:32px;'></th>
-							<th style='width:15px;'></th>
-							<th style='width:75px;'>Summoner</th>
-							<th style='width:40px'>K/D/A</th>
-							<th style='width:40px'>Gold</th>
-							<th style='width:40px'>CS</th>
-							<th style='width:40px'>Dealt</th>
-							<th style='width:40px'>Taken</th>
-							<th style='width:75px;'>Spells</th>
+						<tr><!--612!-->
+							<th style='width:40px;'></th>
+							<th style='width:100px;'>Summoner</th>
+							<th style='width:50px'>K/D/A</th>
+							<th style='width:50px'>Gold</th>
+							<th style='width:50px'>CS</th>
+							<th style='width:50px'>Dealt</th>
+							<th style='width:50px'>Taken</th>
+							<th style='width:85px;'>Spells</th>
 							<th style='width:215px;'>Items</th>
-							<th style='width:4px;'></th>
+							<th style='width:150px;'></th>
 						</tr>
 					</thead>{% comment %}{% for player in players %}
 					<tr class='team_{% if player.blue_team %}blue{% else %}purple{% endif %}'>
@@ -94,9 +93,8 @@
 					</tr>{% endfor %}{% endcomment %}
 					{% regroup players by blue_team as teams %}{% for team in teams %}
 					{% if forloop.counter0 == 0 %}<tr class='interlude win'><td colspan=11>WINNING TEAM</td></tr>{% else %}<tr class='interlude lose'><td colspan=11>LOSING TEAM</td></tr>{% endif %}{% for player in team.list %}
-					<tr class='player {% if player.blue_team %}team_blue win{% else %}team_purple lose{% endif %}'>
-						<td><div class='sprite sprite-champions-small-{{player.champion_id}}'></div></td>
-						<td>{{player.champion_level}}</td>
+					<tr class='player {% if player.blue_team %}team_blue {% else %}team_purple {% endif %}{% if player.won %}won{% else %}lose{% endif %}'>
+						<td class='champion'><div class='sprite sprite-champions-small-{{player.champion_id}}'></div><small>{{player.champion_level}}</small></td>
 						<td><a href='{% url "view_summoner" player.summoner.get_region_display player.summoner.account_id player.summoner.name|slugify %}'>{{player.summoner.name}}</a></td>
 						<td>{{player.kills}}/{{player.deaths}}/{{player.assists}}</td>
 						<td>{{player.gold|to_k_format}}</td>

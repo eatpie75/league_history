@@ -14,18 +14,11 @@ zlib			= require('zlib')
 views			= require('./views')
 
 ev=new events.EventEmitter()
-options=nopt(
-	{
-		username:String
-		password:String
-		region:['na', 'euw', 'eune']
-		port:Number
-		version:String
-	},
-	{},
-	process.argv
-)
-total_requests=0
+options={}
+status=
+	total_requests:0
+	reconnects:0
+
 _log=(text)->
 		process.send({event:'log', server:"#{options.region}:#{options.username}", text:text})
 # _log=(text)->
@@ -45,7 +38,7 @@ class RequestHandler
 	request:(request, response)=>
 		path=url.parse(request.url)
 		if path.pathname in Object.keys(@views)
-			total_requests+=1
+			status.total_requests+=1
 			if @connections==0
 				@connections+=1
 				view=new @views[path.pathname](path.query, @client, ev, request, response)
@@ -119,10 +112,11 @@ _log("Preparing to connect".grey)
 
 #console.log(options)
 client={}
+heartbeat_interval=0
 initial=1
 h={}
 start_client=->
-	client=child_process.fork('client.js', options.argv.cooked)
+	client=child_process.fork('client.js')
 	client.on('message', (msg)->
 		#console.log(msg)
 		if msg.event=='connected' and initial==1
@@ -130,8 +124,8 @@ start_client=->
 			_log("Connected".green)
 			h=new RequestHandler(views, client)
 			server=http.createServer(h.request)
-			server.listen(options.port||8081)
-			setInterval(->
+			server.listen(options.listen_port||8081)
+			heartbeat_interval=setInterval(->
 				client.send({event:'keepalive'})
 			, 600000)
 		else if msg.event=='connected' and initial==0
@@ -142,6 +136,7 @@ start_client=->
 		else if msg.event=='throttled'
 			_log("THROTTLED".red)
 	).on('exit', (code, signal)->
+		clearInterval(heartbeat_interval)
 		if code in [3, 5]
 			console.log(code, signal)
 			console.log(h.current)
@@ -151,8 +146,16 @@ start_client=->
 		else
 			console.log(code, signal)
 	)
+	client.send({event:'connect', options:options})
 client_restart=->
 	client.removeAllListeners()
 	start_client()
+	status.reconnects+=1
 
-start_client()
+process.on('message', (msg)->
+	if msg.event=='connect'
+		options=msg.options
+		start_client()
+	else if msg.event=='status'
+		process.send({event:'status', data:{connections:h.connections, total_requests:status.total_requests, reconnects:status.reconnects}, server:"#{options.region}:#{options.username}"})
+)

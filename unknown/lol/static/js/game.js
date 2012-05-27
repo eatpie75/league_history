@@ -35,7 +35,7 @@
       });
     };
 
-    TellMeMore.prototype.info_template = _.template("<tr><td colspan=6 style='position:relative;'>			<div class='span4'>				<div style='border-bottom:1px solid #ddd;' class='span2'>					Minion Kills:				</div>				<div style='border-bottom:1px solid #ddd;' class='span2 pull-right'>					<%= minion_kills %>				</div>			</div>		</td></tr>");
+    TellMeMore.prototype.info_template = _.template("<td colspan=11>			<div class='span4'>				<b>Physical/Magical Damage</b><br>				<div class='hori-bar purple' title='Magical Damage'><div class='red' title='Physical Damage' style='width:<% print((physical_damage_dealt/damage_dealt)*100) %>%;'></div></div>			</div>		</td>");
 
     TellMeMore.prototype.get_info = function(player) {
       var _ref,
@@ -55,15 +55,26 @@
     };
 
     TellMeMore.prototype.expand = function(el) {
-      var extra, info, player;
+      var extra, info, player,
+        _this = this;
       player = el.data('player');
       info = this.get_info(player);
-      extra = $(this.info_template(info)).insertAfter(el.closest('tr'));
+      extra = $("<tr class='drop-stats'></tr>").insertAfter(el.closest('tr'));
+      extra.css('height');
+      extra.css('height', '100px');
+      setTimeout(function() {
+        return extra.html(_this.info_template(info));
+      }, 210);
       return this.bind_toggle(el, extra, 0);
     };
 
     TellMeMore.prototype.collapse = function(el, extra) {
-      extra.remove();
+      var _this = this;
+      extra.html('');
+      extra.css('height', '0px');
+      setTimeout(function() {
+        return extra.remove();
+      }, 500);
       return this.bind_toggle(el);
     };
 

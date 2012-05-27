@@ -200,8 +200,7 @@
             uuid: this.uuid[0]
           });
         } catch (error) {
-          console.log(error);
-          return console.log(this.client);
+          return console.log(error);
         }
       } else if (this.running_queries === 0 && this.queue.length === 0) {
         this.ev.emit('finished', this.data, this.request, this.response);

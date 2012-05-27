@@ -6,6 +6,14 @@
 	-moz-box-shadow: @shadow1, @shadow2;
 	box-shadow: @shadow1, @shadow2;
 }
+.width-minmax(@min, @max) {
+	min-width:@min;
+	max-width:@max;
+}
+.height-minmax(@min, @max) {
+	min-height:@min;
+	max-height:@max;
+}
 
 @good:	#46A546;
 @bad:	#9D261D;
@@ -25,14 +33,30 @@
 	background-color:fade(@bad, 25%);
 }
 
-.game_list {
+.game-list {
+	table-layout:fixed;
+	width:940px;
 	.highlight {
 		.box-shadow2(1px 0, -1px 0);
+	}
+	small {
+		font-size:xx-small;
 	}
 	th {
 		text-align:center;
 	}
-	tr {
+	tbody > tr {
+		&.player {
+			.height-minmax(37px, 37px);
+			height:37px;
+		}
+		&.drop-stats {
+			height:0px;
+			.transition(height .3s ease);
+			&:hover {
+				.box-shadow(none);
+			}
+		}
 		td {
 			border:none;
 			vertical-align:middle;
@@ -42,6 +66,16 @@
 				position:relative;
 				top:2px;
 			}
+			&.champion {
+				.box-sizing(border-box);
+				// max-width:5px;
+				text-align:left;
+				vertical-align:bottom;
+			}
+			// b {
+			// 	border-bottom:1px dashed #000;
+			// 	font-weight:normal;
+			// }
 		}
 	}
 	tbody > tr:hover {
@@ -98,22 +132,52 @@
 	.purple {
 		#gradient > .horizontal(@purple, darken(@purple, 10%));
 	}
+	&.red		{#gradient > .horizontal(@bad, darken(@bad, 10%));}
+	&.green		{#gradient > .horizontal(@good, darken(@good, 10%));}
+	&.yellow	{#gradient > .horizontal(yellow, darken(yellow, 10%));}
+	&.blue		{#gradient > .horizontal(@blue, darken(@blue, 10%));}
+	&.purple	{#gradient > .horizontal(@purple, darken(@purple, 10%));}
 }
-.vert-bar.red {
-	#gradient > .horizontal(@bad, darken(@bad, 10%));
+
+.hori-bar {
+	color:#FFF;
+	font-size:12px;
+	text-align:center;
+	line-height:12px;
+	display:inline-block;
+	.ie7-inline-block();
+	overflow: hidden;
+	height:12px;
+	width:120px;
+	#gradient > .vertical(@good, darken(@good, 10%));
+	& > div {
+		.box-sizing(border-box);
+		.transition(width .6s ease);
+		height:12px;
+		width:0%;
+	}
+	.red {
+		#gradient > .vertical(@bad, darken(@bad, 10%));
+	}
+	.green {
+		#gradient > .vertical(@good, darken(@good, 10%));
+	}
+	.yellow {
+		#gradient > .vertical(yellow, darken(yellow, 10%));
+	}
+	.blue {
+		#gradient > .vertical(@blue, darken(@blue, 10%));
+	}
+	.purple {
+		#gradient > .vertical(@purple, darken(@purple, 10%));
+	}
+	&.red		{#gradient > .vertical(@bad, darken(@bad, 10%));}
+	&.green		{#gradient > .vertical(@good, darken(@good, 10%));}
+	&.yellow	{#gradient > .vertical(yellow, darken(yellow, 10%));}
+	&.blue		{#gradient > .vertical(@blue, darken(@blue, 10%));}
+	&.purple	{#gradient > .vertical(@purple, darken(@purple, 10%));}
 }
-.vert-bar.green {
-	#gradient > .horizontal(@good, darken(@good, 10%));
-}
-.vert-bar.yellow {
-	#gradient > .horizontal(yellow, darken(yellow, 10%));
-}
-.vert-bar.blue {
-	#gradient > .horizontal(@blue, darken(@blue, 10%));
-}
-.vert-bar.purple {
-	#gradient > .horizontal(@purple, darken(@purple, 10%));
-}
+
 
 .summoner-header {
 	background-color:#1c5c88;

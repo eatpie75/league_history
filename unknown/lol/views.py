@@ -130,6 +130,13 @@ def view_summoner_specific_champion(request, region, acctid, slug, champion, cha
 
 
 def run_auto(request):
-	summoners=Summoner.objects.filter(update_automatically=True, time_updated__lt=(datetime.utcnow().replace(tzinfo=timezone('UTC'))-timedelta(hours=3)))
+	if 'force' in request.GET:
+		summoners=Summoner.objects.filter(update_automatically=True)
+	else:
+		summoners=Summoner.objects.filter(update_automatically=True, time_updated__lt=(datetime.utcnow().replace(tzinfo=timezone('UTC'))-timedelta(hours=3)))
 	update_summoners(summoners)
+	if 'fill' in request.GET:
+		games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.utcnow().replace(tzinfo=timezone('UTC'))-timedelta(days=2)))
+		for player in games:
+			fill_game(player.game)
 	return render_to_response('run_auto.html', {'summoners':summoners}, RequestContext(request))
