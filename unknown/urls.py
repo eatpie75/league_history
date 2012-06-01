@@ -4,7 +4,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns=patterns('unknown.lol.views',
+urlpatterns=patterns('lol.views',
 	url(r'^game/(NA|EUW|EUNE)/(\d{1,12})/$', 'view_game', name='view_game'),
 	url(r'^game/$', 'game_list', name='game_list'),
 	url(r'^summoner/(NA|EUW|EUNE)/(\d{1,12})/([-\w]*?)/games/', 'view_summoner_games', name='view_summoner_games'),
@@ -22,7 +22,7 @@ urlpatterns=patterns('unknown.lol.views',
 	# Uncomment the next line to enable the admin:
 	url(r'^admin/', include(admin.site.urls)),
 )
-urlpatterns+=patterns('unknown.lol.ajax',
+urlpatterns+=patterns('lol.ajax',
 	url(r'^ajax/player_info/(\d{1,12})/$', 'player_info', name='ajax_player_info'),
 	url(r'^ajax/summoner_games/(\d{1,12})/$', 'summoner_games', name='ajax_summoner_games'),
 )

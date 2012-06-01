@@ -161,7 +161,7 @@ INSTALLED_APPS = (
 	'south',
 	# 'unknown.main',
 	# 'unknown.rcimport',
-	'unknown.lol',
+	'lol',
 )
 
 
