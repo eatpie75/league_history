@@ -135,6 +135,8 @@ start_client=->
 			#h.next()
 		else if msg.event=='throttled'
 			_log("THROTTLED".red)
+		else if msg.event=='log'
+			_log(msg.text)
 	).on('exit', (code, signal)->
 		clearInterval(heartbeat_interval)
 		if code in [3, 5]

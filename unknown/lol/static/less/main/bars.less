@@ -1,0 +1,74 @@
+.vert-bar {
+	display:inline-block;
+	.ie7-inline-block();
+	.box-shadow(0px 0px 2px);
+	overflow: hidden;
+	height:120px;
+	width:12px;
+	#gradient > .horizontal(@good, darken(@good, 10%));
+	& > div {
+		.box-sizing(border-box);
+		.transition(height .6s ease);
+		height:0%;
+		width:12px;
+	}
+	.red {
+		#gradient > .horizontal(@bad, darken(@bad, 10%));
+	}
+	.green {
+		#gradient > .horizontal(@good, darken(@good, 10%));
+	}
+	.yellow {
+		#gradient > .horizontal(yellow, darken(yellow, 10%));
+	}
+	.blue {
+		#gradient > .horizontal(@blue, darken(@blue, 10%));
+	}
+	.purple {
+		#gradient > .horizontal(@purple, darken(@purple, 10%));
+	}
+	&.red		{#gradient > .horizontal(@bad, darken(@bad, 10%));}
+	&.green		{#gradient > .horizontal(@good, darken(@good, 10%));}
+	&.yellow	{#gradient > .horizontal(yellow, darken(yellow, 10%));}
+	&.blue		{#gradient > .horizontal(@blue, darken(@blue, 10%));}
+	&.purple	{#gradient > .horizontal(@purple, darken(@purple, 10%));}
+}
+
+.hori-bar {
+	color:#FFF;
+	font-size:12px;
+	text-align:center;
+	line-height:12px;
+	display:inline-block;
+	.ie7-inline-block();
+	overflow: hidden;
+	height:12px;
+	width:120px;
+	#gradient > .vertical(@good, darken(@good, 10%));
+	& > div {
+		.box-sizing(border-box);
+		.transition(width .6s ease);
+		height:12px;
+		width:0%;
+	}
+	.red {
+		#gradient > .vertical(@bad, darken(@bad, 10%));
+	}
+	.green {
+		#gradient > .vertical(@good, darken(@good, 10%));
+	}
+	.yellow {
+		#gradient > .vertical(yellow, darken(yellow, 10%));
+	}
+	.blue {
+		#gradient > .vertical(@blue, darken(@blue, 10%));
+	}
+	.purple {
+		#gradient > .vertical(@purple, darken(@purple, 10%));
+	}
+	&.red		{#gradient > .vertical(@bad, darken(@bad, 10%));}
+	&.green		{#gradient > .vertical(@good, darken(@good, 10%));}
+	&.yellow	{#gradient > .vertical(yellow, darken(yellow, 10%));}
+	&.blue		{#gradient > .vertical(@blue, darken(@blue, 10%));}
+	&.purple	{#gradient > .vertical(@purple, darken(@purple, 10%));}
+}

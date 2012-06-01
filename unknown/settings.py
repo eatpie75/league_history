@@ -39,6 +39,14 @@ DATABASES = {
 }
 # DATABASE_ROUTERS=['unknown.rcimport.router.RCImport',]
 
+# CACHES = {
+# 	'default': {
+# 		'BACKEND':	'django.core.cache.backends.locmem.LocMemCache',
+# 		'LOCATION':	'wat',
+# 		'TIMEOUT':500,
+# 	}
+# }
+
 LOL_CLIENT_SERVERS={
 	'NA':['http://127.0.0.1:8081','http://127.0.0.1:8082'],
 	'EUW':['http://127.0.0.1:8083',],

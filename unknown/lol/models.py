@@ -15,7 +15,7 @@ class Summoner(models.Model):
 	region=models.IntegerField(choices=REGIONS, default=0)
 	account_id=models.IntegerField(db_index=True)
 	summoner_id=models.IntegerField()
-	name=models.CharField(max_length=64, db_index=True)
+	name=models.CharField(max_length=64)
 	internal_name=models.CharField(max_length=64)
 	level=models.IntegerField()
 	profile_icon=models.IntegerField()

@@ -405,7 +405,7 @@ items=
 window.items=items
 
 $(document).ready(->
-	window.wat=(tip, el)->
+	wat=(tip, el)->
 		el=$(el)
 		tip=$(tip)
 		offset=el.position()

@@ -1,0 +1,67 @@
+<!DOCTYPE html>{% load url from future %}{% load humanize %}{% load get_percent to_k_format get_key %}
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>index</title>
+		<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="{{STATIC_URL}}css/bootstrap.css" rel="stylesheet" type="text/css">
+		{# <link href="{{STATIC_URL}}css/main.css" rel="stylesheet" type="text/css"> #}
+		<link href="{{STATIC_URL}}less/main.less" rel="stylesheet/less" type="text/css">
+		<script src="{{STATIC_URL}}js/less.js" type="text/javascript"></script>
+		<link href="{{STATIC_URL}}css/sprites.css" rel="stylesheet" type="text/css">
+		<script src="{{STATIC_URL}}js/jquery.js" type="text/javascript"></script>
+		<script src="{{STATIC_URL}}js/bootstrap.js" type="text/javascript"></script>
+		<script src="{{STATIC_URL}}js/items.js" type="text/javascript"></script>
+		<script src="{{STATIC_URL}}js/player.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div class='container'>
+			<div class='summoner-header row span12'>
+				<span class='info-block pull-right'>
+					<div>
+						<h1>{{count}}</h1>
+						<small>GAMES</small>
+					</div>
+				</span>
+				<div class='name-block'>
+					<h1>ALL CHAMPIONS</h1>
+				</div>
+				<div class='bottom-right'>
+					<form method='get' id='stat-filter' class='form-inline'>{{form.game_map}} {{form.game_mode}}</form>
+				</div>
+			</div>
+			<div class='row span12' id='games'>
+				<table class='table table-condensed table-sorted' style='table-layout:fixed;'>
+					<thead>
+						<tr>
+							<th style='width:95px;' class='table-sort active' data-column='name'><span>CHAMPION<i class='icon-arrow-down'></i></span></th>
+							<th style='width:68px;' class='table-sort' data-column='total'><span>PLAYED<i></i></span></th>
+							<th style='width:70px;' class='table-sort' data-column='won'><span>WON<i></i></span></th>
+							<th style='width:50px;' class='table-sort' data-column='lost'><span>LOST<i></i></span></th>
+							<th style='width:55px;' class='table-sort' data-column='percent'><span>WIN %<i></i></span></th>
+							<th style='width:90px;' class='table-sort' data-column='avg_kills'><span>AVG KILLS<i></i></span></th>
+							<th style='width:142px;' class='table-sort' data-column='avg_deaths'><span>AVG DEATHS<i></i></span></th>
+							<th style='width:95px;' class='table-sort' data-column='avg_cs'><span>AVG CS<i></i></span></th>
+							<th class='table-sort' data-column='avg_gold'><span>AVG GOLD<i></i></span></th>
+						</tr>
+					</thead>
+					<tbody class='cbody'>{% for champ in stats.by_name %}
+						<tr class='sort'>
+							<td class='name'><a href="{% url 'view_champion' champ.0 champions|get_key:champ.0|slugify %}">{{champions|get_key:champ.0}}</a></td>
+							<td class='total'>{{champ.1.count}}</td>
+							<td class='won'>{{champ.1.won}}</td>
+							<td class='lost'>{{champ.1.lost}}</td>
+							<td class='percent'>{{champ.1.won|get_percent:champ.1.count}}</td>
+							<td class='avg_kills'>{{champ.1.avg_kills}}</td>
+							<td class='avg_deaths'>{{champ.1.avg_deaths}}</td>
+							<td class='avg_cs'>{{champ.1.avg_cs}}</td>
+							<td class='avg_gold'>{{champ.1.avg_gold}}</td>
+						</tr>
+					{% endfor %}</tbody>
+				</table>
+			</div>
+		</div>
+	</body>
+</html>

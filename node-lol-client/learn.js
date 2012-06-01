@@ -199,6 +199,8 @@
         return h.connections = 0;
       } else if (msg.event === 'throttled') {
         return _log("THROTTLED".red);
+      } else if (msg.event === 'log') {
+        return _log(msg.text);
       }
     }).on('exit', function(code, signal) {
       clearInterval(heartbeat_interval);

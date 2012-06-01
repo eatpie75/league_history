@@ -544,7 +544,8 @@
   window.items = items;
 
   $(document).ready(function() {
-    window.wat = function(tip, el) {
+    var wat;
+    wat = function(tip, el) {
       var offset, scroll;
       el = $(el);
       tip = $(tip);

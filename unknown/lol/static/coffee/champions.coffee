@@ -96,3 +96,4 @@ champions=
 	115:"Ziggs"
 	117:"Lulu"
 	120:"Hecarim"
+	122:"Darius"

@@ -17,7 +17,6 @@
   _log = function(text) {
     return process.send({
       event: 'log',
-      server: "" + options.region + ":" + options.username,
       text: text
     });
   };

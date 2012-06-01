@@ -6,7 +6,7 @@ models			= require('./lib/models')
 nopt			= require('nopt')
 
 _log=(text)->
-		process.send({event:'log', server:"#{options.region}:#{options.username}", text:text})
+		process.send({event:'log', text:text})
 
 options={}
 client={}

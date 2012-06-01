@@ -23,7 +23,7 @@
 	</head>
 	<body>
 		<div class='container'>
-			<div class='game-header row span12'>
+			<div class='summoner-header row span12'>
 				<!--<div class='pull-left sprite sprite-profile-{{summoner.profile_icon}}'></div>!-->
 				<div class='info-block pull-right'>
 					<!--<div>
@@ -98,7 +98,7 @@
 						<td><a href='{% url "view_summoner" player.summoner.get_region_display player.summoner.account_id player.summoner.name|slugify %}'>{{player.summoner.name}}</a></td>
 						<td>{{player.kills}}/{{player.deaths}}/{{player.assists}}</td>
 						<td>{{player.gold|to_k_format}}</td>
-						<td>{{player.minion_kills}}</td>
+						<td>{{player.minion_kills|add:player.neutral_minions_killed}}</td>
 						<td>{{player.damage_dealt|to_k_format}}</td>
 						<td>{{player.damage_taken|to_k_format}}</td>
 						<td><div class='sprite sprite-summoner-small-{{player.summoner_spell1}}' style='margin-right:4px;'></div><div class='sprite sprite-summoner-small-{{player.summoner_spell2}}'></div></td>
