@@ -418,12 +418,14 @@ $(document).ready(->
 			return 'top'
 		else
 			return 'bottom'
-	$('.item').each(->
-		item=items[$(this).data('item').slice(1)]
-		$(this).popover({
-			content:item.description
-			title:item.name
-			placement:wat
-		})
-	)
+	window.connect_items=->
+		$('.item').each(->
+			item=items[$(this).data('item').slice(1)]
+			$(this).popover({
+				content:item.description
+				title:item.name
+				placement:wat
+			})
+		)
+	window.connect_items()
 )

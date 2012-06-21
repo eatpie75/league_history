@@ -10,29 +10,19 @@
     region: 'na',
     username: 'thosebananas',
     password: 'penis2',
-    version: '1.59.12_04_30_11_00'
+    version: '1.60.12_05_22_19_12'
   };
 
   summoner = {
-    name: 'The Cat Shark'
+    name: 'eatpie75'
   };
 
   client = new LolClient(options);
 
   a = [];
 
-  client.on('connection', function() {
-    return client.getSummonerName([115259], function(err, result) {
-      console.log('#######################');
-      console.log(err);
-      console.log('#######################');
-      console.log(result.object);
-      a = result;
-      console.log('#######################');
-      return null;
-    });
-  });
-
   client.connect();
+
+  module.exports = client;
 
 }).call(this);

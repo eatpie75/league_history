@@ -1,7 +1,8 @@
 #from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+# from django.shortcuts import render_to_response
+from coffin.shortcuts import render_to_response
 from django.utils import simplejson
 from models import Player, Summoner
 
@@ -22,4 +23,4 @@ def summoner_games(request, summoner):
 		games=paginator.page(1)
 	except EmptyPage:
 		games=paginator.page(paginator.num_pages)
-	return render_to_response('ajax/summoner_games.html', {'summoner':summoner, 'games':games}, mimetype='text/html')
+	return render_to_response('ajax/summoner_games.html.j2', {'summoner':summoner, 'games':games}, mimetype='text/html')

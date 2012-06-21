@@ -35,6 +35,8 @@ class LolClient extends EventEmitter
     @options.version = @options.version || '1.55.12_02_27_22_54'
     @options.debug = @options.debug || false
 
+    @keep_alive_counter=0
+
     console.log @options if @options.debug
 
   connect: (cb) ->
@@ -51,7 +53,7 @@ class LolClient extends EventEmitter
 
   checkLoginQueue: (cb) ->
     console.log 'Checking Login Queue' if @options.debug
-    loginQueue @options.lqHost, @options.username, @options.password, (err, response) =>
+    new loginQueue @options.lqHost, @options.username, @options.password, (err, response) =>
       if err
         console.log 'Login Queue Failed' if @options.debug
         console.log err if err and @options.debug
@@ -62,6 +64,7 @@ class LolClient extends EventEmitter
         else
           console.log 'Login Queue Response', response if @options.debug
           @options.queueToken = response.token
+          @options.queue_ip=response.ip_address if response.ip_address?
           cb(null, @options.queueToken)
 
   sslConnect: (cb) ->
@@ -123,7 +126,7 @@ class LolClient extends EventEmitter
       else
         console.log 'Connect Process Completed' if @options.debug
         @emit 'connection'
-        @rtmp.ev.on('throttled', =>@emit('throttled'))
+        # @rtmp.ev.on('throttled', =>@emit('throttled'))
   
   getSummonerByName: (name, cb) =>
     console.log "Finding player by name: #{name}" if @options.debug
@@ -193,11 +196,31 @@ class LolClient extends EventEmitter
       return cb(err, null) unless result?.args?[0]?.body?
       return cb(err, result.args[0].body)
 
+  getSpectatorInfo: (name, cb) =>
+    console.log "Finding spectator info by summonerId: #{name}" if @options.debug
+    getSpectatorInfoPacket = lolPackets.GetSpectatorInfoPacket
+    cmd = new RTMPCommand(0x11, null, null, null, [new getSpectatorInfoPacket(@options).generate(name)])
+    @rtmp.send cmd, (err, result) =>
+      return cb(err.args[0].error) if err?.args?[0]?.error?
+      return cb(err) if err
+      return cb(err, null) unless result?.args?[0]?.body?
+      return cb(err, result.args[0].body)
+
+  getMasteryBook: (summoner_id, cb) =>
+    console.log "Finding masteries by summonerId: #{summoner_id}" if @options.debug
+    getMasteryBookPacket = lolPackets.GetMasteryBookPacket
+    cmd = new RTMPCommand(0x11, null, null, null, [new getMasteryBookPacket(@options).generate(summoner_id)])
+    @rtmp.send cmd, (err, result) =>
+      return cb(err) if err
+      return cb(err, null) unless result?.args?[0]?.body?
+      return cb(err, result.args[0].body)
+
   keepAlive: (cb) =>
     console.log "Sending Heartbeat" if @options.debug
     HeartbeatPacket = lolPackets.HeartbeatPacket
-    cmd = new RTMPCommand(0x11, null, null, null, [new HeartbeatPacket(@options).generate()])
+    cmd = new RTMPCommand(0x11, null, null, null, [new HeartbeatPacket(@options).generate(@keep_alive_counter)])
     @rtmp.send cmd, (err, result) =>
+      @keep_alive_counter+=1
       return cb(err) if err
       return cb(err, null) unless result?.args?[0]?.body?
       return cb(err, result.args[0].body)

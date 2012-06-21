@@ -1,13 +1,13 @@
 from datetime import datetime, timedelta
-from django.conf import settings
+from django.core.cache import cache
 from django.db import models, transaction
 from pytz import timezone
 from time import sleep
-import random
 import requests
 
-MAPS=((0, 'Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, '?'))
-MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, '?'))
+MAPS=((0, 'Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (9, '?'))
+MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (9, '?'))
+GAME_TYPES={'RankedPremade5x5':(4,1), 'RankedTeam5x5':(5,1), 'RankedPremade3x3':(4,0), 'RankedTeam3x3':(5,0), 'Unranked':(2,1), 'OdinUnranked':(2,2), 'RankedSolo5x5':(3,1), 'CoopVsAi':(1,1)}
 REGIONS=((0, 'NA'), (1, 'EUW'), (2, 'EUNE'))
 
 
@@ -20,7 +20,6 @@ class Summoner(models.Model):
 	level=models.IntegerField()
 	profile_icon=models.IntegerField()
 	runes=models.TextField(default='', blank=True)
-	has_been_updated=models.BooleanField(default=0)
 	update_automatically=models.BooleanField(db_index=True, default=False)
 	fully_update=models.BooleanField(default=False)
 	time_created=models.DateTimeField(auto_now_add=True)
@@ -73,10 +72,9 @@ class Game(models.Model):
 	game_mode=models.IntegerField(choices=MODES, db_index=True)
 	time=models.DateTimeField()
 	blue_team_won=models.BooleanField()
-	players=models.ManyToManyField('Player', related_name='game_players')
+	# players=models.ManyToManyField('Player', related_name='game_players')
 	unfetched_players=models.CharField(max_length=128, blank=True)
 	fetched=models.BooleanField(default=False)
-	# updating=models.BooleanField(default=False)
 
 	def __unicode__(self):
 		return unicode(self.time.isoformat())
@@ -148,56 +146,53 @@ class Player(models.Model):
 		ordering=['game',]
 
 
-def choose_server(region):
-	choices=settings.LOL_CLIENT_SERVERS[region]
-	return random.choice(choices)
+def choose_server(region, exclude=None):
+	servers=cache.get('servers')
+	return servers.choose_server(region)
+
+
+def check_server(server, region):
+	try:
+		res=requests.get('{}/{}/'.format(server, 'status'), config={'encode_uri':False}, timeout=20.0)
+		if res.json['connected']==True:
+			return server
+		else:
+			print 'switching servers'
+			return choose_server(region, [server,])
+	except requests.exceptions.Timeout:
+		print 'switching servers'
+		return choose_server(region, [server,])
 
 
 def get_data(url, query, region='NA'):
 	server=choose_server(region)
+	servers=cache.get('servers')
 	try:
 		res=requests.get('{}/{}/'.format(server, url), params=query, config={'encode_uri':False}, timeout=20.0)
 	except requests.exceptions.Timeout:
 		print 'got timeout with:{}'.format(query)
 		sleep(5)
 		print 'retrying'
+		server=servers.check_servers([{'location':server, 'region':region},])
 		res=requests.get('{}/{}/'.format(server, url), params=query, config={'encode_uri':False}, timeout=20.0)
 	if res.status_code==500:
 		print 'got 500 error with:{}'.format(query)
 		sleep(5)
 		print 'retrying'
+		server=servers.check_servers([{'location':server, 'region':region},])
 		res=requests.get('{}/{}/'.format(server, url), params=query, config={'encode_uri':False}, timeout=20.0)
-	#print res.text
-	return res.json
-
-
-def get_names(query, region='NA'):
-	server=choose_server(region)
-	try:
-		res=requests.get('{}/get_names/'.format(server), params=query, config={'encode_uri':False}, timeout=20.0)
-	except requests.exceptions.Timeout:
-		print 'got timeout with:{}'.format(query)
-		sleep(5)
-		print 'retrying'
-		res=requests.get('{}/get_names/'.format(server), params=query, config={'encode_uri':False}, timeout=20.0)
-	if res.status_code==500:
-		print 'got 500 error with:{}'.format(query)
-		sleep(5)
-		print 'retrying'
-		res=requests.get('{}/get_names/'.format(server), params=query, config={'encode_uri':False}, timeout=20.0)
 	#print res.text
 	return res.json
 
 
 def update_summoners(all_summoners, games=True, runes=False):
 	for region in xrange(0,3):
-		# if region==1:
-		# 	continue
+		# if region==1: continue
 		summoners=all_summoners.filter(region=region)
 		if len(summoners)==0:
 			continue
 		elif len(summoners)>5:
-			print 'running autoupdate for:{}'.format(', '.join(summoners.values_list('name', flat=True)))
+			print u'running autoupdate for:{}'.format(', '.join(summoners.values_list('name', flat=True)))
 			queue=map(unicode, summoners.values_list('account_id', flat=True))
 			tmp={}
 			while len(queue)>0:
@@ -209,19 +204,12 @@ def update_summoners(all_summoners, games=True, runes=False):
 				sleep(2)
 			res=tmp
 		else:
-			print 'running autoupdate for:{}'.format(', '.join(summoners.values_list('name', flat=True)))
+			print u'running autoupdate for:{}'.format(u', '.join(summoners.values_list('name', flat=True)))
 			query={'accounts':u','.join(map(unicode, summoners.values_list('account_id', flat=True))), 'games':1}
 			res=get_data('mass_update', query, summoners[0].get_region_display())['accounts']
 		for account, data in res.iteritems():
-			summoner=Summoner.objects.get(account_id=int(account))
-			if summoner.internal_name!=data['profile']['internal_name']:
-				summoner.internal_name=data['profile']['internal_name']
-			if summoner.name!=data['profile']['name']:
-				summoner.name=data['profile']['name']
-			if summoner.level!=data['profile']['level']:
-				summoner.level=data['profile']['level']
-			if summoner.profile_icon!=data['profile']['profile_icon']:
-				summoner.profile_icon=data['profile']['profile_icon']
+			summoner=Summoner.objects.get(account_id=int(account), region=region)
+			summoner=parse_summoner(data['profile'], summoner)
 			parse_ratings(data['stats'], summoner)
 			if summoner.fully_update:
 				parse_games(data['games'], summoner, True)
@@ -229,7 +217,9 @@ def update_summoners(all_summoners, games=True, runes=False):
 				parse_games(data['games'], summoner)
 			summoner.time_updated=datetime.utcnow().replace(tzinfo=timezone('UTC'))
 			summoner.save()
-	return True
+			cache.delete('{}/{}/updating'.format(summoner.region, summoner.account_id))
+			transaction.commit()
+	return all_summoners
 
 
 @transaction.commit_on_success
@@ -237,11 +227,13 @@ def parse_games(games, summoner, full=False, current=None):
 	for ogame in games:
 		try:
 			game=Game.objects.get(game_id=ogame['id'], region=summoner.region)
+			if game.fetched:
+				continue
 			tmp=game.unfetched_players.split(',')
 			if str(summoner.summoner_id) in tmp:
 				tmp.remove(str(summoner.summoner_id))
 				game.unfetched_players=','.join(tmp)
-				game.save()
+				game.save(force_update=True)
 		except Game.DoesNotExist:
 			date=datetime.strptime(ogame['date'], '%Y-%m-%dT%H:%M:%S.%fZ')
 			date=date.replace(tzinfo=timezone('UTC'))
@@ -252,14 +244,18 @@ def parse_games(games, summoner, full=False, current=None):
 			)
 			if ogame['game_type']=='PRACTICE_GAME':
 				game.game_mode=0
-			elif ogame['queue_type'] in ('RANKED_TEAM_3x3', 'RANKED_TEAM_5x5', 'RANKED_PREMADE_3x3', 'RANKED_PREMADE_5x5'):
+			elif ogame['queue_type'] in ('RANKED_PREMADE_3x3', 'RANKED_PREMADE_5x5'):
 				game.game_mode=4
+			elif ogame['queue_type'] in ('RANKED_TEAM_3x3', 'RANKED_TEAM_5x5'):
+				game.game_mode=5
 			elif ogame['queue_type'] in ('NORMAL', 'ODIN_UNRANKED'):
 				game.game_mode=2
 			elif ogame['queue_type']=='RANKED_SOLO_5x5':
 				game.game_mode=3
 			elif ogame['queue_type']=='BOT':
 				game.game_mode=1
+			elif ogame['queue_type']=='NONE' and ogame['game_type']=='CUSTOM_GAME':
+				game.game_mode=0
 			elif ogame['game_type']=='TUTORIAL_GAME':
 				continue
 			else:
@@ -281,17 +277,16 @@ def parse_games(games, summoner, full=False, current=None):
 			if str(summoner.summoner_id) in tmp:
 				tmp.remove(str(summoner.summoner_id))
 				game.unfetched_players=','.join(tmp)
-			game.save()
-		if not Player.objects.filter(game=game, summoner=summoner):
+			game.save(force_insert=True)
+		if not Player.objects.filter(game=game, summoner=summoner).exists():
 			try:
-				sr=SummonerRating.objects.get(summoner=summoner, game_map=game.game_map, game_mode=game.game_mode)
+				sr=SummonerRating.objects.get(summoner=summoner, game_map=game.game_map, game_mode=game.game_mode).current_rating
 			except SummonerRating.DoesNotExist:
-				sr=SummonerRating(summoner=summoner, game_map=game.game_map, game_mode=game.game_mode, wins=0, losses=0, leaves=0, current_rating=0, top_rating=0)
-				sr.save()
+				sr=0
 			player=Player(
 				game=game,
 				summoner=summoner,
-				rating=sr.current_rating,
+				rating=sr,
 				afk=ogame['afk'],
 				leaver=ogame['leaver'],
 				ping=ogame['ping'],
@@ -340,20 +335,21 @@ def parse_games(games, summoner, full=False, current=None):
 			for n in xrange(0, 6):
 				items+='{}|'.format(ogame['stats']['item{}'.format(n)])
 			player.items=items
-			player.save()
+			player.save(force_insert=True)
 		else:
 			player=Player.objects.get(game=game, summoner=summoner)
-		if player not in game.players.all():
-			game.players.add(player)
-			game.save()
+		# if player not in game.players.all():
+		# 	game.players.add(player)
+		# 	game.save(force_update=True)
 		if not game.fetched and game.time>(datetime.utcnow().replace(tzinfo=timezone('UTC'))-timedelta(days=2)) and full and game!=current:
-			print 'Fully updating game:{}'.format(game.game_id)
-			print 'For summoner:{}'.format(summoner.name)
+			print u'Fully updating game:{}'.format(game.game_id)
+			print u'For summoner:{}'.format(summoner.name)
 			fill_game(game, True)
+	transaction.commit()
 
 
 @transaction.commit_on_success
-def parse_summoner(summoner, region=0):
+def create_summoner(summoner, region=0):
 	tmp=Summoner(
 		region=region,
 		account_id=summoner['account_id'],
@@ -363,62 +359,76 @@ def parse_summoner(summoner, region=0):
 		level=summoner['level'],
 		profile_icon=summoner['profile_icon'],
 	)
-	tmp.save()
+	tmp.save(force_insert=True)
+	ratings=[]
+	for game_type, values in GAME_TYPES.iteritems():
+		ratings.append(
+			SummonerRating(
+				summoner=tmp,
+				game_mode=values[0],
+				game_map=values[1],
+				wins=0,
+				losses=0,
+				leaves=0,
+				current_rating=0,
+				top_rating=0
+			)
+		)
+	SummonerRating.objects.bulk_create(ratings)
 	return tmp
 
 
-# MAPS=((0, 'Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'))
-# MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'))
+def parse_summoner(data, summoner):
+	if summoner.internal_name!=data['internal_name']:
+		summoner.internal_name=data['internal_name']
+	if summoner.name!=data['name']:
+		summoner.name=data['name']
+	if summoner.level!=data['level']:
+		summoner.level=data['level']
+	if summoner.profile_icon!=data['profile_icon']:
+		summoner.profile_icon=data['profile_icon']
+	return summoner
+
+# def fix():
+# 	for s in Summoner.objects.all():
+# 		GAME_TYPES={'RankedPremade5x5':(4,1), 'RankedTeam5x5':(5,1), 'RankedPremade3x3':(4,0), 'RankedTeam3x3':(5,0), 'Unranked':(2,1), 'OdinUnranked':(2,2), 'RankedSolo5x5':(3,1), 'CoopVsAi':(1,1)}
+# 		for game_type, values in GAME_TYPES.iteritems():
+# 			if not SummonerRating.objects.filter(summoner=s, game_mode=values[0], game_map=values[1]).exists():
+# 				SummonerRating(
+# 				summoner=s,
+# 				game_map=values[1],
+# 				game_mode=values[0],
+# 				wins=0,
+# 				losses=0,
+# 				leaves=0,
+# 				current_rating=0,
+# 				top_rating=0
+# 			).save()
+
+
 @transaction.commit_on_success
 def parse_ratings(ratings, summoner):
-	tmp=SummonerRating.objects.filter(summoner=summoner).select_related()
-	for rating in ratings:
-		game_type=rating['game_type'].lower()
-		game_map=3
-		game_mode=5
-		if game_type in ('rankedteam5x5', 'rankedpremade5x5'):
-			game_mode=4
-			game_map=1
-		elif  game_type in  ('rankedteam3x3', 'rankedpremade3x3'):
-			game_mode=4
-			game_map=0
-		elif game_type in ('unranked', 'odinunranked'):
-			game_mode=2
-			game_map=2
-		elif game_type=='rankedsolo5x5':
-			game_mode=3
-			game_map=1
-		elif game_type=='coopvsai':
-			game_mode=1
-			game_map=1
-		try:
-			rating_model=tmp.get(summoner=summoner, game_mode=game_mode, game_map=game_map)
-			rating_model.wins=rating['wins']
-			rating_model.losses=rating['losses']
-			rating_model.current_rating=rating['rating']
-			rating_model.top_rating=rating['rating_max']
-		except SummonerRating.DoesNotExist:
-			rating_model=SummonerRating(
-				summoner=summoner,
-				game_map=game_map,
-				game_mode=game_mode,
-				wins=rating['wins'],
-				losses=rating['losses'],
-				leaves=rating['leaves'],
-				current_rating=rating['rating'],
-				top_rating=rating['rating_max']
-			)
-		rating_model.save()
+	# MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (9, '?'))
+	# MAPS=((0, 'Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (9, '?'))
+	for rating in SummonerRating.objects.filter(summoner=summoner):
+		for r in ratings:
+			if r['game_type'] in GAME_TYPES:
+				game_mode, game_map=GAME_TYPES[r['game_type']]
+			else:
+				game_mode, game_map=(9, 9)
+			if game_mode==rating.game_mode and game_map==rating.game_map:
+				if rating.wins!=int(r['wins']) or rating.losses!=int(r['losses']) or rating.current_rating!=int(r['rating']) or rating.top_rating!=int(r['rating_max']):
+					rating.wins=r['wins']
+					rating.losses=r['losses']
+					rating.current_rating=r['rating']
+					rating.top_rating=r['rating_max']
+					rating.save(force_update=True)
 
 
 @transaction.commit_on_success
 def fill_game(game, auto=False):
 	if not game.fetched and game.unfetched_players!='':
-		# unf=map(int, game.unfetched_players.split(','))
-		# for sid in unf:
-		# 	for pl in Player.objects.filter(game=game, summoner__summoner_id=sid).select_related('summoner').only('summoner__summoner_id'):
-		# 		unf.remove(pl.summoner_id)
-		names=get_names({'ids':game.unfetched_players}, game.get_region_display())
+		names=get_data('get_names', {'ids':game.unfetched_players}, game.get_region_display())
 		accounts=map(unicode, names)
 		if len(accounts)>5:
 			queue=accounts
@@ -437,9 +447,10 @@ def fill_game(game, auto=False):
 		for account, data in res.iteritems():
 			try:
 				summoner=Summoner.objects.get(account_id=data['profile']['account_id'], region=game.region)
+				summoner=parse_summoner(data['profile'], summoner)
 				parse_ratings(data['stats'], summoner)
 			except Summoner.DoesNotExist:
-				summoner=parse_summoner(data['profile'], game.region)
+				summoner=create_summoner(data['profile'], game.region)
 				parse_ratings(data['stats'], summoner)
 			if summoner.fully_update and not auto:
 				parse_games(data['games'], summoner, True, game)
@@ -450,11 +461,11 @@ def fill_game(game, auto=False):
 				tmp.remove(str(summoner.summoner_id))
 				game.unfetched_players=','.join(tmp)
 			summoner.time_updated=datetime.utcnow().replace(tzinfo=timezone('UTC'))
-			summoner.save()
+			summoner.save(force_update=True)
 		game.fetched=True
-		game.save()
+		game.save(force_update=True)
 	elif not game.fetched and game.unfetched_players=='':
 		print 'game was already full'
 		game.fetched=True
-		game.save()
+		game.save(force_update=True)
 	return True

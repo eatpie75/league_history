@@ -5,13 +5,13 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns=patterns('lol.views',
-	url(r'^game/(NA|EUW|EUNE)/(\d{1,12})/$', 'view_game', name='view_game'),
+	url(r'^game/(?P<region>NA|EUW|EUNE)/(?P<game_id>\d{1,12})/$', 'view_game', name='view_game'),
 	url(r'^game/$', 'game_list', name='game_list'),
-	url(r'^summoner/(NA|EUW|EUNE)/(\d{1,12})/([-\w]*?)/games/', 'view_summoner_games', name='view_summoner_games'),
-	url(r'^summoner/(NA|EUW|EUNE)/(\d{1,12})/([-\w]*?)/champions/(\d{1,12})/([-\w])*/', 'view_summoner_specific_champion', name='view_summoner_specific_champion'),
-	url(r'^summoner/(NA|EUW|EUNE)/(\d{1,12})/([-\w]*?)/champions/', 'view_summoner_champions', name='view_summoner_champions'),
-	url(r'^summoner/(NA|EUW|EUNE)/(\d{1,12})/([-\w]*?)/', 'view_summoner', name='view_summoner'),
-	url(r'^champions/(\d{1,12})/([-\w]*?)/', 'view_champion', name='view_champion'),
+	url(r'^summoner/(?P<region>NA|EUW|EUNE)/(?P<account_id>\d{1,12})/(?P<slug>[-\w]*?)/games/', 'view_summoner_games', name='view_summoner_games'),
+	url(r'^summoner/(?P<region>NA|EUW|EUNE)/(?P<account_id>\d{1,12})/(?P<slug>[-\w]*?)/champions/(?P<champion_id>\d{1,12})/(?P<champion_slug>[-\w])*/', 'view_summoner_specific_champion', name='view_summoner_specific_champion'),
+	url(r'^summoner/(?P<region>NA|EUW|EUNE)/(?P<account_id>\d{1,12})/(?P<slug>[-\w]*?)/champions/', 'view_summoner_champions', name='view_summoner_champions'),
+	url(r'^summoner/(?P<region>NA|EUW|EUNE)/(?P<account_id>\d{1,12})/(?P<slug>[-\w]*?)/', 'view_summoner', name='view_summoner'),
+	url(r'^champions/(?P<champion_id>\d{1,12})/(?P<champion_slug>[-\w]*?)/', 'view_champion', name='view_champion'),
 	url(r'^champions/', 'view_all_champions', name='view_all_champions'),
 	url(r'^search/([-\w\s]*)/', 'search', name='search'),
 	url(r'^run_auto/$', 'run_auto'),
@@ -26,3 +26,4 @@ urlpatterns+=patterns('lol.ajax',
 	url(r'^ajax/player_info/(\d{1,12})/$', 'player_info', name='ajax_player_info'),
 	url(r'^ajax/summoner_games/(\d{1,12})/$', 'summoner_games', name='ajax_summoner_games'),
 )
+urlpatterns+=patterns('', url(r'^redis/status/', include('redis_cache.stats.urls', namespace='redis_cache')))

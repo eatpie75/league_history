@@ -1,5 +1,9 @@
 # Django settings for unknown project.
 import os.path
+import djcelery
+from datetime import timedelta
+
+djcelery.setup_loader()
 
 PROJECT_DIR=os.path.dirname(__file__)
 
@@ -20,36 +24,50 @@ DATABASES = {
 		'USER':		'django',
 		'PASSWORD':	'ohsocool'
 	}
-	# 'default': {
-	# 	'ENGINE': 'django.db.backends.sqlite3', 	# Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-	# 	'NAME': os.path.join(PROJECT_DIR, 'db.sqlite'),		# Or path to database file if using sqlite3.
-	# 	'USER': '',								# Not used with sqlite3.
-	# 	'PASSWORD': '',							# Not used with sqlite3.
-	# 	'HOST': '',								# Set to empty string for localhost. Not used with sqlite3.
-	# 	'PORT': '',								# Set to empty string for default. Not used with sqlite3.
+}
+
+CACHES = {
+	'default': {
+		'BACKEND':	'redis_cache.cache.RedisCache',
+		'LOCATION':	'127.0.0.1:6379',
+		'TIMEOUT':500,
+	}
+}
+
+BROKER_URL="redis://localhost:6379/1"
+CELERY_RESULT_BACKEND="redis"
+CELERY_REDIS_HOST="localhost"
+CELERY_REDIS_PORT=6379
+CELERY_REDIS_DB=2
+CELERYD_CONCURRENCY=1
+CELERY_TASK_RESULT_EXPIRES=timedelta(minutes=30)
+CELERYBEAT_SCHEDULE = {
+	# "auto_update": {
+	# 	"task": "lol.tasks.auto_update",
+	# 	"schedule": timedelta(minutes=30),
 	# },
-	# 'rcimport': {
-	# 	'ENGINE': 'django.db.backends.sqlite3', 	# Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-	# 	'NAME': os.path.join('D:\\', 'Downloads', 's', 'RiotControl', 'RiotControl.sqlite'),		# Or path to database file if using sqlite3.
-	# 	'USER': '',								# Not used with sqlite3.
-	# 	'PASSWORD': '',							# Not used with sqlite3.
-	# 	'HOST': '',								# Set to empty string for localhost. Not used with sqlite3.
-	# 	'PORT': '',								# Set to empty string for default. Not used with sqlite3.
+	"check_all_servers": {
+		"task": "lol.tasks.check_servers",
+		"schedule": timedelta(minutes=2),
+	},
+	# "check_down_servers": {
+	# 	"task": "lol.tasks.check_servers",
+	# 	"schedule": timedelta(minutes=1),
+	# 	"kwargs": {'up':False}
+	# },
+	# "check_up_servers": {
+	# 	"task": "lol.tasks.check_servers",
+	# 	"schedule": timedelta(minutes=2),
+	# 	"kwargs": {'down':False, 'unknown':False}
 	# }
 }
-# DATABASE_ROUTERS=['unknown.rcimport.router.RCImport',]
-
-# CACHES = {
-# 	'default': {
-# 		'BACKEND':	'django.core.cache.backends.locmem.LocMemCache',
-# 		'LOCATION':	'wat',
-# 		'TIMEOUT':500,
-# 	}
-# }
-
+CELERY_DEFAULT_QUEUE = "default"
+CELERY_DEFAULT_EXCHANGE = "default"
+CELERY_DEFAULT_EXCHANGE_TYPE = "topic"
+CELERY_DEFAULT_ROUTING_KEY = "default"
 LOL_CLIENT_SERVERS={
-	'NA':['http://127.0.0.1:8081','http://127.0.0.1:8082'],
-	'EUW':['http://127.0.0.1:8083',],
+	'NA':['http://127.0.0.1:8081', 'http://127.0.0.1:8082', 'http://127.0.0.1:8085'],
+	'EUW':['http://127.0.0.1:8083', ],
 }
 
 # Local time zone for this installation. Choices can be found here:
@@ -119,8 +137,14 @@ SECRET_KEY = 'z6oyhza0dob#eue&amp;*2*_nsx79_-xa#3-05sitokb(l-07^pvuc'
 TEMPLATE_LOADERS = (
 	'django.template.loaders.filesystem.Loader',
 	'django.template.loaders.app_directories.Loader',
-#	'django.template.loaders.eggs.Loader',
 )
+# JINJA2_ENVIRONMENT_OPTIONS = {
+# 	'trim_blocks':True,
+# }
+from django.utils import safestring
+if not hasattr(safestring, '__html__'):
+	safestring.SafeString.__html__ = lambda self: str(self)
+	safestring.SafeUnicode.__html__ = lambda self: unicode(self)
 
 MIDDLEWARE_CLASSES = (
 	'django.middleware.gzip.GZipMiddleware',
@@ -159,8 +183,7 @@ INSTALLED_APPS = (
 	# Uncomment the next line to enable admin documentation:
 	'django.contrib.admindocs',
 	'south',
-	# 'unknown.main',
-	# 'unknown.rcimport',
+	'djcelery',
 	'lol',
 )
 

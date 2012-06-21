@@ -39,6 +39,10 @@
       this.options = options;
       this.keepAlive = __bind(this.keepAlive, this);
 
+      this.getMasteryBook = __bind(this.getMasteryBook, this);
+
+      this.getSpectatorInfo = __bind(this.getSpectatorInfo, this);
+
       this.getSummonerName = __bind(this.getSummonerName, this);
 
       this.getSummonerData = __bind(this.getSummonerData, this);
@@ -71,6 +75,7 @@
       this.options.password = this.options.password;
       this.options.version = this.options.version || '1.55.12_02_27_22_54';
       this.options.debug = this.options.debug || false;
+      this.keep_alive_counter = 0;
       if (this.options.debug) {
         console.log(this.options);
       }
@@ -91,7 +96,7 @@
       if (this.options.debug) {
         console.log('Checking Login Queue');
       }
-      return loginQueue(this.options.lqHost, this.options.username, this.options.password, function(err, response) {
+      return new loginQueue(this.options.lqHost, this.options.username, this.options.password, function(err, response) {
         if (err) {
           if (_this.options.debug) {
             console.log('Login Queue Failed');
@@ -108,6 +113,9 @@
               console.log('Login Queue Response', response);
             }
             _this.options.queueToken = response.token;
+            if (response.ip_address != null) {
+              _this.options.queue_ip = response.ip_address;
+            }
             return cb(null, _this.options.queueToken);
           }
         }
@@ -209,10 +217,7 @@
           if (_this.options.debug) {
             console.log('Connect Process Completed');
           }
-          _this.emit('connection');
-          return _this.rtmp.ev.on('throttled', function() {
-            return _this.emit('throttled');
-          });
+          return _this.emit('connection');
         }
       });
     };
@@ -365,6 +370,49 @@
       });
     };
 
+    LolClient.prototype.getSpectatorInfo = function(name, cb) {
+      var cmd, getSpectatorInfoPacket,
+        _this = this;
+      if (this.options.debug) {
+        console.log("Finding spectator info by summonerId: " + name);
+      }
+      getSpectatorInfoPacket = lolPackets.GetSpectatorInfoPacket;
+      cmd = new RTMPCommand(0x11, null, null, null, [new getSpectatorInfoPacket(this.options).generate(name)]);
+      return this.rtmp.send(cmd, function(err, result) {
+        var _ref, _ref1, _ref2, _ref3;
+        if ((err != null ? (_ref = err.args) != null ? (_ref1 = _ref[0]) != null ? _ref1.error : void 0 : void 0 : void 0) != null) {
+          return cb(err.args[0].error);
+        }
+        if (err) {
+          return cb(err);
+        }
+        if ((result != null ? (_ref2 = result.args) != null ? (_ref3 = _ref2[0]) != null ? _ref3.body : void 0 : void 0 : void 0) == null) {
+          return cb(err, null);
+        }
+        return cb(err, result.args[0].body);
+      });
+    };
+
+    LolClient.prototype.getMasteryBook = function(summoner_id, cb) {
+      var cmd, getMasteryBookPacket,
+        _this = this;
+      if (this.options.debug) {
+        console.log("Finding masteries by summonerId: " + summoner_id);
+      }
+      getMasteryBookPacket = lolPackets.GetMasteryBookPacket;
+      cmd = new RTMPCommand(0x11, null, null, null, [new getMasteryBookPacket(this.options).generate(summoner_id)]);
+      return this.rtmp.send(cmd, function(err, result) {
+        var _ref, _ref1;
+        if (err) {
+          return cb(err);
+        }
+        if ((result != null ? (_ref = result.args) != null ? (_ref1 = _ref[0]) != null ? _ref1.body : void 0 : void 0 : void 0) == null) {
+          return cb(err, null);
+        }
+        return cb(err, result.args[0].body);
+      });
+    };
+
     LolClient.prototype.keepAlive = function(cb) {
       var HeartbeatPacket, cmd,
         _this = this;
@@ -372,9 +420,10 @@
         console.log("Sending Heartbeat");
       }
       HeartbeatPacket = lolPackets.HeartbeatPacket;
-      cmd = new RTMPCommand(0x11, null, null, null, [new HeartbeatPacket(this.options).generate()]);
+      cmd = new RTMPCommand(0x11, null, null, null, [new HeartbeatPacket(this.options).generate(this.keep_alive_counter)]);
       return this.rtmp.send(cmd, function(err, result) {
         var _ref, _ref1;
+        _this.keep_alive_counter += 1;
         if (err) {
           return cb(err);
         }

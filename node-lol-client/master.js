@@ -142,13 +142,19 @@
       password: 'penis2',
       region: 'na',
       listen_port: 8081,
-      version: '1.60.12_05_22_19_12'
+      version: '1.61.12_06_18_11_51'
     }, {
       username: 'thosebananas',
       password: 'penis2',
       region: 'na',
       listen_port: 8082,
-      version: '1.60.12_05_22_19_12'
+      version: '1.61.12_06_18_11_51'
+    }, {
+      username: 'trondamener',
+      password: 'penis2',
+      region: 'na',
+      listen_port: 8085,
+      version: '1.61.12_06_18_11_51'
     }, {
       username: 'dotaesnumerouno',
       password: 'penis2',

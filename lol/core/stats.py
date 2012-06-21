@@ -1,9 +1,24 @@
 from champions import CHAMPIONS
 
 
+class queryset_manager:
+	def __init__(self, queryset, chunksize=2000):
+		self.queryset=queryset.order_by('pk')
+		self.last_pk=queryset.order_by('-pk')[0].pk
+		self.chunksize=chunksize
+		self.pk=self.queryset[0].pk - 1
+
+	def __iter__(self):
+		while self.pk<self.last_pk:
+			for row in self.queryset.filter(pk__gt=self.pk)[:self.chunksize]:
+				self.pk=row.pk
+				yield row
+
+
 class Stats(object):
-		def __init__(self, games, champion=None):
-			self.games=games
+		def __init__(self, games, champion=None, summoner_name=None):
+			self.qs=games
+			self.games=queryset_manager(self.qs)
 			self.indexed=False
 			self.items_indexed=False
 			self.index={}
@@ -12,10 +27,18 @@ class Stats(object):
 				self.champion=int(champion)
 			else:
 				self.champion=None
+			self.summoner_name=summoner_name
+
+		def __str__(self):
+			if self.champion!=None:
+				return '<Stats for champion {}>'.format(self.champion)
+			elif self.summoner_name!=None:
+				return '<Stats for {}>'.format(self.summoner_name)
+			else:
+				return '<Stats class>'
 
 		def __index(self):
-			self.count=len(self.games)
-			items={}
+			self.count=self.qs.count()
 			champions={}
 			for game in self.games:
 				if game.champion_id not in champions:
@@ -27,6 +50,7 @@ class Stats(object):
 						'avg_kills':	0,
 						'deaths':		0,
 						'avg_deaths':	0,
+						'kdr':			0,
 						'assists':		0,
 						'avg_assists':	0,
 						'cs':			0,
@@ -37,33 +61,26 @@ class Stats(object):
 					}
 				champions[game.champion_id]['count']+=1
 				champions[game.champion_id]['kills']+=game.kills
-				champions[game.champion_id]['avg_kills']=champions[game.champion_id]['kills']/champions[game.champion_id]['count']
+				champions[game.champion_id]['avg_kills']=round(float(champions[game.champion_id]['kills'])/champions[game.champion_id]['count'], 1)
 				champions[game.champion_id]['deaths']+=game.deaths
-				champions[game.champion_id]['avg_deaths']=champions[game.champion_id]['deaths']/champions[game.champion_id]['count']
+				champions[game.champion_id]['avg_deaths']=round(float(champions[game.champion_id]['deaths'])/champions[game.champion_id]['count'], 1)
 				champions[game.champion_id]['assists']+=game.assists
-				champions[game.champion_id]['avg_assists']=champions[game.champion_id]['assists']/champions[game.champion_id]['count']
+				champions[game.champion_id]['avg_assists']=round(float(champions[game.champion_id]['assists'])/champions[game.champion_id]['count'], 1)
 				champions[game.champion_id]['cs']+=game.minion_kills+game.neutral_minions_killed
 				champions[game.champion_id]['avg_cs']=champions[game.champion_id]['cs']/champions[game.champion_id]['count']
 				champions[game.champion_id]['gold']+=game.gold
 				champions[game.champion_id]['avg_gold']=champions[game.champion_id]['gold']/champions[game.champion_id]['count']
+				if champions[game.champion_id]['deaths']>0:
+					champions[game.champion_id]['kdr']=round(float(champions[game.champion_id]['kills'])/champions[game.champion_id]['deaths'], 2)
+				else:
+					champions[game.champion_id]['kdr']=round(float(champions[game.champion_id]['kills']), 2)
 				if game.won:
 					champions[game.champion_id]['won']+=1
 				else:
 					champions[game.champion_id]['lost']+=1
-				# itt=game.get_items
-				# for i in itt:
-				# 	i=int(i)
-				# 	if i==0:
-				# 		continue
-				# 	if i not in items:
-				# 		items[i]={'count':0, 'won':0, 'lost':0}
-				# 	items[i]['count']+=1
-				# 	if game.won:
-				# 		items[i]['won']+=1
-				# 	else:
-				# 		items[i]['lost']+=1
-			self.index={'champions':champions, 'items':items}
+			self.index={'champions':champions}
 			self.indexed=True
+			self.games=queryset_manager(self.qs)
 
 		def __index_items(self):
 			if not self.indexed: self.__index()
@@ -83,11 +100,16 @@ class Stats(object):
 					else:
 						self.index['champions'][game.champion_id]['items'][item]['lost']+=1
 			self.items_indexed=True
+			self.games=queryset_manager(self.qs)
 
 		def __champions(self):
 			if not self.indexed: self.__index()
 			return self.index['champions']
 		champions=property(__champions)
+
+		def generate_index(self):
+			if not self.items_indexed: self.__index_items()
+			return True
 
 		def by_name(self):
 			def __get_name(c):
@@ -107,7 +129,7 @@ class Stats(object):
 					return -100
 			if not self.indexed: self.__index()
 			if minimum==None:
-				minimum=round(self.count*0.05)
+				minimum=round(self.count*0.04)
 			return sorted(self.index['champions'].iteritems(), key=bsort, reverse=True)
 
 		def items_most_used(self, champion_id=None):

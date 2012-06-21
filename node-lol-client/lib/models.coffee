@@ -1,5 +1,6 @@
 ev		= require('events').EventEmitter
-json	= require('JSON2').stringify
+json	= JSON.stringify
+# json	= require('JSON2').stringify
 
 #_log=(text)->
 #		process.send({event:'log', server:"#{options.region}:#{options.username}", text:text})
@@ -131,7 +132,7 @@ class RecentGames extends ev
 		account_id=args.account_id
 		@client.getMatchHistory(account_id, (err, result)=>
 			if err?
-				consolg.log('Error'.red+err)
+				console.log('Error'.red+err)
 				data=err
 			else
 				@org=result.object
@@ -200,13 +201,16 @@ class Search extends ev
 				@account_id=@search.account_id
 		@data={}
 	parse:=>
+		console.log(@search)
 		@data={}
 		current={
 			'account_id'		:@search.acctId.value
 			'summoner_id'		:@search.summonerId.value
 			'internal_name'		:@search.internalName
 			'name'				:@search.name
+			'level'				:@search.summonerLevel.value
 			'profile_icon'		:@search.profileIconId
+			'region'			:@client.options.region
 		}
 		@data=current
 		return @data
@@ -217,7 +221,7 @@ class Search extends ev
 				@data=err
 				@emit('finished', @data)
 			else if err==null and result==null
-				@data={'null':'null'}
+				@data={}
 			else
 				# console.log(err, result)
 				@account_id=result.object.acctId.value
@@ -257,11 +261,46 @@ class RunePage
 	toJSON:=>
 		return json(@data)
 
-exports.PlayerNames	=PlayerNames
-exports.PlayerStats	=PlayerStats
-exports.RecentGames	=RecentGames
-exports.Summoner	=Summoner
-exports.RunePage	=RunePage
-exports.Search		=Search
 
-exports.get		={'PlayerNames':exports.PlayerNames, 'PlayerStats':exports.PlayerStats, 'RecentGames':exports.RecentGames, 'Summoner':exports.Summoner, 'RunePage':exports.RunePage, 'Search':exports.Search}
+class SpectatorInfo extends ev
+	constructor:(options)->
+		if options?
+			if has_key(options, 'client') then @client=options.client
+			if has_key(options, 'info')
+				@info=options.info
+		@data={}
+	parse:=>
+		@data={}
+		regions={'na':'NA1', 'euw':'EUW1', 'eune':'EUN1'}
+		current={
+			'key'		:@info.playerCredentials.object.observerEncryptionKey
+			'ip'		:@info.playerCredentials.object.observerServerIp
+			'port'		:@info.playerCredentials.object.observerServerPort
+			'game_id'	:@info.playerCredentials.object.gameId.value
+			'region'	:regions[@client.options.region]
+		}
+		@data=current
+		return @data
+	get:(args)=>
+		name=args.name
+		@client.getSpectatorInfo(name, (err, result)=>
+			if err?
+				@data='error':err
+				@emit('finished', @data)
+			else
+				@info=result.object
+				@parse()
+			@emit('finished', @data)
+		)
+	toJSON:=>
+		return json(@data)
+
+exports.PlayerNames		=PlayerNames
+exports.PlayerStats		=PlayerStats
+exports.RecentGames		=RecentGames
+exports.Summoner		=Summoner
+exports.RunePage		=RunePage
+exports.Search			=Search
+exports.SpectatorInfo	=SpectatorInfo
+
+exports.get		={'PlayerNames':exports.PlayerNames, 'PlayerStats':exports.PlayerStats, 'RecentGames':exports.RecentGames, 'Summoner':exports.Summoner, 'RunePage':exports.RunePage, 'Search':exports.Search, 'SpectatorInfo':exports.SpectatorInfo}

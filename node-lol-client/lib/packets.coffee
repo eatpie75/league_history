@@ -42,7 +42,7 @@ class ConnectPacket extends Packet
 class LoginPacket extends Packet
   constructor: () ->
     super
-    #console.log @options
+    # console.log @options
 
   generate: (clientVersion) ->
     object = new ASObject()
@@ -71,22 +71,22 @@ class LoginPacket extends Packet
     headers.encoding = 2
     return headers
 
-  generateBody: (clientVersion = '1.48.11_11_14_04_20') ->
+  generateBody: (clientVersion) ->
     body = new ASObject()
     body.name = 'com.riotgames.platform.login.AuthenticationCredentials'
     body.keys = ['oldPassword', 'password', 'authToken', 'locale', 'partnerCredentials', 'ipAddress', 'domain', 'username', 'clientVersion', 'securityAnswer']
     body.object =
-      oldPassword: null,
       password: @options.password
       authToken: @options.queueToken
-      #authToken: '2ca02ca5-1c75-4103-976d-20ab45f1fc79' # auth token from the login q request?
       locale: 'en_US'
-      partnerCredentials: null
-      ipAddress: '203.59.95.218'
+      ipAddress: if @options.queue_ip? then @options.queue_ip else '203.59.95.218'
       domain: 'lolclient.lol.riotgames.com'
       username: @options.username
       clientVersion: clientVersion
+      operatingSystem: 'Windows 7'
       securityAnswer: null
+      partnerCredentials: null
+      oldPassword: null,
     body.encoding = 0
     return body
 
@@ -119,8 +119,7 @@ class AuthPacket extends Packet
     return headers
 
 class HeartbeatPacket extends Packet
-  counter: 1
-  generate: () ->
+  generate: (counter) ->
     object = new ASObject()
     object.name = 'flex.messaging.messages.RemotingMessage'
     object.keys = ['operation', 'source', 'timestamp', 'clientId', 'timeToLive', 'messageId', 'destination', 'headers', 'body']
@@ -133,9 +132,8 @@ class HeartbeatPacket extends Packet
       messageId: uuid().toUpperCase()
       destination: 'loginService'
       headers: @generateHeaders()
-      body: [@options.acctId, @options.authToken, @counter, new Date().toString()[0..-7]]
+      body: [@options.acctId, @options.authToken, counter, new Date().toString()[0..-7]]
     object.encoding = 0
-    @counter += 1
     return object
 
   generateHeaders: () ->
@@ -392,6 +390,62 @@ class GetSummonerNamePacket extends Packet
     headers.encoding = 2
     return headers
 
+class GetSpectatorInfoPacket extends Packet
+  generate: (name) ->
+    object = new ASObject()
+    object.name = 'flex.messaging.messages.RemotingMessage'
+    object.keys = ['source', 'operation', 'timestamp', 'messageId', 'clientId', 'timeToLive', 'body', 'destination', 'headers']
+    object.object =
+      operation: 'retrieveInProgressSpectatorGameInfo'
+      source: null
+      timestamp: 0
+      clientId: null
+      timeToLive: 0
+      messageId: uuid().toUpperCase()
+      destination: 'gameService'
+      headers: @generateHeaders()
+      body: [name]
+    object.encoding = 0
+    return object
+
+  generateHeaders: () ->
+    headers = new ASObject()
+    headers.name = ''
+    headers.object =
+      DSId: @options.dsid
+      DSRequestTimeout: 60
+      DSEndpoint: 'my-rtmps'
+    headers.encoding = 2
+    return headers
+
+class GetMasteryBookPacket extends Packet
+  generate: (summoner_id) ->
+    object = new ASObject()
+    object.name = 'flex.messaging.messages.RemotingMessage'
+    object.keys = ['source', 'operation', 'timestamp', 'messageId', 'clientId', 'timeToLive', 'body', 'destination', 'headers']
+    object.object =
+      operation: 'getMasteryBook'
+      source: null
+      timestamp: 0
+      clientId: null
+      timeToLive: 0
+      messageId: uuid().toUpperCase()
+      destination: 'masteryBookService'
+      headers: @generateHeaders()
+      body: [summoner_id]
+    object.encoding = 0
+    return object
+
+  generateHeaders: () ->
+    headers = new ASObject()
+    headers.name = ''
+    headers.object =
+      DSId: @options.dsid
+      DSRequestTimeout: 60
+      DSEndpoint: 'my-rtmps'
+    headers.encoding = 2
+    return headers
+
 exports.ConnectPacket = ConnectPacket
 exports.LoginPacket = LoginPacket
 exports.AuthPacket = AuthPacket
@@ -404,3 +458,5 @@ exports.RecentGames = RecentGames
 exports.GetTeamForSummoner = GetTeamForSummoner
 exports.GetTeamById = GetTeamById
 exports.GetSummonerNamePacket = GetSummonerNamePacket
+exports.GetSpectatorInfoPacket = GetSpectatorInfoPacket
+exports.GetMasteryBookPacket = GetMasteryBookPacket

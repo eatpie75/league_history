@@ -6,7 +6,7 @@ uglifyjs	= require('./node-lol-client/node_modules/uglify-js')
 uglifycss	= require('./node-lol-client/node_modules/uglifycss')
 
 Cakefile		= 'Cakefile'
-BASE			= 'unknown/lol'
+BASE			= 'lol'
 COFFEEINDIR		= "#{BASE}/static/coffee"
 COFFEEOUTDIR	= "#{BASE}/static/js"
 JSTOCOMPRESS	= [

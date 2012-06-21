@@ -1,0 +1,61 @@
+<table class='game-list table table-condensed'>
+<thead>
+	<tr><!--612!-->
+		<th style='width:40px;'></th>
+		<th style='width:100px;'>Summoner</th>
+		<th style='width:50px'>K/D/A</th>
+		<th style='width:50px'>Gold</th>
+		<th style='width:50px'>CS</th>
+		<th style='width:50px'>Dealt</th>
+		<th style='width:50px'>Taken</th>
+		<th style='width:85px;'>Spells</th>
+		<th style='width:215px;'>Items</th>
+		<th style='width:150px;'></th>
+	</tr>
+</thead>
+<tbody>{% for player in games %}
+	<tr class='{% if player.won %}good{% else %}bad{% endif %}'>
+		<td class='champion'><div class='sprite sprite-champions-small-{{player.champion_id}}'></div><small>{{player.champion_level}}</small></td>
+		<td><a href='{{ url("view_summoner", region=player.summoner.get_region_display(), account_id=player.summoner.account_id, slug=player.summoner.name|slugify) }}'>{{player.summoner.name}}</a></td>
+		<td>{{player.kills}}/{{player.deaths}}/{{player.assists}}</td>
+		<td>{{player.gold|to_k_format}}</td>
+		<td>{{player.minion_kills+player.neutral_minions_killed}}</td>
+		<td>{{player.damage_dealt|to_k_format}}</td>
+		<td>{{player.damage_taken|to_k_format}}</td>
+		<td><div class='sprite sprite-summoner-small-{{player.summoner_spell1}}' style='margin-right:4px;'></div><div class='sprite sprite-summoner-small-{{player.summoner_spell2}}'></div></td>
+		<td>{% for item in player.get_items %}
+			<div class='item sprite sprite-items-small-{{item}}' data-item="_{{item}}"></div>{% endfor %}
+		</td>
+		<td><a href='{{ url("view_game", region=player.game.get_region_display(), game_id=player.game.game_id) }}'>View</a></td>
+	</tr>{% endfor %}
+</tbody>
+</table>
+<div class='pagination pagination-centered'><ul>
+{%- if games.has_previous() %}
+	<li><a href='javascript:void(0);' class='page_link' data-page='{{games.previous_page_number()}}'>&laquo;</a></li>
+{%- else %}
+	<li class='disabled'><a href='javascript:void(0);'>&laquo;</a></li>
+{%- endif %}
+{%- if games.paginator.num_pages <= 20 %}
+	{% for page in games.paginator.page_range %}{% if page == games.number %}
+	<li class='active'><a href='javascript:void(0);'>{{page}}</a></li>
+	{% else %}
+	<li><a href='javascript:void(0);' class='page_link' data-page='{{page}}'>{{page}}</a></li>
+	{% endif %}{% endfor %}
+{%- else %}
+	{%- if games.number-10<0 %}
+		{% set start=0 %}
+	{%- elif games.number+10>games.paginator.num_pages and games.has_previous() and 20-(games.paginator.num_pages-games.number)>0 %}
+		{% set start=games.number-(20-(games.paginator.num_pages-games.number)) %}
+	{%- else %}
+		{% set start=games.number-10 %}
+{%- endif %}{% for page in games.paginator.page_range[start:start+20] -%}
+{%- if page == games.number %}
+	<li class='active'><a href='javascript:void(0);'>{{page}}</a></li>
+{%- else %}
+	<li><a href='javascript:void(0);' class='page_link' data-page='{{page}}'>{{page}}</a></li>{% endif %}
+{%- endfor %}{%- endif %}
+{%- if games.has_next() %}
+	<li><a href='javascript:void(0);' class='page_link' data-page='{{games.next_page_number()}}'>&raquo;</a></li>{% else %}<li class='disabled'><a href='javascript:void(0);'>&raquo;</a></li>
+{%- endif %}
+</ul></div>

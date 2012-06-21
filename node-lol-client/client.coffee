@@ -1,15 +1,23 @@
 colors			= require('colors')
-json			= require('JSON2').stringify
-json2			= require('JSON2')
 lol_client		= require('./lol-client')
 models			= require('./lib/models')
-nopt			= require('nopt')
 
 _log=(text)->
 		process.send({event:'log', text:text})
+_keepalive=->
+	timer=setTimeout(=>
+		client.emit('timeout')
+		console.log('wtf')
+	, 10000
+	)
+	client.keepAlive((err, result)->
+		clearTimeout(timer)
+		# _log("Heartbeat".magenta)
+	)
 
 options={}
 client={}
+keepalive={}
 
 process.on('message', (msg)->
 	#console.log(msg)
@@ -22,9 +30,15 @@ process.on('message', (msg)->
 		client=new lol_client(options)
 		client.on('connection', =>
 			process.send({event:'connected'})
+			keepalive=setInterval(->
+				_keepalive()
+			, 120000)
 		).on('throttled', =>
 			process.send({event:'throttled'})
 			process.exit(3)
+		).on('timeout', =>
+			process.send({event:'timeout'})
+			process.exit(5)
 		)
 		client.connect()
 	else if msg.event=='get'
@@ -35,8 +49,4 @@ process.on('message', (msg)->
 			process.send({event:"#{msg.uuid}__finished", data:data, extra:extra})
 		)
 		model.get(query)
-	else if msg.event=='keepalive'
-		client.keepAlive((err, result)->
-			_log("Heartbeat".magenta)
-		)
 )

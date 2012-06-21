@@ -95,6 +95,7 @@ CHAMPIONS={
 	114:"Fiora",
 	115:"Ziggs",
 	117:"Lulu",
+	119:"Draven",
 	120:"Hecarim",
 	122:"Darius"
 }

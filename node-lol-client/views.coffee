@@ -7,11 +7,6 @@ models		= require('./lib/models')
 
 _log=(text)->
 		process.send({event:'log', server:"#{options.region}:#{options.username}", text:text})
-# _log=(text)->
-# 	d=new Date()
-# 	time="#{d.getFullYear()}/#{d.getMonth()+1}/#{d.getDate()} #{d.getHours()}:#{if d.getMinutes()< 10 then '0'+d.getMinutes() else d.getMinutes()}:#{if d.getSeconds()< 10 then '0'+d.getSeconds() else d.getSeconds()}".white
-# 	time=(time+'                             ').slice(0,29)
-# 	console.log(time+" | "+text)
 has_key=(obj, key)->obj.hasOwnProperty(key)
 sleep=(ms)->
 	d=startTime=new Date().getTime()
@@ -20,12 +15,8 @@ sleep=(ms)->
 	return true
 
 class GetNames
-	constructor:(query, local_client, ev, request, response)->
+	constructor:(query, @client, @cb, @request, @response)->
 		@uuid=uuid.v4()
-		@client=local_client
-		@ev=ev
-		@request=request
-		@response=response
 		@summoners=qs.parse(query)['ids'].split(',').map(Number)
 	go:=>
 		@client.on('message', @get)
@@ -33,16 +24,12 @@ class GetNames
 	get:(msg)=>
 		if msg.event=="#{@uuid}__finished"
 			data=status:200, body:msg.data
-			@ev.emit('finished', data, @request, @response)
+			@cb(data, @request, @response)
 			@client.removeListener('message', @get)
 
 class MassUpdate
-	constructor:(query, local_client, ev, request, response)->
+	constructor:(query, @client, @cb, @request, @response)->
 		@uuid=[uuid.v4(), uuid.v4(), uuid.v4()]
-		@client=local_client
-		@ev=ev
-		@request=request
-		@response=response
 		@query=qs.parse(query)
 		@data=
 			status:200
@@ -54,10 +41,9 @@ class MassUpdate
 		if @query['names']?
 			@queue=@queue.concat(({'name':name} for name in @query['names'].split(',')))
 		if @query['games']? then @games=1 else @games=0
-		@ev.on('next', @_next)
 		@client.on('message', @get)
 	go:=>
-		@ev.emit('next')
+		@_next()
 	get:(msg)=>
 		if msg.event=="#{@uuid[0]}__finished"
 			summoner=msg.data
@@ -71,15 +57,17 @@ class MassUpdate
 		else if msg.event=="#{@uuid[1]}__finished"
 			@data.body.accounts[msg.extra.account_id].stats=msg.data
 			@running_queries-=1
-			@ev.emit('next')
+			@_next()
 		else if msg.event=="#{@uuid[2]}__finished"
 			@running_queries-=1
 			@data.body.accounts[msg.extra.account_id].games=msg.data
-			@ev.emit('next')
-		else if msg.event=='throttled'
+			@_next()
+		else if msg.event in ['throttled','timeout']
 			@throttled()
+		else
+			console.log(msg)
 	_next:=>
-		if @running_queries<5 and @queue.length>0
+		if @running_queries<3 and @queue.length>0
 			@running_queries+=1
 			key=@queue.shift()
 			console.log(key)
@@ -87,27 +75,18 @@ class MassUpdate
 				@client.send({event:'get', model:'Summoner', query:key, uuid:@uuid[0]})
 			catch error
 				console.log(error)
-				# console.log(@client)
+				console.log('oh god')
 		else if @running_queries==0 and @queue.length==0
-			@ev.emit('finished', @data, @request, @response)
-			@ev.removeAllListeners('fetched').removeListener('next', @_next)
-			#console.log(util.inspect(@client.listeners('message')))
+			@cb(@data, @request, @response)
 			@client.removeListener('message', @get)
-			#console.log(util.inspect(@client.listeners('message')))
 	throttled:=>
 		@client.removeListener('message', @get)
+		@queue=[]
 		@response.writeHead(500)
 		@response.end()
-		#console.log(@)
-		#sleep(2500)
-
 
 class RecentGames
-	constructor:(query, local_client, ev, request, response)->
-		@client=local_client
-		@ev=ev
-		@request=request
-		@response=response
+	constructor:(query, @client, @cb, @request, @response)->
 		@query=qs.parse(query)
 		@account=Number(@query['account'])
 		@data={}
@@ -115,18 +94,14 @@ class RecentGames
 		_log('Fetching games'.yellow)
 		games=new models.RecentGames({client:@client})
 		games.on('finished', (result)=>
-			data=status:200, body:result
-			@ev.emit('finished', data, @request, @response)
+			@data=status:200, body:result
+			@cb(@data, @request, @response)
 		)
 		games.get(@account)
 		return false
 
 class GetSummonerData
-	constructor:(query, local_client, ev, request, response)->
-		@client=local_client
-		@ev=ev
-		@request=request
-		@response=response
+	constructor:(query, @client, @cb, @request, @response)->
 		@query=qs.parse(query)
 		if @query['account']?
 			@key={account_id:Number(@query['account'])}
@@ -140,17 +115,13 @@ class GetSummonerData
 			@data=status:200, body:result
 			if @runes
 				@data.body['runes']=new models.RunePage(summoner_data.org.object.spellBook.object).parse()
-			@ev.emit('finished', @data, @request, @response)
+			@cb(@data, @request, @response)
 		)
 		summoner_data.get(@key)
 
 class Search
-	constructor:(query, local_client, ev, request, response)->
+	constructor:(query, @client, @cb, @request, @response)->
 		@uuid=uuid.v4()
-		@client=local_client
-		@ev=ev
-		@request=request
-		@response=response
 		@name=qs.parse(query)['name']
 	go:=>
 		@client.on('message', @get)
@@ -158,14 +129,40 @@ class Search
 	get:(msg)=>
 		if msg.event=="#{@uuid}__finished"
 			data=status:200, body:msg.data
-			@ev.emit('finished', data, @request, @response)
+			@cb(data, @request, @response)
+			@client.removeListener('message', @get)
+
+class GetSpectatorInfo
+	constructor:(query, @client, @cb, @request, @response)->
+		@uuid=uuid.v4()
+		@query=qs.parse(query)
+		@name=@query['name']
+		if @query['link']? then @link=true else @link=false
+	go:=>
+		@client.on('message', @get)
+		@client.send({event:'get', model:'SpectatorInfo', query:{name:@name}, uuid:@uuid})
+	get:(msg)=>
+		errors='OB-1':'No game', 'OB-2':'Game not observable', 'OB-3':'Game not started yet'
+		# console.log(msg)
+		if msg.event=="#{@uuid}__finished"
+			data=status:200
+			if msg.data.error?
+				data.body=errors[msg.data.error]
+			else
+				if @link
+					data.body="<a href='lolspectate://ip=#{msg.data.ip}&port=#{msg.data.port}&game_id=#{msg.data.game_id}&region=#{msg.data.region}&key=#{msg.data.key}'>#{@name}</a>"
+					data.html=true
+				else
+					data.body=msg.data
+			@cb(data, @request, @response)
 			@client.removeListener('message', @get)
 
 views=
 	'/get_names/'		: GetNames
 	'/mass_update/'		: MassUpdate
-	'/recent_games/'	: RecentGames
-	'/get_data/'		: GetSummonerData
+	# '/recent_games/'	: RecentGames
+	# '/get_data/'		: GetSummonerData
 	'/search/'			: Search
+	'/spectate/'		: GetSpectatorInfo
 
 module.exports=views

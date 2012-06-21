@@ -8,6 +8,7 @@ class PlayerGamePageHandler
 		$('.page_link').bind('click', (e)->
 			_this_.change_page($(@))
 		)
+		window.connect_items()
 	change_page:(el=1)->
 		if typeof(el)=='object' then page=el.data('page') else page=el
 		$.ajax(
