@@ -3,6 +3,7 @@ from django.template import defaultfilters
 from django.utils.translation import pgettext, ungettext, ugettext as _
 from django.utils.timezone import is_aware, utc
 from coffin import template
+from pytz import timezone
 
 register = template.Library()
 
@@ -32,6 +33,11 @@ def is_in_game(player, game):
 		return True
 	else:
 		return False
+
+
+@register.filter
+def timediff(val1, val2=datetime.now(timezone('UTC'))):
+	return (val2-val1).total_seconds()
 
 
 @register.filter

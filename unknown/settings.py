@@ -30,44 +30,39 @@ CACHES = {
 	'default': {
 		'BACKEND':	'redis_cache.cache.RedisCache',
 		'LOCATION':	'127.0.0.1:6379',
-		'TIMEOUT':500,
+		'OPTIONS': {
+			'DB': 0,
+			'PICKLE_VERSION':2
+		}
 	}
 }
 
 BROKER_URL="redis://localhost:6379/1"
-CELERY_RESULT_BACKEND="redis"
-CELERY_REDIS_HOST="localhost"
-CELERY_REDIS_PORT=6379
-CELERY_REDIS_DB=2
+CELERY_RESULT_BACKEND="redis://localhost:6379/2"
 CELERYD_CONCURRENCY=1
 CELERY_TASK_RESULT_EXPIRES=timedelta(minutes=30)
 CELERYBEAT_SCHEDULE = {
-	# "auto_update": {
-	# 	"task": "lol.tasks.auto_update",
-	# 	"schedule": timedelta(minutes=30),
-	# },
+	"auto_update": {
+		"task": "lol.tasks.auto_update",
+		"schedule": timedelta(minutes=10),
+	},
+	"auto_fill": {
+		"task": "lol.tasks.auto_fill",
+		"schedule": timedelta(minutes=11),
+	},
 	"check_all_servers": {
 		"task": "lol.tasks.check_servers",
 		"schedule": timedelta(minutes=2),
 	},
-	# "check_down_servers": {
-	# 	"task": "lol.tasks.check_servers",
-	# 	"schedule": timedelta(minutes=1),
-	# 	"kwargs": {'up':False}
-	# },
-	# "check_up_servers": {
-	# 	"task": "lol.tasks.check_servers",
-	# 	"schedule": timedelta(minutes=2),
-	# 	"kwargs": {'down':False, 'unknown':False}
-	# }
 }
-CELERY_DEFAULT_QUEUE = "default"
-CELERY_DEFAULT_EXCHANGE = "default"
-CELERY_DEFAULT_EXCHANGE_TYPE = "topic"
-CELERY_DEFAULT_ROUTING_KEY = "default"
+
+# LOL_CLIENT_SERVERS={
+# 	'NA':['http://127.0.0.1:8081', 'http://127.0.0.1:8082', 'http://127.0.0.1:8085'],
+# 	'EUW':['http://127.0.0.1:8083', ],
+# }
+
 LOL_CLIENT_SERVERS={
-	'NA':['http://127.0.0.1:8081', 'http://127.0.0.1:8082', 'http://127.0.0.1:8085'],
-	'EUW':['http://127.0.0.1:8083', ],
+	'NA':['http://127.0.0.1:8081',],
 }
 
 # Local time zone for this installation. Choices can be found here:
@@ -153,9 +148,20 @@ MIDDLEWARE_CLASSES = (
 	'django.middleware.csrf.CsrfViewMiddleware',
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
-	'django.middleware.transaction.TransactionMiddleware',
+	# 'django.middleware.transaction.TransactionMiddleware',
 	# Uncomment the next line for simple clickjacking protection:
 	# 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS=(
+	"django.contrib.auth.context_processors.auth",
+	"django.core.context_processors.debug",
+	"django.core.context_processors.i18n",
+	"django.core.context_processors.media",
+	"django.core.context_processors.static",
+	"django.core.context_processors.tz",
+	"django.contrib.messages.context_processors.messages",
+	"lol.context_processors.ajax_base"
 )
 
 ROOT_URLCONF = 'unknown.urls'
@@ -167,7 +173,7 @@ TEMPLATE_DIRS = (
 	# Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
 	# Always use forward slashes, even on Windows.
 	# Don't forget to use absolute paths, not relative paths.
-	os.path.join(PROJECT_DIR, 'unknown', 'temlplates'),
+	# os.path.join(PROJECT_DIR, 'unknown', 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -187,6 +193,28 @@ INSTALLED_APPS = (
 	'lol',
 )
 
+# LOGGING = {
+# 	'version': 1,
+# 	'disable_existing_loggers': False,
+# 	'formatters': {
+# 		'verbose': {
+# 			'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+# 		},
+# 	},
+# 	'handlers': {
+# 		'file': {
+# 			'class': 'logging.FileHandler',
+# 			'filename': '/var/www/logs/lol.log',
+# 			'formatter': 'verbose'
+# 		}
+# 	},
+# 	'loggers': {
+# 		'lol.main': {
+# 			'handlers': ['file'],
+# 			'propagate': True,
+# 		},
+# 	}
+# }
 
 try:
 	from settings_local import *

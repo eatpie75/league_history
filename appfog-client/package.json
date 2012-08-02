@@ -1,0 +1,16 @@
+{
+  "name": "lolclient",
+  "version": "0.0.2",
+  "private": true,
+  "scripts": {
+    "start": "node bridge.js"
+  },
+  "dependencies": {
+    "express": "3.0.0rc1",
+    "jade": "*",
+    "colors": "*",
+    "hexy": "*",
+    "node-uuid": "*",
+    "underscore": "*"
+  }
+}

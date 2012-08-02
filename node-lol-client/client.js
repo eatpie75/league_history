@@ -20,10 +20,13 @@
       _this = this;
     timer = setTimeout(function() {
       client.emit('timeout');
-      return console.log('wtf');
+      return console.log('wtf keepalive timeout');
     }, 10000);
     return client.keepAlive(function(err, result) {
-      return clearTimeout(timer);
+      clearTimeout(timer);
+      if (Math.random() >= 0.75) {
+        return _log("Heartbeat".magenta);
+      }
     });
   };
 
@@ -34,7 +37,7 @@
   keepalive = {};
 
   process.on('message', function(msg) {
-    var model, query,
+    var model, query, query_options,
       _this = this;
     if (msg.event === 'connect') {
       options = {
@@ -60,15 +63,18 @@
         process.send({
           event: 'timeout'
         });
-        return process.exit(3);
+        return process.exit(5);
       });
       return client.connect();
     } else if (msg.event === 'get') {
       query = msg.query;
-      model = new models.get[msg.model]({
+      query_options = {
         client: client
-      });
-      model.on('finished', function(data, extra) {
+      };
+      if (msg.extra != null) {
+        query_options['extra'] = msg.extra;
+      }
+      model = new models.get[msg.model](function(data, extra) {
         if (extra == null) {
           extra = {};
         }
@@ -78,7 +84,7 @@
           data: data,
           extra: extra
         });
-      });
+      }, query_options);
       return model.get(query);
     }
   });

@@ -229,7 +229,7 @@ items=
 		description:"+12% Critical Strike Chance<br>UNIQUE Passive: Gain an additional 5 Gold every 10 seconds."
 	3096:
 		name:"Philosopher's Stone"
-		description:"+18 Health Regen per 5 seconds<br>+8 Mana Regen per 5 seconds<br>UNIQUE Passive: Gain an additional 5 Gold every 10 seconds."
+		description:"+15 Health Regen per 5 seconds<br>+8 Mana Regen per 5 seconds<br>UNIQUE Passive: Gain an additional 5 Gold every 10 seconds."
 	3097:
 		name:"Emblem of Valor"
 		description:"+25 Armor<br>UNIQUE Aura: Nearby allied Champions gain 10 Health Regen per 5 seconds."
@@ -295,7 +295,7 @@ items=
 		description:"+60% attack speed<br>UNIQUE Passive: Every fourth basic attack deals 100 bonus magic damage.<br>UNIQUE Active: For 8 seconds, you gain +30 armor penetration and your basic attacks cannot be dodged. 40 second cooldown."
 	3132:
 		name:"Heart of Gold"
-		description:"+250 Health<br>UNIQUE Passive: Gain an additional 5 Gold every 10 seconds."
+		description:"+200 Health<br>UNIQUE Passive: Gain an additional 5 Gold every 10 seconds."
 	3134:
 		name:"The Brutalizer"
 		description:"+25 Attack Damage<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +15 Armor Penetration."
@@ -310,7 +310,7 @@ items=
 		description:"+180 Health<br>UNIQUE Passive: Your champion gains 32 Health per stack, receiving 2 stacks for a kill or 1 stack for an assist (stacks up to 20). You lose a third of your stacks on death. At 20 stacks, your champion takes 15% less damage."
 	3140:
 		name:"Quicksilver Sash"
-		description:"+56 Magic Resist<br>UNIQUE Active: Removes all debuffs from your champion (90 second cooldown)."
+		description:"+48 Magic Resist<br>UNIQUE Active: Removes all debuffs from your champion (90 second cooldown)."
 	3141:
 		name:"Sword of the Occult"
 		description:"+10 Attack Damage<br>UNIQUE Passive: Your champion gains 5 Attack Damage per stack, receiving 2 stacks for a kill or 1 stack for an assist (stacks up to 20). You lose a third of your stacks on death. At 20 stacks, your champion's Movement Speed is increased by 15%."
@@ -361,10 +361,10 @@ items=
 		description:"+25 Health Regen per 5 seconds<br>+20 Mana Regen per 5 seconds<br>UNIQUE Passive: +35 Tenacity (Tenacity reduces the duration of stuns, slows, taunts, fears, silences, blinds and immobilizes. Does not stack with other Tenacity items.)"
 	3174:
 		name:"Athene's Unholy Grail"
-		description:"+80 Ability Power<br>+36 Magic Resist<br>+15 Mana Regen per 5 seconds<br>UNIQUE Passive: 15% Cooldown Reduction.<br>UNIQUE Passive: Restores 12% of your max mana on kill or assist.<br>UNIQUE Passive: Increases your Mana Regeneration by 1% per 1% Mana you are missing."
+		description:"+90 Ability Power<br>+40 Magic Resist<br>+15 Mana Regen per 5 seconds<br>UNIQUE Passive: 15% Cooldown Reduction.<br>UNIQUE Passive: Restores 12% of your max mana on kill or assist.<br>UNIQUE Passive: Increases your Mana Regeneration by 1% per 1% Mana you are missing."
 	3178:
 		name:"Ionic Spark"
-		description:"+50% Attack Speed<br>+250 Health<br>UNIQUE Passive: Every fourth basic attack unleashes a chain lightning, dealing 110 magic damage to up to 4 targets."
+		description:"+50% Attack Speed<br>+250 Health<br>UNIQUE Passive: Every fourth basic attack unleashes a chain lightning, dealing 125 magic damage to up to 4 targets."
 	3180:
 		name:"Odyn's Veil"
 		description:"+350 Health<br>+350 Mana<br>+50 Magic Resist<br>UNIQUE Passive: Reduces and stores 10% of the magic damage dealt to your champion.<br>UNIQUE Active: Deals 200 + (stored magic) [max: 400] magic damage to nearby enemy units (90 second cooldown)."

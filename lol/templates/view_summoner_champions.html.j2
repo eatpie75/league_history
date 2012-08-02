@@ -11,17 +11,19 @@
 		<link href="{{STATIC_URL}}less/main.less" rel="stylesheet/less" type="text/css">
 		<script src="{{STATIC_URL}}js/less.js" type="text/javascript"></script>
 		<link href="{{STATIC_URL}}css/sprites.css" rel="stylesheet" type="text/css">
-		<script src="{{STATIC_URL}}js/jquery.js" type="text/javascript"></script>
+		<script src="{{STATIC_URL}}js/jquery.min.js" type="text/javascript"></script>
 		<script src="{{STATIC_URL}}js/bootstrap.js" type="text/javascript"></script>
 		<script src="{{STATIC_URL}}js/items.js" type="text/javascript"></script>
 		<script src="{{STATIC_URL}}js/player.js" type="text/javascript"></script>
 		<script type="text/javascript">
+			var AJAX_BASE="{{AJAX_BASE}}";
 			var account_id={{summoner.account_id}};
+			var region={{summoner.region}};
 		</script>
 	</head>
 	<body>
 		<div class='container'>
-			<div class='summoner-header row span12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{stats.by_count()[0][0]}}.png)'>
+			<div class='summoner-header row span12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{stats.by_count()|first|first}}.png)'>
 				<div class='pull-left sprite sprite-profile-{{summoner.profile_icon}}'></div>
 				<div class='info-block pull-right'>
 					<div>
@@ -44,9 +46,9 @@
 					<small>LAST UPDATED:{{summoner.time_updated|naturaltime|upper}}</small>
 				</div>
 				<ul class='mynav mynav-tabs'>
-					<li><a href='{{ url("view_summoner", region=summoner.get_region_display(), account_id=summoner.account_id, slug=summoner.name|slugify) }}'>OVERVIEW</a></li>
-					<li><a href='{{ url("view_summoner_games", region=summoner.get_region_display(), account_id=summoner.account_id, slug=summoner.name|slugify) }}'>GAMES</a></li>
-					<li class='active'><a href='{{ url("view_summoner_champions", region=summoner.get_region_display(), account_id=summoner.account_id, slug=summoner.name|slugify) }}'>CHAMPIONS</a></li>
+					<li><a href='{{summoner.get_absolute_url()}}'>OVERVIEW</a></li>
+					<li><a href='{{summoner.get_games_url()}}'>GAMES</a></li>
+					<li class='active'><a href='{{summoner.get_champions_url()}}'>CHAMPIONS</a></li>
 				</ul>
 			</div>
 			<div class='row span12' id='games'>

@@ -1,18 +1,11 @@
 ev		= require('events').EventEmitter
 json	= JSON.stringify
-# json	= require('JSON2').stringify
+util	= require('util')
 
-#_log=(text)->
-#		process.send({event:'log', server:"#{options.region}:#{options.username}", text:text})
-# _log=(text)->
-# 	d=new Date()
-# 	time="#{d.getFullYear()}/#{d.getMonth()+1}/#{d.getDate()} #{d.getHours()}:#{if d.getMinutes()< 10 then '0'+d.getMinutes() else d.getMinutes()}:#{if d.getSeconds()< 10 then '0'+d.getSeconds() else d.getSeconds()}".white
-# 	time=(time+'                             ').slice(0,29)
-# 	console.log(time+" | "+text)
 has_key=(obj, key)->obj.hasOwnProperty(key)
 
-class PlayerNames extends ev
-	constructor:(options)->
+class PlayerNames
+	constructor:(@cb, options)->
 		if options?
 			if options.hasOwnProperty('client')
 				@client=options.client
@@ -28,11 +21,11 @@ class PlayerNames extends ev
 				data=err
 			else
 				data=result.data
-			@emit('finished', data)
+			@cb(data, {requests:1})
 		)
 
-class PlayerStats extends ev
-	constructor:(options)->
+class PlayerStats
+	constructor:(@cb, options)->
 		if options?
 			if options.hasOwnProperty('client') then @client=options.client
 			if options.hasOwnProperty('stats')
@@ -65,13 +58,13 @@ class PlayerStats extends ev
 				@org=result.object
 				@account_id=@org.userId.value
 				@parse()
-			@emit('finished', @data, {account_id:@account_id})
+			@cb(@data, {account_id:@account_id, requests:1})
 		)
 	toJSON:=>
 		return json(@data)
 
-class RecentGames extends ev
-	constructor:(options)->
+class RecentGames
+	constructor:(@cb, options)->
 		#_log('Parsing games'.yellow)
 		if options.hasOwnProperty('client') then @client=options.client
 		if options.hasOwnProperty('games')
@@ -138,19 +131,23 @@ class RecentGames extends ev
 				@org=result.object
 				@account_id=@org.userId.value
 				@parse()
-			@emit('finished', @data, {account_id:@account_id})
+			@cb(@data, {account_id:@account_id, requests:1})
 		)
 	toJSON:=>
 		return json(@data)
 
-class Summoner extends ev
-	constructor:(options)->
+class Summoner
+	constructor:(@cb, options)->
 		if options?
 			if options.hasOwnProperty('client') then @client=options.client
 			if options.hasOwnProperty('summoner')
 				@summoner=options.summoner
 				@account_id=@summoner.acctId.value
+			if options.extra?
+				if options.extra.runes? then @runes=options.extra.runes
+				if options.extra.masteries? then @masteries=options.extra.masteries
 		@data={}
+		@requests=0
 	parse:=>
 		@data={}
 		current={
@@ -165,35 +162,41 @@ class Summoner extends ev
 		@data=current
 		return @data
 	get:(args)=>
-		@on('found_account_id', =>
+		found_account_id=()=>
 			@client.getSummonerData(@account_id, (err, result)=>
 				if err?
 					@data=err
 				else
 					@org=result
-					@summoner=result.object.summoner.object
-					@account_id=@summoner.acctId.value
+					try
+						@summoner=result.object.summoner.object
+						@account_id=@summoner.acctId.value
+					catch e
+						console.log e
+						console.log util.inspect(result, false, 10, true)
 					@parse()
-				@emit('finished', @data)
+				extra={requests:@requests+1}
+				if @runes then extra['runes']=new RunePage({'book':@org.object.spellBook.object}).parse()
+				@cb(@data, extra)
 			)
-		)
 		if has_key(args, 'account_id')
 			@account_id=args.account_id
-			@emit('found_account_id')
+			found_account_id()
 		else if has_key(args, 'name')
 			@client.getSummonerByName(args.name, (err, result)=>
+				@requests+=1
 				if err?
 					@data=err
-					@emit('finished', @data)
+					@cb(@data, {requests:@requests})
 				else
 					@account_id=result.object.acctId.value
-					@emit('found_account_id')
+					found_account_id()
 			)
 	toJSON:=>
 		return json(@data)
 
-class Search extends ev
-	constructor:(options)->
+class Search
+	constructor:(@cb, options)->
 		if options?
 			if has_key(options, 'client') then @client=options.client
 			if has_key(options, 'search')
@@ -219,7 +222,6 @@ class Search extends ev
 		@client.getSummonerByName(name, (err, result)=>
 			if err?
 				@data=err
-				@emit('finished', @data)
 			else if err==null and result==null
 				@data={}
 			else
@@ -227,43 +229,102 @@ class Search extends ev
 				@account_id=result.object.acctId.value
 				@search=result.object
 				@parse()
-			@emit('finished', @data)
+			@cb(@data, {requests:1})
 		)
 	toJSON:=>
 		return json(@data)
 
 
 class RunePage
-	constructor:(runepage, client)->
-		if client?
-			@client=client
-		@runepage=runepage
+	constructor:(options)->
+		if options?
+			if has_key(options, 'client') then @client=options.client
+			if has_key(options, 'book') then @book=options.book
 		@data=[]
 	parse:=>
 		@data=[]
-		for opage in @runepage.bookPages.data
-			page=opage.object
+		for page in @book.bookPages.data
+			page=page.object
 			current={
 				'id'		:page.pageId.value
 				'name'		:page.name
 				'created'	:page.createDate
 				'slots'		:[]
 			}
-			for orune in page.slotEntries.data
-				rune=orune.object
+			for rune in page.slotEntries.data
+				rune=rune.object
 				tmp={
 					'slot'	:rune.runeSlotId
 					'id'	:rune.runeId
 				}
-				current['slots'].push(tmp)
+				current.slots.push(tmp)
+			current.slots.sort(@_rsort)
 			@data.push(current)
+		@data.sort(@_msort)
 		return @data
+	# get:(args)=>
+	# 	@account_id=args.account_id
+	# 	@client.getMasteryBook(@account_id, (err, result)=>
+	# 		if err?
+	# 			@data=err
+	# 		else
+	# 			@book=result.object.bookPages
+	# 			@parse()
+	# 		@emit('finished', @data, {requests:1})
+	# 	)
+	_msort:(a,b)=>if a.id<b.id then -1 else if a.id==b.id then 0 else 1
+	_rsort:(a,b)=>if a.slot<b.slot then -1 else if a.slot==b.slot then 0 else 1
 	toJSON:=>
 		return json(@data)
 
 
-class SpectatorInfo extends ev
-	constructor:(options)->
+class MasteryBook
+	constructor:(@cb, options)->
+		if options?
+			if has_key(options, 'client') then @client=options.client
+			if has_key(options, 'book') then @book=options.book
+	parse:=>
+		@data={}
+		current=[]
+		for page in @book.data
+			page=page.object
+			if page.name.match(/@@!PaG3!@@\d+/) then continue
+			id=page.pageId.value
+			tmp={
+				'id':		id
+				'name':		page.name
+				'current':	page.current
+				'talents':	[]
+			}
+			for talent in page.talentEntries.data
+				talent=talent.object
+				tmp.talents.push({
+					'id':	talent.talentId
+					'rank':	talent.rank
+				})
+			tmp.talents.sort(@_msort)
+			current.push(tmp)
+		current.sort(@_msort)
+		@data=current
+		return @data
+	get:(args)=>
+		@summoner_id=args.summoner_id
+		@account_id=args.account_id
+		@client.getMasteryBook(@summoner_id, (err, result)=>
+			if err?
+				@data=err
+			else
+				@book=result.object.bookPages
+				@parse()
+			@cb(@data, {'account_id':@account_id, requests:1})
+		)
+	_msort:(a,b)=>if a.id<b.id then -1 else if a.id==b.id then 0 else 1
+	toJSON:=>
+		return json(@data)
+
+
+class SpectatorInfo
+	constructor:(@cb, options)->
 		if options?
 			if has_key(options, 'client') then @client=options.client
 			if has_key(options, 'info')
@@ -278,19 +339,21 @@ class SpectatorInfo extends ev
 			'port'		:@info.playerCredentials.object.observerServerPort
 			'game_id'	:@info.playerCredentials.object.gameId.value
 			'region'	:regions[@client.options.region]
+			'name'		:@info.game.object.name
 		}
 		@data=current
 		return @data
 	get:(args)=>
 		name=args.name
 		@client.getSpectatorInfo(name, (err, result)=>
+			console.log("err:#{util.inspect(err, false, 10, true)}") if args.debug?
+			console.log("res:#{util.inspect(result, false, 10, true)}") if args.debug?
 			if err?
 				@data='error':err
-				@emit('finished', @data)
 			else
 				@info=result.object
 				@parse()
-			@emit('finished', @data)
+			@cb(@data, {requests:1})
 		)
 	toJSON:=>
 		return json(@data)
@@ -301,6 +364,7 @@ exports.RecentGames		=RecentGames
 exports.Summoner		=Summoner
 exports.RunePage		=RunePage
 exports.Search			=Search
+exports.MasteryBook		=MasteryBook
 exports.SpectatorInfo	=SpectatorInfo
 
-exports.get		={'PlayerNames':exports.PlayerNames, 'PlayerStats':exports.PlayerStats, 'RecentGames':exports.RecentGames, 'Summoner':exports.Summoner, 'RunePage':exports.RunePage, 'Search':exports.Search, 'SpectatorInfo':exports.SpectatorInfo}
+exports.get		={'PlayerNames':exports.PlayerNames, 'PlayerStats':exports.PlayerStats, 'RecentGames':exports.RecentGames, 'Summoner':exports.Summoner, 'RunePage':exports.RunePage, 'Search':exports.Search, 'MasteryBook':exports.MasteryBook, 'SpectatorInfo':exports.SpectatorInfo}

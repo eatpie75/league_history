@@ -1,22 +1,28 @@
 LolClient = require('./lol-client')
 util = require('util')
+fs = require('fs')
 
 # Config stuff
 options =
-  region: 'na' # Lol Client region, one of 'na', 'euw' or 'eune'
-  username: 'thosebananas' # must be lowercase!
-  password: 'penis2'
-  version: '1.60.12_05_22_19_12' # Lol Client version - must be "current" or it wont work. This is correct as at 21/03/2012
+	region: 'na' # Lol Client region, one of 'na', 'euw' or 'eune'
+	username: 'intoleagues' # must be lowercase!
+	password: 'penis2'
+	version: '1.63.12_07_15_18_46' # Lol Client version - must be "current" or it wont work. This is correct as at 21/03/2012
 
 summoner = {
-  name: 'eatpie75', # summoners name
+	name: 'eatpie75', # summoners name
+	account_id:142098,
+	summoner_id:115259
 }
 
 client = new LolClient(options)
 a=[]
 # Listen for a successful connection event
-# client.on 'connection', ->
-#   #console.log 'Connected'
+client.on 'connection', ->
+	console.log 'Connected'
+	client.getSummonerData(summoner.account_id, (err, result)->
+		fs.writeFileSync('getSummonerData.json', JSON.stringify(result), 'utf8')
+	)
   
 #   # Now do stuff!
 #   #client.getSummonerByName summoner.name, (err, result) ->

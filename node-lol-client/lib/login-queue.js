@@ -59,7 +59,7 @@
       args = {
         path: "/login-queue/rest/queue/ticker/" + this.queue_name
       };
-      return this._request(args, null, function(res) {
+      return this._request(args, null, function(err, res) {
         var key;
         key = u.find(u.keys(res), function(tmp) {
           if (Number(tmp) === _this.queue_node) {
@@ -84,7 +84,7 @@
         path: "/login-queue/rest/queue/authToken/" + this.user
       };
       console.log("" + this.username + " getting token");
-      return this._request(args, null, function(res) {
+      return this._request(args, null, function(err, res) {
         if (res.token != null) {
           return _this._get_ip(function(ip) {
             res.ip_address = ip;
@@ -104,7 +104,7 @@
         host: 'll.leagueoflegends.com',
         port: 80
       };
-      return this._request(args, null, function(res) {
+      return this._request(args, null, function(err, res) {
         return cb(res.ip_address);
       });
     };
@@ -116,7 +116,7 @@
         path: '/login-queue/rest/queue/authenticate'
       };
       data = "payload=user%3D" + this.username + "%2Cpassword%3D" + this.password;
-      return this._request(args, data, function(res) {
+      return this._request(args, data, function(err, res) {
         var tmp;
         if (res.status === 'LOGIN') {
           return _this.cb(null, res);
@@ -157,11 +157,20 @@
         return res.on('data', function(d) {
           var data;
           data = JSON.parse(d.toString('utf-8'));
-          return cb(data);
+          return cb(null, data);
         });
       });
       req.on('error', function(err) {
-        return cb(err);
+        console.log(err);
+        req.abort();
+        return process.exit(1);
+      }).on('socket', function(socket) {
+        socket.setTimeout(20000);
+        return socket.on('timeout', function() {
+          console.log('things are about to go poorly');
+          req.abort();
+          return process.exit(1);
+        });
       });
       if (payload != null) {
         return req.end(payload);

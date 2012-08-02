@@ -1,0 +1,31 @@
+{% macro summoner_games(games) %}
+<div class='pagination pagination-centered'><ul>
+{%- if games.has_previous() %}
+	<li><a href='javascript:void(0);' class='page_link' data-page='{{games.previous_page_number()}}'>&laquo;</a></li>
+{%- else %}
+	<li class='disabled'><a href='javascript:void(0);'>&laquo;</a></li>
+{%- endif %}
+{%- if games.paginator.num_pages <= 20 %}
+	{% for page in games.paginator.page_range %}{% if page == games.number %}
+	<li class='active'><a href='javascript:void(0);'>{{page}}</a></li>
+	{% else %}
+	<li><a href='javascript:void(0);' class='page_link' data-page='{{page}}'>{{page}}</a></li>
+	{% endif %}{% endfor %}
+{%- else %}
+	{%- if games.number-10<0 %}
+		{% set start=0 %}
+	{%- elif games.number+10>games.paginator.num_pages and games.has_previous() and 20-(games.paginator.num_pages-games.number)>0 %}
+		{% set start=games.number-(20-(games.paginator.num_pages-games.number)) %}
+	{%- else %}
+		{% set start=games.number-10 %}
+{%- endif %}{% for page in games.paginator.page_range[start:start+20] -%}
+{%- if page == games.number %}
+	<li class='active'><a href='javascript:void(0);'>{{page}}</a></li>
+{%- else %}
+	<li><a href='javascript:void(0);' class='page_link' data-page='{{page}}'>{{page}}</a></li>{% endif %}
+{%- endfor %}{%- endif %}
+{%- if games.has_next() %}
+	<li><a href='javascript:void(0);' class='page_link' data-page='{{games.next_page_number()}}'>&raquo;</a></li>{% else %}<li class='disabled'><a href='javascript:void(0);'>&raquo;</a></li>
+{%- endif %}
+</ul></div>
+{% endmacro %}

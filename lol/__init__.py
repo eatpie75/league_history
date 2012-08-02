@@ -26,11 +26,11 @@ class Server_List:
 		def __check(server):
 			try:
 				res=requests.get('{}/{}/'.format(server, 'status'), config={'encode_uri':False}, timeout=20.0)
-				if res.json['connected']==True:
+				if res.status_code==200 and res.json['connected']==True:
 					return 1
 				else:
 					return 0
-			except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
+			except:
 				return 0
 		if server==None:
 			for region, data in self.servers.iteritems():
@@ -45,7 +45,7 @@ class Server_List:
 				region=s['region']
 				location=s['location']
 				self.servers[region][location]=__check(location)
-				cache.set('servers', self, 60*60*24)
+				cache.set('servers', self, 60*60*24*30)
 			return self.choose_server(region)
 
 	def __filter_up(self, region):
@@ -64,7 +64,7 @@ class Server_List:
 servers=cache.get('servers')
 if servers==None:
 	sl=Server_List(settings.LOL_CLIENT_SERVERS)
-	cache.set('servers', sl, 60*60*24)
+	cache.set('servers', sl, 60*60*24*30)
 else:
 	if servers.updated<datetime.now()-timedelta(hours=1):
 		servers.check_servers()

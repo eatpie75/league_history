@@ -18,7 +18,7 @@ class PlayerForm(forms.ModelForm):
 class PlayerAdmin(admin.ModelAdmin):
 	#list_filter=('summoner',)
 	list_display=('summoner',)
-	list_filter=('summoner__update_automatically', 'game__fetched')
+	list_filter=('summoner__update_automatically', 'game__fetched', 'game__game_map', 'game__game_mode')
 	search_fields=('game__game_id',)
 	form=PlayerForm
 
@@ -30,30 +30,11 @@ class SummonerAdmin(admin.ModelAdmin):
 	search_fields=('summoner_id', 'account_id', 'name')
 
 
-class GameForm(forms.ModelForm):
-	def __init__(self, *args, **kwargs):
-		super(GameForm, self).__init__(*args, **kwargs)
-		#self.fields['winner_tags'].widget=forms.SelectMultiple(attrs={'style':'height:250px'})
-		if 'instance' in kwargs:
-			self.fields['players'].queryset=kwargs['instance'].players.all()
-		else:
-			self.fields['players'].queryset=Player.objects.none()
-		# if 'instance' in kwargs:
-		# 	if kwargs['instance'].series and kwargs['instance'].series.winner and kwargs['instance'].series.loser:
-		# 		self.fields['series'].queryset=Series.objects.filter(Q(winner=kwargs['instance'].series.winner)|Q(loser=kwargs['instance'].series.loser)).select_related()
-		# 		self.fields['winner'].queryset=Player.objects.filter(Q(id=kwargs['instance'].series.winner.id)|Q(id=kwargs['instance'].series.loser.id)).select_related()
-		# 		self.fields['loser'].queryset=Player.objects.filter(Q(id=kwargs['instance'].series.winner.id)|Q(id=kwargs['instance'].series.loser.id)).select_related()
-		# 		self.fields['set'].initial=Match.objects.filter(series=kwargs['instance'].series).count()+1
-		# 	elif kwargs['instance'].winner and kwargs['instance'].loser:
-		# 		self.fields['series'].queryset=Series.objects.filter(Q(winner=kwargs['instance'].winner)|Q(loser=kwargs['instance'].loser)).select_related()
-
-
 class GameAdmin(admin.ModelAdmin):
-	list_display=('game_id', 'fetched')
+	list_display=('time', 'game_id', 'game_map', 'game_mode', 'fetched')
 	list_editable=('fetched',)
-	list_filter=('game_map', 'game_mode')
-	search_fields=('game_id',)
-	form=GameForm
+	list_filter=('game_map', 'game_mode', 'fetched')
+	search_fields=('game_id', 'unfetched_players')
 
 
 class SummonerRatingAdmin(admin.ModelAdmin):

@@ -84,6 +84,9 @@
     LolClient.prototype.connect = function(cb) {
       var _this = this;
       return this.checkLoginQueue(function(err, token) {
+        if (err) {
+          console.log(err);
+        }
         return _this.sslConnect(function(err, stream) {
           _this.stream = stream;
           return _this.setupRTMP();
@@ -217,7 +220,10 @@
           if (_this.options.debug) {
             console.log('Connect Process Completed');
           }
-          return _this.emit('connection');
+          _this.emit('connection');
+          return _this.rtmp.ev.on('throttled', function() {
+            return _this.emit('throttled');
+          });
         }
       });
     };

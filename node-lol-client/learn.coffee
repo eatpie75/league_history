@@ -2,10 +2,9 @@ buffer			= require('buffer').Buffer
 child_process	= require('child_process')
 colors			= require('colors')
 events			= require('events')
-fs				= require('fs')
 http			= require('http')
-json			= require('JSON2').stringify
-json2			= require('JSON2')
+json			= JSON.stringify
+json2			= JSON
 qs				= require('querystring')
 url				= require('url')
 util			= require('util')
@@ -13,6 +12,7 @@ zlib			= require('zlib')
 views			= require('./views')
 
 options={}
+id=''
 status=
 	login_errors:0
 	total_requests:0
@@ -20,7 +20,7 @@ status=
 	connected:false
 
 _log=(text)->
-	process.send({event:'log', server:"#{options.region}:#{options.username}", text:text})
+	process.send({event:'log', server:"#{id}", text:text})
 
 
 class RequestHandler
@@ -32,12 +32,11 @@ class RequestHandler
 	request:(request, response)=>
 		path=url.parse(request.url)
 		if path.pathname in Object.keys(@views)
-			status.total_requests+=1
 			if @connections==0
 				@connections+=1
 				view=new @views[path.pathname](path.query, @client, @respond, request, response)
 				view.go()
-				view=null
+				# view=null
 			else
 				@queue.push({path:path, request:request, response:response})
 		else if path.pathname=='/status/'
@@ -62,8 +61,9 @@ class RequestHandler
 		@connections+=1
 		view=new @views[@current.path.pathname](@current.path.query, @client, @respond, @current.request, @current.response)
 		view.go()
-		view=null
+		# view=null
 	respond:(data, request, response)=>
+		status.total_requests+=data.requests
 		if not data.html?
 			body=json(data.body)
 			mimetype='application/json'
@@ -104,21 +104,23 @@ _log("Preparing to connect".grey)
 
 
 client={}
-initial=1
+initial=true
 h={}
 start_client=->
+	if not initial
+		options=require('./servers.json')[id]
 	client=child_process.fork('client.js')
 	client.on('message', (msg)->
 		#console.log(msg)
-		if msg.event=='connected' and initial==1
-			initial=0
+		if msg.event=='connected' and initial
+			initial=false
 			_log("Connected".green)
 			status.login_errors=0
 			status.connected=true
 			h=new RequestHandler(views, client)
 			server=http.createServer(h.request)
-			server.listen(options.listen_port||8081)
-		else if msg.event=='connected' and initial==0
+			server.listen(options.listen_port||8081, 'localhost')
+		else if msg.event=='connected' and not initial
 			_log('Reconnected'.green)
 			status.login_errors=0
 			status.connected=true
@@ -138,14 +140,23 @@ start_client=->
 			console.log(h.queue)
 			console.log(h.connections)
 			setTimeout(client_restart, 2000)
-		if code==4
+		else if code in [1,4]
 			get_time=()=>
-				if status.login_errors*500+1000<=10000
+				if status.login_errors*500+1000<=6000
 					_log("restarting client in #{status.login_errors*500+1000}ms")
 					status.login_errors*500+1000
-				else
-					_log('restarting client in 10000ms')
+				else if 10<status.login_errors<20
+					_log('restarting client in 10s')
 					10000
+				else if 20<=status.login_errors<30
+					_log('restarting client in 1m')
+					60000
+				else if 30<=status.login_errors<40
+					_log('restarting client in 5m')
+					300000
+				else if 40<=status.login_errors
+					_log('restarting client in 10m')
+					600000
 			status.login_errors+=1
 			setTimeout(client_restart, get_time())
 		else
@@ -159,8 +170,9 @@ client_restart=->
 
 process.on('message', (msg)->
 	if msg.event=='connect'
+		id=msg.id
 		options=msg.options
 		start_client()
 	else if msg.event=='status'
-		process.send({event:'status', data:{connected:status.connected, connections:h.connections, total_requests:status.total_requests, reconnects:status.reconnects}, server:"#{options.region}:#{options.username}"})
+		process.send({event:'status', data:{connected:status.connected, connections:h.connections, total_requests:status.total_requests, reconnects:status.reconnects}, server:"#{id}"})
 )

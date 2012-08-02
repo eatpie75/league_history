@@ -3,7 +3,7 @@ child_process	= require('child_process')
 colors			= require('colors')
 events			= require('events')
 http			= require('http')
-json			= require('JSON2').stringify
+json			= JSON.stringify
 url				= require('url')
 zlib			= require('zlib')
 
@@ -74,19 +74,20 @@ bind_events=(server)->
 			_log(msg)
 	)
 
-servers=[
-	{username:'dotaesnumerouno', password:'penis2', region:'na', listen_port:8081, version:'1.61.12_06_18_11_51'}
-	{username:'thosebananas', password:'penis2', region:'na', listen_port:8082, version:'1.61.12_06_18_11_51'}
-	{username:'trondamener', password:'penis2', region:'na', listen_port:8085, version:'1.61.12_06_18_11_51'}
-	{username:'dotaesnumerouno', password:'penis2', region:'euw', listen_port:8083, version:'1.60.12_05_22_19_12'}
-	# # {username:'dotaesnumerouno', password:'penis2', region:'eune', port:8084}
-]
+servers=require('./servers.json')
+# servers=[
+# 	{username:'dotaesnumerouno', password:'penis2', region:'na', listen_port:8081, version:'1.62.12_07_06_17_01'}
+# 	{username:'thosebananas', password:'penis2', region:'na', listen_port:8082, version:'1.62.12_07_06_17_01'}
+# 	{username:'trondamener', password:'penis2', region:'na', listen_port:8085, version:'1.62.12_07_06_17_01'}
+# 	{username:'dotaesnumerouno', password:'penis2', region:'euw', listen_port:8083, version:'1.62.12_07_06_17_01'}
+# 	# {username:'dotaesnumerouno', password:'penis2', region:'eune', port:8084}
+# ]
+
 clients=[]
 
-for server in servers
-	# tmp=child_process.fork('learn.js', ['--username', server.username, '--password', server.password, '--region', server.region, '--port', server.port, '--version', server.version])
+for server, options of servers
 	tmp=child_process.fork('learn.js')
-	tmp.send({event:'connect', options:server})
+	tmp.send({event:'connect', options:options, id:server})
 	bind_events(tmp)
 	clients.push(tmp)
 

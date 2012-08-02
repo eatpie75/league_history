@@ -25,7 +25,7 @@ class performQueueRequest
 		setTimeout(@_check_queue, delay)
 	_check_queue:=>
 		args={path:"/login-queue/rest/queue/ticker/#{@queue_name}"}
-		@_request(args, null, (res)=>
+		@_request(args, null, (err, res)=>
 			key=u.find(u.keys(res), (tmp)=>
 				if Number(tmp)==@queue_node then true else false
 			)
@@ -38,7 +38,7 @@ class performQueueRequest
 	_get_token:=>
 		args={path:"/login-queue/rest/queue/authToken/#{@user}"}
 		console.log("#{@username} getting token")
-		@_request(args, null, (res)=>
+		@_request(args, null, (err, res)=>
 			if res.token?
 				@_get_ip((ip)=>
 					res.ip_address=ip
@@ -49,13 +49,13 @@ class performQueueRequest
 		)
 	_get_ip:(cb)=>
 		args={path:'/services/connection_info', host:'ll.leagueoflegends.com', port:80}
-		@_request(args, null, (res)=>
+		@_request(args, null, (err, res)=>
 			cb(res.ip_address)
 		)
 	_attempt_login:=>
 		args={path:'/login-queue/rest/queue/authenticate'}
 		data = "payload=user%3D#{@username}%2Cpassword%3D#{@password}"
-		@_request(args, data, (res)=>
+		@_request(args, data, (err, res)=>
 			if res.status=='LOGIN'
 				@cb(null, res)
 			else if res.status=='QUEUE'
@@ -79,13 +79,21 @@ class performQueueRequest
 			res.on('data', (d)->
 				data=JSON.parse(d.toString('utf-8'))
 				# console.log(data)
-				cb(data)
+				cb(null, data)
 			)
 		)
 		req.on('error', (err)->
-			cb(err)
+			console.log err
+			req.abort()
+			process.exit(1)
+		).on('socket', (socket)->
+			socket.setTimeout(20000)
+			socket.on('timeout', ()->
+				console.log 'things are about to go poorly'
+				req.abort()
+				process.exit(1)
+			)
 		)
 		if payload? then req.end(payload) else req.end()
 
 module.exports = performQueueRequest
-

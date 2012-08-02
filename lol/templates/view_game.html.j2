@@ -11,12 +11,12 @@
 		<link href="{{STATIC_URL}}less/main.less" rel="stylesheet/less" type="text/css">
 		<script src="{{STATIC_URL}}js/less.js" type="text/javascript"></script>
 		<link href="{{STATIC_URL}}css/sprites.css" rel="stylesheet" type="text/css">
-		<script src="{{STATIC_URL}}js/jquery.js" type="text/javascript"></script>
-		<script src="{{STATIC_URL}}js/bootstrap.js" type="text/javascript"></script>
-		<script src="{{STATIC_URL}}js/underscore.js" type="text/javascript"></script>
+		<script src="{{STATIC_URL}}js/jquery.min.js" type="text/javascript"></script>
+		<script src="{{STATIC_URL}}js/bootstrap.min.js" type="text/javascript"></script>
 		<script src="{{STATIC_URL}}js/items.js" type="text/javascript"></script>
 		<script src="{{STATIC_URL}}js/game.js" type="text/javascript"></script>
 		<script type="text/javascript">
+			var AJAX_BASE="{{AJAX_BASE}}";
 			var game_pk={{game.pk}};
 			var game_region={{game.region}};
 		</script>
@@ -51,7 +51,7 @@
 					<li><a href=''>CHAMPIONS</a></li>
 				</ul>
 			</div>
-			<div class='row span12'>
+			<div class='row span12'>{% if not update_in_queue %}
 				<table class='game-list table table-condensed'>
 					<thead>
 						<tr><!--612!-->
@@ -67,10 +67,10 @@
 							<th style='width:150px;'></th>
 						</tr>
 					</thead>{% for team in players|groupby('won')|reverse %}
-					{% if loop.index0 == 0 %}<tr class='interlude win'><td colspan=0>WINNING TEAM</td></tr>{% else %}<tr class='interlude lose'><td colspan=0>LOSING TEAM</td></tr>{% endif %}{% for player in team.list %}
+					{% if loop.index0 == 0 %}<tr class='interlude win'><td colspan=10>WINNING TEAM</td></tr>{% else %}<tr class='interlude lose'><td colspan=10>LOSING TEAM</td></tr>{% endif %}{% for player in team.list %}
 					<tr class='player {% if player.blue_team %}team_blue {% else %}team_purple {% endif %}{% if player.won %}won{% else %}lose{% endif %}'>
 						<td class='champion'><div class='sprite sprite-champions-small-{{player.champion_id}}'></div><small>{{player.champion_level}}</small></td>
-						<td><a href='{{ url("view_summoner", region=player.summoner.get_region_display(), account_id=player.summoner.account_id, slug=player.summoner.name|slugify) }}'>{{player.summoner.name}}</a></td>
+						<td><a href='{{player.summoner.get_absolute_url()}}'>{{player.summoner.name}}</a></td>
 						<td>{{player.kills}}/{{player.deaths}}/{{player.assists}}</td>
 						<td>{{player.gold|to_k_format}}</td>
 						<td>{{player.minion_kills+player.neutral_minions_killed}}</td>
@@ -84,11 +84,13 @@
 					</tr>{% endfor %}{% endfor %}
 				</table>
 			</div>
+			{% else %}
+			{{update_in_queue}}
+			{% endif %}
 			{% for p in players %} {{p.summoner.name}}:{{p.rating}}{% endfor %}<br>
 			{% for p in players %} {{p.summoner.name}}:{{p.won}}{% endfor %}<br>
 			{{game.fetched}}
 			<div class='well'>{{sql_queries|length}}</div>
-			{% set wat=players|groupby('won') %}
 		</div>
 	</body>
 </html>

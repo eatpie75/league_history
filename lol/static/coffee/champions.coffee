@@ -98,3 +98,5 @@ champions=
 	119:"Draven"
 	120:"Hecarim"
 	122:"Darius"
+	126:"Jayce"
+	143:"Zyra"

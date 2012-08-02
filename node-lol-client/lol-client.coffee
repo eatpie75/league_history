@@ -42,7 +42,7 @@ class LolClient extends EventEmitter
   connect: (cb) ->
     @checkLoginQueue (err, token) =>
       #console.log('err:')
-      #console.log err if err
+      console.log err if err
       #return cb(err) if err
       @sslConnect (err, stream) =>
         #return cb(err) if err
@@ -126,7 +126,7 @@ class LolClient extends EventEmitter
       else
         console.log 'Connect Process Completed' if @options.debug
         @emit 'connection'
-        # @rtmp.ev.on('throttled', =>@emit('throttled'))
+        @rtmp.ev.on('throttled', =>@emit('throttled'))
   
   getSummonerByName: (name, cb) =>
     console.log "Finding player by name: #{name}" if @options.debug

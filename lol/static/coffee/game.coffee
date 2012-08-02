@@ -17,19 +17,19 @@ class TellMeMore
 			else
 				_this_.collapse($(@), extra)
 		)
-	info_template:_.template(
+	info_template:(args)->
 		"<td colspan=11>
 			<div class='span4'>
 				<b>Physical/Magical Damage</b><br>
-				<div class='hori-bar purple' title='Magical Damage'><div class='red' title='Physical Damage' style='width:<% print((physical_damage_dealt/damage_dealt)*100) %>%;'></div></div>
+				<div class='hori-bar purple' title='Magical Damage'><div class='red' title='Physical Damage' style='width:#{(args.physical_damage_dealt/args.damage_dealt)*100}%;'></div></div>
 			</div>
-		</td>")
+		</td>"
 	get_info:(player)->
-		if "#{player}" not in _.keys(@cache)
+		if "#{player}" not in Object.keys(@cache)
 			$.ajax(
 				type: 'GET'
 				async: false
-				url: "/ajax/player_info/#{player}/"
+				url: "#{window.AJAX_BASE}ajax/player_info/#{player}/"
 				dataType: "json"
 				success:(msg)=>
 					@cache[player]=msg

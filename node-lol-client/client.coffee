@@ -1,5 +1,5 @@
 colors			= require('colors')
-lol_client		= require('./lol-client')
+lol_client		= require('./lib/lol-client')
 models			= require('./lib/models')
 
 _log=(text)->
@@ -7,12 +7,12 @@ _log=(text)->
 _keepalive=->
 	timer=setTimeout(=>
 		client.emit('timeout')
-		console.log('wtf')
+		console.log('wtf keepalive timeout')
 	, 10000
 	)
 	client.keepAlive((err, result)->
 		clearTimeout(timer)
-		# _log("Heartbeat".magenta)
+		_log("Heartbeat".magenta) if Math.random()>=0.75
 	)
 
 options={}
@@ -43,10 +43,13 @@ process.on('message', (msg)->
 		client.connect()
 	else if msg.event=='get'
 		query=msg.query
-		model=new models.get[msg.model]({client:client})
-		model.on('finished', (data, extra={})=>
-			extra.region=options.region
-			process.send({event:"#{msg.uuid}__finished", data:data, extra:extra})
+		query_options={client:client}
+		if msg.extra? then query_options['extra']=msg.extra
+		model=new models.get[msg.model](
+			(data, extra={})=>
+				extra.region=options.region
+				process.send({event:"#{msg.uuid}__finished", data:data, extra:extra})
+			,query_options
 		)
 		model.get(query)
 )
