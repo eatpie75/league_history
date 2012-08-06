@@ -84,6 +84,7 @@
         host: 'll.leagueoflegends.com',
         port: 80
       };
+      console.log("" + username + " getting ip");
       return _request(args, null, function(err, res) {
         return tcb(res.ip_address);
       });
@@ -98,6 +99,7 @@
         var queue_name, tmp,
           _this = this;
         if (res.status === 'LOGIN') {
+          console.log("" + username + " got token");
           return cb(null, res);
         } else if (res.status === 'QUEUE') {
           user = res.user;
@@ -114,6 +116,8 @@
           target = tmp.id;
           current = tmp.current;
           return _next_check();
+        } else {
+          return console.log(res);
         }
       });
     };

@@ -27,20 +27,20 @@
 				<div class='pull-left sprite sprite-profile-{{summoner.profile_icon}}'></div>
 				<div class='info-block pull-right'>
 					<div>
-						<h1>{{summoner.level}}</h1>
+						<b>{{summoner.level}}</b>
 						<small>LEVEL</small>
 					</div>
 					<div>
-						<h1>{% if rating.current_rating>1200 %}{{rating.current_rating}}{% else %}?{% endif %}</h1>
+						<b>{% if rating.current_rating>1200 %}{{rating.current_rating}}{% else %}?{% endif %}</b>
 						<small>ELO</small>
 					</div>
 					<div>
-						<h1>{{games.count()}}</h1>
+						<b>{{games.count()}}</b>
 						<small>GAMES</small>
 					</div>
 				</div>
 				<div class='name-block'>
-					<h1>{{summoner.name}}</h1>
+					<b>{{summoner.name}}</b>
 				</div>
 				<div class='bottom-right'>
 					<small>LAST UPDATED:{{summoner.time_updated|naturaltime|upper}}</small>

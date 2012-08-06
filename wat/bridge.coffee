@@ -29,7 +29,7 @@ bridge_status_middleware=(req, res, next)->
 	req.bridge_status=status
 	next()
 
-app=express.createServer()
+app=express()
 app.configure(->
 	app.use(express.logger('dev'))
 	app.use(express.bodyParser())

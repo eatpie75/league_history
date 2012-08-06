@@ -496,10 +496,10 @@ def parse_ratings(ratings, summoner):
 
 
 def parse_masteries(masteries, summoner):
-	summoner.masteries=masteries
+	summoner.masteries=simplejson.dumps(masteries)
 	return summoner
 
 
 def parse_runes(runes, summoner):
-	summoner.runes=runes
+	summoner.runes=simplejson.dumps(runes)
 	return summoner

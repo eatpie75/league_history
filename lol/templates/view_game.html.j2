@@ -26,24 +26,27 @@
 			<div class='summoner-header row span12'>
 				<div class='info-block pull-right'>
 					{% if metadata.avg_elo %}<div>
-						<h1>{{metadata.avg_elo|floatformat('0')}}</h1>
+						<b>{{metadata.avg_elo|floatformat('0')}}</b>
 						<small>AVG ELO</small>
 					</div>{% endif %}
 					<div>
-						<h1>{{metadata.mode}}</h1>
+						<b>{{metadata.mode}}</b>
 						<small>MODE</small>
 					</div>
 					<div>
-						<h1>{{metadata.map}}</h1>
+						<b>{{metadata.map}}</b>
 						<small>MAP</small>
 					</div>
 					<div>
-						<h1>{{game.time|date('N d')|upper}}</h1>
+						<b>{{game.time|date('N d')|upper}}</b>
 						<small>{{game.time|naturaltime|upper}}</small>
 					</div>
 				</div>
 				<div class='name-block'>
-					<h1>SUMMARY</h1>
+					<b>SUMMARY</b>
+				</div>
+				<div class='large-bottom-right'>
+					<span class='green'>{{metadata.stats.winner.kills}}</span>/<span class='red'>{{metadata.stats.loser.kills}}</span>
 				</div>
 				<ul class='mynav mynav-tabs'>
 					<li class='active'><a href=''>OVERVIEW</a></li>
@@ -68,7 +71,7 @@
 						</tr>
 					</thead>{% for team in players|groupby('won')|reverse %}
 					{% if loop.index0 == 0 %}<tr class='interlude win'><td colspan=10>WINNING TEAM</td></tr>{% else %}<tr class='interlude lose'><td colspan=10>LOSING TEAM</td></tr>{% endif %}{% for player in team.list %}
-					<tr class='player {% if player.blue_team %}team_blue {% else %}team_purple {% endif %}{% if player.won %}won{% else %}lose{% endif %}'>
+					<tr class='player{% if player.blue_team %} team_blue{% else %} team_purple{% endif %}{% if player.won %} won{% else %} lose{% endif %}{% if player.afk or player.leaver %} leaver {% endif %}'>
 						<td class='champion'><div class='sprite sprite-champions-small-{{player.champion_id}}'></div><small>{{player.champion_level}}</small></td>
 						<td><a href='{{player.summoner.get_absolute_url()}}'>{{player.summoner.name}}</a></td>
 						<td>{{player.kills}}/{{player.deaths}}/{{player.assists}}</td>
@@ -90,7 +93,6 @@
 			{% for p in players %} {{p.summoner.name}}:{{p.rating}}{% endfor %}<br>
 			{% for p in players %} {{p.summoner.name}}:{{p.won}}{% endfor %}<br>
 			{{game.fetched}}
-			<div class='well'>{{sql_queries|length}}</div>
 		</div>
 	</body>
 </html>

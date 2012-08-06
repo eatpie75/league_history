@@ -48,7 +48,7 @@ for server, options of servers
 	bind_events(tmp)
 	clients.push(tmp)
 
-app=express.createServer()
+app=express()
 app.configure(->
 	app.set('port', process.env.PORT || 8080)
 	app.set('lolclients', clients)

@@ -49,7 +49,7 @@
     return next();
   };
 
-  app = express.createServer();
+  app = express();
 
   app.configure(function() {
     app.use(express.logger('dev'));

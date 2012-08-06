@@ -46,7 +46,7 @@ def summoner_auto(summoner):
 		parse_games(data['games'], summoner, True)
 	else:
 		parse_games(data['games'], summoner)
-	summoner.time_updated=datetime.utcnow()
+	summoner.time_updated=datetime.now(timezone('UTC'))
 	summoner.save()
 	cache.delete('summoner/{}/{}/updating'.format(summoner.region, summoner.account_id))
 	cache.delete('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))

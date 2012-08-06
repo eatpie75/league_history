@@ -99,5 +99,6 @@ CHAMPIONS={
 	120:"Hecarim",
 	122:"Darius",
 	126:"Jayce",
+	131:"Diana",
 	143:"Zyra"
 }

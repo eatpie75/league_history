@@ -21,12 +21,12 @@
 			<div class='summoner-header row span12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{champion_id}}.png)'>
 				<div class='info-block pull-right'>
 					<div>
-						<h1>{% if not generating %}{{stats.display_count}}{% else %}?{% endif %}</h1>
+						<b>{% if not generating %}{{stats.display_count}}{% else %}?{% endif %}</b>
 						<small>GAMES</small>
 					</div>
 				</div>
 				<div class='name-block'>
-					<h1>{{champions|upper}}</h1>
+					<b>{{champions|upper}}</b>
 				</div>
 				<div class='bottom-right'>
 					<form method='get' id='stat-filter' class='form-inline'>{{form.game_map.as_widget()}} {{form.game_mode.as_widget()}}</form>

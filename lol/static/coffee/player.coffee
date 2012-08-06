@@ -177,4 +177,8 @@ $(document).ready(->
 	window.stat_filter=new StatFilter()
 	$('#force-update').bind('click', force_update)
 	if window.bgchart? then draw_bgchart(window.data, window.bgchart)
+	$('a[data-toggle="tab"]').click((e)->
+		e.preventDefault()
+		$(@).tab('show')
+	)
 )

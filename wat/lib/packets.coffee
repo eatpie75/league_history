@@ -119,7 +119,7 @@ class AuthPacket extends Packet
 		return headers
 
 class HeartbeatPacket extends Packet
-	generate: (counter) ->
+	generate: (account_id, counter) ->
 		object = new ASObject()
 		object.name = 'flex.messaging.messages.RemotingMessage'
 		object.keys = ['operation', 'source', 'timestamp', 'clientId', 'timeToLive', 'messageId', 'destination', 'headers', 'body']
@@ -132,7 +132,7 @@ class HeartbeatPacket extends Packet
 			messageId: uuid().toUpperCase()
 			destination: 'loginService'
 			headers: @generateHeaders()
-			body: [@options.acctId, @options.authToken, counter, new Date().toString()[0..-7]]
+			body: [account_id, @options.authToken, counter, new Date().toString()[0..-7]]
 		object.encoding = 0
 		return object
 
@@ -186,7 +186,6 @@ class GetSummonerDataPacket extends Packet
 			timestamp: 0
 			clientId: null
 			timeToLive: 0
-			#messageId: 'FE149B94-2373-9F75-3EDE-1515B4A47763' # generate a uuid
 			messageId: uuid().toUpperCase()
 			destination: 'summonerService'
 			headers: @generateHeaders()
@@ -215,7 +214,6 @@ class AggregatedStatsPacket extends Packet
 			timestamp: 0
 			clientId: null
 			timeToLive: 0
-			#messageId: 'FE149B94-2373-9F75-3EDE-1515B4A47763' # generate a uuid
 			messageId: uuid().toUpperCase()
 			destination: 'playerStatsService'
 			headers: @generateHeaders()
@@ -227,7 +225,6 @@ class AggregatedStatsPacket extends Packet
 		headers = new ASObject()
 		headers.name = ''
 		headers.object =
-			#DSId: 'B676FABB-A938-8A67-F7DF-9D922DE0CF4A' # ds id from connect request
 			DSId: @options.dsid
 			DSRequestTimeout: 60
 			DSEndpoint: 'my-rtmps'
@@ -245,7 +242,6 @@ class PlayerStatsPacket extends Packet
 			timestamp: 0
 			clientId: null
 			timeToLive: 0
-			#messageId: 'FE149B94-2373-9F75-3EDE-1515B4A47763' # generate a uuid
 			messageId: uuid().toUpperCase()
 			destination: 'playerStatsService'
 			headers: @generateHeaders()
@@ -257,14 +253,13 @@ class PlayerStatsPacket extends Packet
 		headers = new ASObject()
 		headers.name = ''
 		headers.object =
-			#DSId: 'B676FABB-A938-8A67-F7DF-9D922DE0CF4A' # ds id from connect request
 			DSId: @options.dsid
 			DSRequestTimeout: 60
 			DSEndpoint: 'my-rtmps'
 		headers.encoding = 2
 		return headers
 
-class RecentGames extends Packet
+class RecentGamesPacket extends Packet
 	generate: (acctId) ->
 		object = new ASObject()
 		object.name = 'flex.messaging.messages.RemotingMessage'
@@ -275,7 +270,6 @@ class RecentGames extends Packet
 			timestamp: 0
 			clientId: null
 			timeToLive: 0
-			#messageId: 'FE149B94-2373-9F75-3EDE-1515B4A47763' # generate a uuid
 			messageId: uuid().toUpperCase()
 			destination: 'playerStatsService'
 			headers: @generateHeaders()
@@ -293,7 +287,7 @@ class RecentGames extends Packet
 		headers.encoding = 2
 		return headers
 
-class GetTeamForSummoner extends Packet
+class GetTeamForSummonerPacket extends Packet
 	generate: (summonerId) ->
 		object = new ASObject()
 		object.name = 'flex.messaging.messages.RemotingMessage'
@@ -304,7 +298,6 @@ class GetTeamForSummoner extends Packet
 			timestamp: 0
 			clientId: null
 			timeToLive: 0
-			#messageId: 'FE149B94-2373-9F75-3EDE-1515B4A47763' # generate a uuid
 			messageId: uuid().toUpperCase()
 			destination: 'summonerTeamService'
 			headers: @generateHeaders()
@@ -322,7 +315,7 @@ class GetTeamForSummoner extends Packet
 		headers.encoding = 2
 		return headers
 
-class GetTeamById extends Packet
+class GetTeamByIdPacket extends Packet
 	generate: (teamId) ->
 		object = new ASObject()
 		object.name = 'flex.messaging.messages.RemotingMessage'
@@ -333,7 +326,6 @@ class GetTeamById extends Packet
 			timestamp: 0
 			clientId: null
 			timeToLive: 0
-			#messageId: 'FE149B94-2373-9F75-3EDE-1515B4A47763' # generate a uuid
 			messageId: uuid().toUpperCase()
 			destination: 'summonerTeamService'
 			headers: @generateHeaders()
@@ -391,72 +383,72 @@ class GetSummonerNamePacket extends Packet
 		return headers
 
 class GetSpectatorInfoPacket extends Packet
-	generate: (name) ->
-		object = new ASObject()
-		object.name = 'flex.messaging.messages.RemotingMessage'
-		object.keys = ['source', 'operation', 'timestamp', 'messageId', 'clientId', 'timeToLive', 'body', 'destination', 'headers']
-		object.object =
-			operation: 'retrieveInProgressSpectatorGameInfo'
-			source: null
-			timestamp: 0
-			clientId: null
-			timeToLive: 0
-			messageId: uuid().toUpperCase()
-			destination: 'gameService'
-			headers: @generateHeaders()
-			body: [name]
-		object.encoding = 0
+	generate:(name)->
+		object=new ASObject()
+		object.name='flex.messaging.messages.RemotingMessage'
+		object.keys=['source', 'operation', 'timestamp', 'messageId', 'clientId', 'timeToLive', 'body', 'destination', 'headers']
+		object.object=
+			operation:		'retrieveInProgressSpectatorGameInfo'
+			source:			null
+			timestamp:		0
+			clientId:		null
+			timeToLive:		0
+			messageId:		uuid().toUpperCase()
+			destination:	'gameService'
+			headers:		@generateHeaders()
+			body:			[name]
+		object.encoding=0
 		return object
 
-	generateHeaders: () ->
-		headers = new ASObject()
-		headers.name = ''
-		headers.object =
-			DSId: @options.dsid
-			DSRequestTimeout: 60
-			DSEndpoint: 'my-rtmps'
-		headers.encoding = 2
+	generateHeaders:()->
+		headers=new ASObject()
+		headers.name=''
+		headers.object=
+			DSId:				@options.dsid
+			DSRequestTimeout:	60
+			DSEndpoint:			'my-rtmps'
+		headers.encoding=2
 		return headers
 
 class GetMasteryBookPacket extends Packet
-	generate: (summoner_id) ->
-		object = new ASObject()
-		object.name = 'flex.messaging.messages.RemotingMessage'
-		object.keys = ['source', 'operation', 'timestamp', 'messageId', 'clientId', 'timeToLive', 'body', 'destination', 'headers']
-		object.object =
-			operation: 'getMasteryBook'
-			source: null
-			timestamp: 0
-			clientId: null
-			timeToLive: 0
-			messageId: uuid().toUpperCase()
-			destination: 'masteryBookService'
-			headers: @generateHeaders()
-			body: [summoner_id]
-		object.encoding = 0
+	generate:(summoner_id)->
+		object=new ASObject()
+		object.name='flex.messaging.messages.RemotingMessage'
+		object.keys=['source', 'operation', 'timestamp', 'messageId', 'clientId', 'timeToLive', 'body', 'destination', 'headers']
+		object.object=
+			operation:		'getMasteryBook'
+			source:			null
+			timestamp:		0
+			clientId:		null
+			timeToLive:		0
+			messageId:		uuid().toUpperCase()
+			destination:	'masteryBookService'
+			headers:		@generateHeaders()
+			body:			[summoner_id]
+		object.encoding=0
 		return object
 
-	generateHeaders: () ->
-		headers = new ASObject()
-		headers.name = ''
-		headers.object =
-			DSId: @options.dsid
-			DSRequestTimeout: 60
-			DSEndpoint: 'my-rtmps'
-		headers.encoding = 2
+	generateHeaders:()->
+		headers=new ASObject()
+		headers.name=''
+		headers.object=
+			DSId:				@options.dsid
+			DSRequestTimeout:	60
+			DSEndpoint:			'my-rtmps'
+		headers.encoding=2
 		return headers
 
-exports.ConnectPacket = ConnectPacket
-exports.LoginPacket = LoginPacket
-exports.AuthPacket = AuthPacket
-exports.HeartbeatPacket = HeartbeatPacket
-exports.LookupPacket = LookupPacket
-exports.GetSummonerDataPacket = GetSummonerDataPacket
-exports.AggregatedStatsPacket = AggregatedStatsPacket
-exports.PlayerStatsPacket = PlayerStatsPacket
-exports.RecentGames = RecentGames
-exports.GetTeamForSummoner = GetTeamForSummoner
-exports.GetTeamById = GetTeamById
-exports.GetSummonerNamePacket = GetSummonerNamePacket
-exports.GetSpectatorInfoPacket = GetSpectatorInfoPacket
-exports.GetMasteryBookPacket = GetMasteryBookPacket
+exports.ConnectPacket			=ConnectPacket
+exports.LoginPacket				=LoginPacket
+exports.AuthPacket				=AuthPacket
+exports.HeartbeatPacket			=HeartbeatPacket
+exports.LookupPacket			=LookupPacket
+exports.GetSummonerDataPacket	=GetSummonerDataPacket
+exports.AggregatedStatsPacket	=AggregatedStatsPacket
+exports.PlayerStatsPacket		=PlayerStatsPacket
+exports.RecentGamesPacket		=RecentGamesPacket
+exports.GetTeamForSummonerPacket=GetTeamForSummonerPacket
+exports.GetTeamByIdPacket		=GetTeamByIdPacket
+exports.GetSummonerNamePacket	=GetSummonerNamePacket
+exports.GetSpectatorInfoPacket	=GetSpectatorInfoPacket
+exports.GetMasteryBookPacket	=GetMasteryBookPacket

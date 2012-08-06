@@ -81,7 +81,7 @@
     clients.push(tmp);
   }
 
-  app = express.createServer();
+  app = express();
 
   app.configure(function() {
     app.set('port', process.env.PORT || 8080);

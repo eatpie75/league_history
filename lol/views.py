@@ -62,6 +62,7 @@ def view_game(request, region, game_id):
 	game=Game.objects.get(game_id=game_id, region=region)
 	modes=('CUSTOM', 'BOT', 'UNRANKED', 'RANKED', 'RANKED TEAM', 'RANKED PREMADE')
 	metadata={'map':game.get_game_map_display().upper(), 'mode':modes[game.game_mode]}
+	update_in_queue=False
 	if game.fetched==False:
 		updating=cache.get('game/{}/{}/filling'.format(game.region, game.game_id))
 		if updating!=None:
@@ -69,11 +70,10 @@ def view_game(request, region, game_id):
 				update_in_queue='{:.0%} DONE'.format(float(updating.result['current'])/float(updating.result['total']))
 			else:
 				update_in_queue='UPDATE IN QUEUE.'
-			return render_to_response('view_game.html.j2', {'game':game, 'update_in_queue':update_in_queue, 'metadata':metadata}, RequestContext(request))
 		if game.time>(datetime.now(timezone('UTC'))-timedelta(days=2)) and not game.fetched:
 			result=fill_game.apply_async(args=[game.pk,], priority=1)
 			cache.set('game/{}/{}/filling'.format(game.region, game.game_id), result, 60*10)
-			return render_to_response('view_game.html.j2', {'game':game, 'update_in_queue':'UPDATE IN QUEUE.', 'metadata':metadata}, RequestContext(request))
+			update_in_queue='UPDATE IN QUEUE.'
 		elif not game.fetched and game.unfetched_players=='':
 			game.fetched=True
 			game.save()
@@ -81,9 +81,41 @@ def view_game(request, region, game_id):
 		players=Player.objects.filter(game=game).order_by('-blue_team', '-gold').select_related()
 	else:
 		players=Player.objects.filter(game=game).order_by('blue_team', '-gold').select_related()
-	if game.game_mode in (3, 4):
+	BASE={
+		'num_players':	0,
+		'kills':		0,
+		'avg_kills':	0,
+		'deaths':		0,
+		'avg_deaths':	0,
+		'assists':		0,
+		'avg_assists':	0,
+		'gold':			0,
+		'avg_gold':		0,
+		'cs':			0,
+		'avg_cs':		0,
+		'pd_dealt':		0,
+		'pd_taken':		0,
+		'md_dealt':		0,
+		'md_taken':		0,
+		'td_dealt':		0,
+		'td_taken':		0
+	}
+	metadata['stats']={'winner':BASE.copy(), 'loser':BASE.copy()}
+	for player in players:
+		team='winner' if player.won else 'loser'
+		metadata['stats'][team]['num_players']+=1
+		for key, mapping in  {'kills':'kills', 'deaths':'deaths', 'assists':'assists', 'minion_kills':'cs', 'neutral_minions_killed':'cs', 'gold':'gold'}.iteritems():
+			metadata['stats'][team][mapping]+=getattr(player, key)
+			metadata['stats'][team]['avg_{}'.format(mapping)]=round(float(metadata['stats'][team][mapping])/metadata['stats'][team]['num_players'], 1)
+		metadata['stats'][team]['pd_dealt']+=player.physical_damage_dealt
+		metadata['stats'][team]['pd_taken']+=player.physical_damage_taken
+		metadata['stats'][team]['md_dealt']+=player.magic_damage_dealt
+		metadata['stats'][team]['md_taken']+=player.magic_damage_taken
+		metadata['stats'][team]['td_dealt']+=player.damage_dealt
+		metadata['stats'][team]['td_taken']+=player.damage_taken
+	if game.game_mode in (3, 4, 5):
 		metadata['avg_elo']=players.filter(rating__gt=0).aggregate(Avg('rating'))['rating__avg']
-	return render_to_response('view_game.html.j2', {'game':game, 'players':players, 'metadata':metadata}, RequestContext(request))
+	return render_to_response('view_game.html.j2', {'game':game, 'players':players, 'metadata':metadata, 'update_in_queue':update_in_queue}, RequestContext(request))
 
 
 # @cache_page(60 * 15)
@@ -102,7 +134,7 @@ def view_summoner(request, region, account_id, slug):
 	else: update_in_queue=False
 	if summoner.slug!=slug: return HttpResponseRedirect(summoner.get_absolute_url())
 	rating=summoner.get_rating()
-	games=Player.objects.filter(summoner=summoner).select_related()
+	games=Player.objects.filter(summoner=summoner).defer('summoner').select_related()
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats==None:
 		stats=Stats(games, summoner_name=summoner.name, cached=True, elo=True)
@@ -148,6 +180,21 @@ def view_summoner_champions(request, region, account_id, slug):
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
 	# assert False
 	return render_to_response('view_summoner_champions.html.j2', {'games':games, 'summoner':summoner, 'rating':rating, 'stats':stats, 'champions':CHAMPIONS}, RequestContext(request))
+
+
+def view_summoner_inventory(request, region, account_id, slug):
+	sregion=region
+	region=__get_region(sregion)
+	summoner=Summoner.objects.get(account_id=account_id, region=region)
+	if summoner.slug!=slug: return HttpResponseRedirect(summoner.get_absolute_url())
+	rating=summoner.get_rating()
+	games=Player.objects.filter(summoner=summoner).select_related()
+	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
+	if stats==None:
+		stats=Stats(games, summoner_name=summoner.name, cached=True, elo=True)
+		stats.generate_index()
+		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
+	return render_to_response('view_summoner_inventory.html.j2', {'summoner':summoner, 'rating':rating, 'stats':stats}, RequestContext(request))
 
 
 def view_summoner_specific_champion(request, sregion, acctid, slug, champion, champion_slug):

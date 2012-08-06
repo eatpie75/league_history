@@ -420,8 +420,8 @@ $(document).ready(->
 			return 'bottom'
 	window.connect_items=->
 		$('.item').each(->
-			item=items[$(this).data('item').slice(1)]
-			$(this).popover({
+			item=items[$(@).data('item').slice(1)]
+			$(@).popover({
 				content:item.description
 				title:item.name
 				placement:wat

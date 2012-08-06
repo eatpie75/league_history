@@ -14,7 +14,7 @@
     region: 'na',
     username: 'unprojapina1',
     password: 'penis2',
-    version: '1.63.12_07_15_18_46'
+    version: '1.64.12_07_27_15_01'
   };
 
   summoner = {
@@ -37,6 +37,8 @@
     con.context.options = options;
     return con.context.summoner = summoner;
   });
+
+  console.log('connecting');
 
   client.connect();
 

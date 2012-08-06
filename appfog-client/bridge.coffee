@@ -30,7 +30,7 @@ bridge_status_middleware=(req, res, next)->
 	req.bridge_status=status
 	next()
 
-app=express.createServer()
+app=express()
 app.configure(->
 	app.use(express.logger('dev'))
 	app.use(express.bodyParser())
@@ -112,17 +112,6 @@ client_restart=->
 	start_client()
 	status.reconnects+=1
 
-# process.on('message', (msg)->
-# 	if msg.event=='connect'
-# 		id=msg.id
-# 		options=msg.options
-# 		app.set('port', options.listen_port)
-# 		start_client()
-# 	else if msg.event=='status'
-# 		process.send({event:'status', data:{connected:status.connected, total_requests:status.total_requests, reconnects:status.reconnects}, server:"#{id}"})
-# 	else
-# 		msg=null
-# )
 
 options=require('./servers.json')[instance]
 id="#{options.region}:#{options.username}"

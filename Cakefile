@@ -1,9 +1,9 @@
 fs			= require ('fs')
 {exec}		= require('child_process')
-async		= require('./node-lol-client/node_modules/async')
-colors		= require('./node-lol-client/node_modules/colors')
-uglifyjs	= require('./node-lol-client/node_modules/uglify-js')
-uglifycss	= require('./node-lol-client/node_modules/uglifycss')
+async		= require('./wat/node_modules/async')
+colors		= require('./wat/node_modules/colors')
+uglifyjs	= require('./wat/node_modules/uglify-js')
+uglifycss	= require('./wat/node_modules/uglifycss')
 
 Cakefile		= 'Cakefile'
 BASE			= 'lol'

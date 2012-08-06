@@ -123,17 +123,11 @@ class Stats:
 						'avg_gold':		0,
 						'items':		{}
 					}
+
 				champions[game.champion_id]['count']+=1
-				champions[game.champion_id]['kills']+=game.kills
-				champions[game.champion_id]['avg_kills']=round(float(champions[game.champion_id]['kills'])/champions[game.champion_id]['count'], 1)
-				champions[game.champion_id]['deaths']+=game.deaths
-				champions[game.champion_id]['avg_deaths']=round(float(champions[game.champion_id]['deaths'])/champions[game.champion_id]['count'], 1)
-				champions[game.champion_id]['assists']+=game.assists
-				champions[game.champion_id]['avg_assists']=round(float(champions[game.champion_id]['assists'])/champions[game.champion_id]['count'], 1)
-				champions[game.champion_id]['cs']+=game.minion_kills+game.neutral_minions_killed
-				champions[game.champion_id]['avg_cs']=champions[game.champion_id]['cs']/champions[game.champion_id]['count']
-				champions[game.champion_id]['gold']+=game.gold
-				champions[game.champion_id]['avg_gold']=champions[game.champion_id]['gold']/champions[game.champion_id]['count']
+				for key, mapping in {'kills':'kills', 'deaths':'deaths', 'assists':'assists', 'minion_kills':'cs', 'neutral_minions_killed':'cs', 'gold':'gold'}.iteritems():
+					champions[game.champion_id][mapping]+=getattr(game, key)
+					champions[game.champion_id]['avg_{}'.format(mapping)]=round(float(champions[game.champion_id][mapping])/champions[game.champion_id]['count'], 1)
 				if champions[game.champion_id]['deaths']>0:
 					champions[game.champion_id]['kdr']=round(float(champions[game.champion_id]['kills'])/champions[game.champion_id]['deaths'], 2)
 				else:

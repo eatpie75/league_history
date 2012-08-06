@@ -88,7 +88,6 @@
           console.log(err);
         }
         return _this.sslConnect(function(err, stream) {
-          console.log('stream connected');
           _this.stream = stream;
           return _this.setupRTMP();
         });
@@ -218,6 +217,7 @@
       }
       AuthPacket = lolPackets.AuthPacket;
       this.options.authToken = result.args[0].body.object.token;
+      this.options.account_id = result.args[0].body.object.accountSummary.object.accountId.value;
       cmd = new RTMPCommand(0x11, null, null, null, [new AuthPacket(this.options).generate()]);
       return this.rtmp.send(cmd, function(err, result) {
         if (err) {
@@ -256,14 +256,14 @@
       });
     };
 
-    LolClient.prototype.getSummonerStats = function(acctId, cb) {
+    LolClient.prototype.getSummonerStats = function(account_id, cb) {
       var PlayerStatsPacket, cmd,
         _this = this;
       if (this.options.debug) {
-        console.log("Fetching Summoner Stats for " + acctId);
+        console.log("Fetching Summoner Stats for " + account_id);
       }
       PlayerStatsPacket = lolPackets.PlayerStatsPacket;
-      cmd = new RTMPCommand(0x11, null, null, null, [new PlayerStatsPacket(this.options).generate(Number(acctId))]);
+      cmd = new RTMPCommand(0x11, null, null, null, [new PlayerStatsPacket(this.options).generate(Number(account_id))]);
       return this.rtmp.send(cmd, function(err, result) {
         var _ref, _ref1;
         if (err) {
@@ -276,14 +276,14 @@
       });
     };
 
-    LolClient.prototype.getMatchHistory = function(acctId, cb) {
-      var RecentGames, cmd,
+    LolClient.prototype.getMatchHistory = function(account_id, cb) {
+      var RecentGamesPacket, cmd,
         _this = this;
       if (this.options.debug) {
-        console.log("Fetching recent games for " + acctId);
+        console.log("Fetching recent games for " + account_id);
       }
-      RecentGames = lolPackets.RecentGames;
-      cmd = new RTMPCommand(0x11, null, null, null, [new RecentGames(this.options).generate(Number(acctId))]);
+      RecentGamesPacket = lolPackets.RecentGamesPacket;
+      cmd = new RTMPCommand(0x11, null, null, null, [new RecentGamesPacket(this.options).generate(Number(account_id))]);
       return this.rtmp.send(cmd, function(err, result) {
         var _ref, _ref1;
         if (err) {
@@ -296,11 +296,11 @@
       });
     };
 
-    LolClient.prototype.getAggregatedStats = function(acctId, cb) {
+    LolClient.prototype.getAggregatedStats = function(account_id, cb) {
       var AggregatedStatsPacket, cmd,
         _this = this;
       AggregatedStatsPacket = lolPackets.AggregatedStatsPacket;
-      cmd = new RTMPCommand(0x11, null, null, null, [new AggregatedStatsPacket(this.options).generate(Number(acctId))]);
+      cmd = new RTMPCommand(0x11, null, null, null, [new AggregatedStatsPacket(this.options).generate(Number(account_id))]);
       return this.rtmp.send(cmd, function(err, result) {
         var _ref, _ref1;
         if (err) {
@@ -313,11 +313,11 @@
       });
     };
 
-    LolClient.prototype.getTeamsForSummoner = function(summonerId, cb) {
-      var GetTeamForSummoner, cmd,
+    LolClient.prototype.getTeamsForSummoner = function(summoner_id, cb) {
+      var GetTeamForSummonerPacket, cmd,
         _this = this;
-      GetTeamForSummoner = lolPackets.GetTeamForSummoner;
-      cmd = new RTMPCommand(0x11, null, null, null, [new GetTeamForSummoner(this.options).generate(Number(summonerId))]);
+      GetTeamForSummonerPacket = lolPackets.GetTeamForSummonerPacket;
+      cmd = new RTMPCommand(0x11, null, null, null, [new GetTeamForSummonerPacket(this.options).generate(Number(summoner_id))]);
       return this.rtmp.send(cmd, function(err, result) {
         var _ref, _ref1;
         if (err) {
@@ -330,11 +330,11 @@
       });
     };
 
-    LolClient.prototype.getTeamById = function(teamId, cb) {
-      var GetTeamById, cmd,
+    LolClient.prototype.getTeamById = function(team_id, cb) {
+      var GetTeamByIdPacket, cmd,
         _this = this;
-      GetTeamById = lolPackets.GetTeamById;
-      cmd = new RTMPCommand(0x11, null, null, null, [new GetTeamById(this.options).generate(teamId)]);
+      GetTeamByIdPacket = lolPackets.GetTeamByIdPacket;
+      cmd = new RTMPCommand(0x11, null, null, null, [new GetTeamByIdPacket(this.options).generate(team_id)]);
       return this.rtmp.send(cmd, function(err, result) {
         var _ref, _ref1;
         if (err) {
@@ -347,11 +347,11 @@
       });
     };
 
-    LolClient.prototype.getSummonerData = function(acctId, cb) {
+    LolClient.prototype.getSummonerData = function(account_id, cb) {
       var GetSummonerDataPacket, cmd,
         _this = this;
       GetSummonerDataPacket = lolPackets.GetSummonerDataPacket;
-      cmd = new RTMPCommand(0x11, null, null, null, [new GetSummonerDataPacket(this.options).generate(acctId)]);
+      cmd = new RTMPCommand(0x11, null, null, null, [new GetSummonerDataPacket(this.options).generate(account_id)]);
       return this.rtmp.send(cmd, function(err, result) {
         var _ref, _ref1;
         if (err) {
@@ -434,7 +434,7 @@
         console.log("Sending Heartbeat");
       }
       HeartbeatPacket = lolPackets.HeartbeatPacket;
-      cmd = new RTMPCommand(0x11, null, null, null, [new HeartbeatPacket(this.options).generate(this.keep_alive_counter)]);
+      cmd = new RTMPCommand(0x11, null, null, null, [new HeartbeatPacket(this.options).generate(this.options.account_id, this.keep_alive_counter)]);
       return this.rtmp.send(cmd, function(err, result) {
         var _ref, _ref1;
         _this.keep_alive_counter += 1;
