@@ -454,6 +454,7 @@
           'id': page.pageId.value,
           'name': page.name,
           'created': page.createDate,
+          'active': page.current,
           'slots': []
         };
         _ref1 = page.slotEntries.data;

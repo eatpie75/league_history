@@ -283,7 +283,7 @@
       return GetSummonerDataPacket.__super__.constructor.apply(this, arguments);
     }
 
-    GetSummonerDataPacket.prototype.generate = function(acctId) {
+    GetSummonerDataPacket.prototype.generate = function(account_id) {
       var object;
       object = new ASObject();
       object.name = 'flex.messaging.messages.RemotingMessage';
@@ -297,7 +297,7 @@
         messageId: uuid().toUpperCase(),
         destination: 'summonerService',
         headers: this.generateHeaders(),
-        body: [acctId]
+        body: [account_id]
       };
       object.encoding = 0;
       return object;
@@ -328,11 +328,11 @@
       return AggregatedStatsPacket.__super__.constructor.apply(this, arguments);
     }
 
-    AggregatedStatsPacket.prototype.generate = function(acctId) {
+    AggregatedStatsPacket.prototype.generate = function(account_id) {
       var object;
       object = new ASObject();
       object.name = 'flex.messaging.messages.RemotingMessage';
-      object.keys = ['source', 'operation', 'timestamp', 'messageId', 'clientId', 'timeToLive', 'body', 'destination', 'headers'];
+      object.key = ['source', 'operation', 'timestamp', 'messageId', 'clientId', 'timeToLive', 'body', 'destination', 'headers'];
       object.object = {
         operation: 'getAggregatedStats',
         source: null,
@@ -342,7 +342,7 @@
         messageId: uuid().toUpperCase(),
         destination: 'playerStatsService',
         headers: this.generateHeaders(),
-        body: [acctId, 'CLASSIC', 'CURRENT']
+        body: [account_id, 'CLASSIC', 'CURRENT']
       };
       object.encoding = 0;
       return object;
@@ -373,7 +373,7 @@
       return PlayerStatsPacket.__super__.constructor.apply(this, arguments);
     }
 
-    PlayerStatsPacket.prototype.generate = function(acctId) {
+    PlayerStatsPacket.prototype.generate = function(account_id) {
       var object;
       object = new ASObject();
       object.name = 'flex.messaging.messages.RemotingMessage';
@@ -387,7 +387,7 @@
         messageId: uuid().toUpperCase(),
         destination: 'playerStatsService',
         headers: this.generateHeaders(),
-        body: [acctId, 'CURRENT']
+        body: [account_id, 'CURRENT']
       };
       object.encoding = 0;
       return object;
@@ -418,7 +418,7 @@
       return RecentGamesPacket.__super__.constructor.apply(this, arguments);
     }
 
-    RecentGamesPacket.prototype.generate = function(acctId) {
+    RecentGamesPacket.prototype.generate = function(account_id) {
       var object;
       object = new ASObject();
       object.name = 'flex.messaging.messages.RemotingMessage';
@@ -432,7 +432,7 @@
         messageId: uuid().toUpperCase(),
         destination: 'playerStatsService',
         headers: this.generateHeaders(),
-        body: [acctId]
+        body: [account_id]
       };
       object.encoding = 0;
       return object;
@@ -463,7 +463,7 @@
       return GetTeamForSummonerPacket.__super__.constructor.apply(this, arguments);
     }
 
-    GetTeamForSummonerPacket.prototype.generate = function(summonerId) {
+    GetTeamForSummonerPacket.prototype.generate = function(summoner_id) {
       var object;
       object = new ASObject();
       object.name = 'flex.messaging.messages.RemotingMessage';
@@ -477,7 +477,7 @@
         messageId: uuid().toUpperCase(),
         destination: 'summonerTeamService',
         headers: this.generateHeaders(),
-        body: [summonerId]
+        body: [summoner_id]
       };
       object.encoding = 0;
       return object;
@@ -508,7 +508,7 @@
       return GetTeamByIdPacket.__super__.constructor.apply(this, arguments);
     }
 
-    GetTeamByIdPacket.prototype.generate = function(teamId) {
+    GetTeamByIdPacket.prototype.generate = function(team_id) {
       var object;
       object = new ASObject();
       object.name = 'flex.messaging.messages.RemotingMessage';
@@ -522,20 +522,20 @@
         messageId: uuid().toUpperCase(),
         destination: 'summonerTeamService',
         headers: this.generateHeaders(),
-        body: [this.generateBody(teamId)]
+        body: [this.generateBody(team_id)]
       };
       object.encoding = 0;
       return object;
     };
 
-    GetTeamByIdPacket.prototype.generateBody = function(teamId) {
+    GetTeamByIdPacket.prototype.generateBody = function(team_id) {
       var body;
       body = new ASObject();
       body.name = 'com.riotgames.team.TeamId';
       body.keys = ['dataVersion', 'fullId', 'futureData'];
       body.object = {
         dataVersion: null,
-        fullId: teamId,
+        fullId: team_id,
         futureData: null
       };
       body.encoding = 0;

@@ -14,18 +14,27 @@ def rune_summary(runepage):
 				page['stats'][stat]=round(amount, 1)
 			else:
 				page['stats'][stat]=int(round(amount))
+			if page['stats'][stat]%1==0:
+				page['stats'][stat]=int(page['stats'][stat])
 		return page
 	presum=[]
 	for page in runepage:
-		tmp={'stats':{}}
+		tmp={'stats':{}, 'runes':{}}
 		# print page
 		if len(page['slots'])==0:
 			continue
 		name=page['name']
 		tmp['name']=name
 		tmp['id']=page['id']
+		tmp['active']=page.get('active') if page.get('active')!=None else False
 		for slot in page['slots']:
 			rune=RUNES[slot['id']]
+			if slot['id'] not in tmp['runes']:
+				tmp['runes'][slot['id']]={
+					'name':rune['name'],
+					'count':0
+				}
+			tmp['runes'][slot['id']]['count']+=1
 			for effect in rune['effect']:
 				stat=effect['stat']
 				if stat not in tmp['stats']:

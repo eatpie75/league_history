@@ -110,7 +110,7 @@
 	.box-shadow(0px 0px 2px);
 }
 
-.best-champions {
+.best-stats {
 	.header {
 		height:26px;
 		vertical-align:center;
@@ -123,6 +123,21 @@
 		text-align:left;
 		height:130px;
 		width:100%;
+		.stats {
+			width:80px;
+			text-align:left;
+			& > b {
+				float:right;
+			}
+		}
+	}
+	.item {
+		text-align:left;
+		// height:70px;
+		// width:100%;
+		.vert-bar {
+			height:64px;
+		}
 		.stats {
 			width:80px;
 			text-align:left;
@@ -248,7 +263,7 @@
 	list-style:none;
 }
 .rune-nav-tabs {
-	width:150px;
+	// width:150px;
 	& > li {
 		.box-shadow(0px 0px 0px);
 		background-color:#64727c;
@@ -275,7 +290,7 @@
 			color:#FFF;
 			outline:0px none;
 		}
-	}	
+	}
 }
 
 .interlude {

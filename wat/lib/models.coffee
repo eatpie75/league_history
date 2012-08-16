@@ -249,6 +249,7 @@ class RunePage
 				'id'		:page.pageId.value
 				'name'		:page.name
 				'created'	:page.createDate
+				'active'	:page.current
 				'slots'		:[]
 			}
 			for rune in page.slotEntries.data

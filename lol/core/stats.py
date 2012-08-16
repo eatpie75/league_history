@@ -146,7 +146,7 @@ class Stats:
 			for game in self.games:
 				for item in game.get_items:
 					item=int(item)
-					if item==0: continue
+					if item in (0, 2003, 2004, 2037, 2038, 2039, 2042, 2043, 2044, 2047): continue
 					if item not in self.index['champions'][game.champion_id]['items']:
 						self.index['champions'][game.champion_id]['items'][item]={
 							'count':0,

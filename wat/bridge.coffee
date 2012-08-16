@@ -17,9 +17,23 @@ status=
 	reconnects:0
 	connected:false
 
+if process.env.VCAP_APPLICATION?
+	af_app=JSON.parse(process.env.VCAP_APPLICATION)
+	instance=af_app.instance_index
+	port=process.env.VCAP_APP_PORT
+	mode='appfog'
+	server_list='appfogservers.json'
+else
+	port=process.env.PORT || 8080
+	mode='normal'
+	server_list='servers.json'
+
 
 _log=(text)->
-	process.send({event:'log', server:"#{id}", text:text})
+	if mode=='normal'
+		process.send({event:'log', server:"#{id}", text:text})
+	else
+		console.log(text)
 
 
 lolclient_middleware=(req, res, next)->
@@ -54,7 +68,10 @@ _log("Preparing to connect".grey)
 
 start_client=->
 	if not initial
-		options=require('./servers.json')[id]
+		if mode=='normal'
+			options=require("./#{server_list}")[id]
+		else if mode=='appfog'
+			options=require("./#{server_list}")[instance]
 	client=child_process.fork('client.js')
 	client.on('message', (msg)->
 		#console.log(msg)
@@ -64,7 +81,10 @@ start_client=->
 			status.login_errors=0
 			status.connected=true
 			app.set('lolclient', client)
-			app.listen(app.settings.port, 'localhost')
+			if mode=='normal'
+				app.listen(app.settings.port, 'localhost')
+			else if mode=='appfog'
+				app.listen(app.settings.port)
 		else if msg.event=='connected' and not initial
 			_log('Reconnected'.green)
 			status.login_errors=0
@@ -110,14 +130,21 @@ client_restart=->
 	start_client()
 	status.reconnects+=1
 
-process.on('message', (msg)->
-	if msg.event=='connect'
-		id=msg.id
-		options=msg.options
-		app.set('port', options.listen_port)
-		start_client()
-	else if msg.event=='status'
-		process.send({event:'status', data:{connected:status.connected, total_requests:status.total_requests, reconnects:status.reconnects}, server:"#{id}"})
-	else
-		msg=null
-)
+if mode=='normal'
+	process.on('message', (msg)->
+		if msg.event=='connect'
+			id=msg.id
+			options=msg.options
+			app.set('port', options.listen_port)
+			start_client()
+		else if msg.event=='status'
+			process.send({event:'status', data:{connected:status.connected, total_requests:status.total_requests, reconnects:status.reconnects}, server:"#{id}"})
+		else
+			msg=null
+	)
+else if mode=='appfog'
+	options=require("./#{server_list}")[instance]
+	id="#{options.region}:#{options.username}"
+	status.id=id
+	app.set('port', process.env.VCAP_APP_PORT)
+	start_client()

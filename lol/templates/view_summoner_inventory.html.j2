@@ -61,14 +61,19 @@
 			</div>
 			<div class='row span12'>{% set runes, masteries = summoner.get_runes()|rune_summary, summoner.get_masteries() %}
 				<div class='tabbable tabs-left'>
-					<ul class='rune-nav rune-nav-tabs'>{% for page in runes %}
-						<li{% if loop.index0==0 %} class='active'{% endif %}><a href='#runetab{{loop.index0}}' data-toggle='tab'>{{page.name}}</a></li>
+					<ul class='span2 rune-nav rune-nav-tabs'>{% for page in runes %}
+						<li{% if page.active %} class='active'{% endif %}><a href='#runetab{{loop.index0}}' data-toggle='tab'>{{page.name}}</a></li>
 					{% endfor %}</ul>
 					<div class='tab-content'>{% for page in runes %}
-						<div class='tab-pane{% if loop.index0==0 %} active{% endif %}' id='runetab{{loop.index0}}'>{% for stat, amount in page.stats.iteritems() %}
+						<div class='tab-pane{% if page.active %} active{% endif %}' id='runetab{{loop.index0}}'>
+							<div class='span5' style='margin-left:0;'>{% for stat, amount in page.stats.iteritems() %}
 							<b>{{stat|rune_stat_str}}</b><br>
 							{{amount}}<hr>
 						{% endfor %}</div>
+							<div class='span5' style='margin-left:0;'>{% for id, rune in page.runes.iteritems() %}
+								<b>{{rune.count}}</b><small>x</small>{{rune.name}}<br>
+							{% endfor %}</div>
+					</div>
 					{% endfor %}</div>
 				</div>
 			</div>

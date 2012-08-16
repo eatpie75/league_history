@@ -13,12 +13,14 @@ class LolClient extends EventEmitter
 		'na':	'prod.na1.lol.riotgames.com'
 		'euw':	'prod.eu.lol.riotgames.com'
 		'eune':	'prod.eun1.lol.riotgames.com'
+		'br':	'prod.br.lol.riotgames.com'
 	}
 	
 	_loginQueueHosts:{
 		'na':	'lq.na1.lol.riotgames.com'
 		'euw':	'lq.eu.lol.riotgames.com'
 		'eune':	'lq.eun1.lol.riotgames.com'
+		'br':	'lq.br.lol.riotgames.com'
 	}
 
 	constructor:(@options)->

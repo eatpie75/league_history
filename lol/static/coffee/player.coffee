@@ -123,17 +123,10 @@ force_update=(e)->
 				setTimeout(_update_status, msg.delay)
 	)
 
-draw_bgchart=(data, y='rating')->
+draw_bgchart=(data, y='rating', aoptions={}, data_parse='default')->
 	# console.log data
 	container=document.getElementById("elo-graph")
-
-	parsed=[]
-	for day in data
-		if day[1][y]<10
-			continue
-		parsed.push([new Date(day[0]), day[1][y]])
-
-	Flotr.draw(container, [parsed], {
+	defaults={
 		# subtitle:'ELO GRAPH'
 		# fontColor:'#fff'
 		# shadowSize:0
@@ -145,6 +138,7 @@ draw_bgchart=(data, y='rating')->
 			autoscale: true
 			autoscaleMargin:1
 			showLabels:false
+			tickFormatter:(num)->"#{num}%"
 		}
 		mouse: {
 			track:true
@@ -169,12 +163,40 @@ draw_bgchart=(data, y='rating')->
 			horizontalLines:false
 			outline:''
 		}
-	})
+	}
+
+	options=$.extend({}, defaults)
+	$.extend(true, options, aoptions)
+	# console.log options
+
+	if data_parse=='default'
+		parsed=[]
+		for day in data
+			if day[1][y]<10
+				continue
+			parsed.push([new Date(day[0]), day[1][y]])
+	else if data_parse=='chistorywr'
+		parsed=[]
+		for day in data
+			date=new Date(day[0])
+			now=new Date()
+			if day[1]['champions'][y]['count']<10# or (date.getUTCMonth()!=now.getUTCMonth()|date.getUTCFullYear()!=now.getUTCFullYear())
+				continue
+			parsed.push([date, (day[1]['champions'][y]['won']/day[1]['champions'][y]['count'])*100])
+	else if data_parse=='chistorypop'
+		parsed=[]
+		for day in data
+			if day[1]['champions'][y]['count']<10
+				continue
+			parsed.push([new Date(day[0]), (day[1]['champions'][y]['won']/day[1]['count'])*100])
+
+	Flotr.draw(container, [parsed], options)
 
 $(document).ready(->
 	window.page_handler=new PlayerGamePageHandler()
 	window.champion_sort=new ChampionSort()
 	window.stat_filter=new StatFilter()
+	window.draw_chart=draw_bgchart
 	$('#force-update').bind('click', force_update)
 	if window.bgchart? then draw_bgchart(window.data, window.bgchart)
 	$('a[data-toggle="tab"]').click((e)->

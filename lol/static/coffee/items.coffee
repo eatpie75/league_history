@@ -419,7 +419,7 @@ $(document).ready(->
 		else
 			return 'bottom'
 	window.connect_items=->
-		$('.item').each(->
+		$('div.item.sprite').each(->
 			item=items[$(@).data('item').slice(1)]
 			$(@).popover({
 				content:item.description

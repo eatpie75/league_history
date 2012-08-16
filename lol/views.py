@@ -222,10 +222,12 @@ def view_all_champions(request):
 		key+='/'+form.cleaned_data['game_map']
 		games=games.filter(game__game_map=form.cleaned_data['game_map'])
 		count=count.filter(game_map=form.cleaned_data['game_map'])
+	else: key+='/-1'
 	if form.cleaned_data['game_mode'] not in ('', '-1'):
 		key+='/'+form.cleaned_data['game_mode']
 		games=games.filter(game__game_mode=form.cleaned_data['game_mode'])
 		count=count.filter(game_mode=form.cleaned_data['game_mode'])
+	else: key+='/-1'
 	stats=cache.get(key)
 	if stats==None:
 		generating=True
@@ -251,18 +253,50 @@ def view_champion(request, champion_id, champion_slug):
 	if form.cleaned_data['game_map'] not in ('', '-1'):
 		key+='/'+form.cleaned_data['game_map']
 		games=games.filter(game__game_map=form.cleaned_data['game_map'])
+	else: key+='/-1'
 	if form.cleaned_data['game_mode'] not in ('', '-1'):
 		key+='/'+form.cleaned_data['game_mode']
 		games=games.filter(game__game_mode=form.cleaned_data['game_mode'])
+	else: key+='/-1'
 	stats=cache.get(key)
 	if stats==None:
 		generating=True
 		if cache.get(key+'/generating')==None:
 			cache.set(key+'/generating', True, 60*10)
-			generate_global_stats.delay(key, games.query, True, champion=champion_id)
+			generate_global_stats.delay(key, games.query, True, champion=champion_id, champion_history=True)
 	else:
 		generating=False
 	return render_to_response('view_champion.html.j2', {'stats':stats, 'champion_id':champion_id, 'champion':CHAMPIONS[champion_id], 'items':ITEMS, 'form':form, 'generating':generating}, RequestContext(request))
+
+
+# @cache_page(60 * 60)
+def view_champion_items(request, champion_id, champion_slug):
+	from core.champions import CHAMPIONS
+	from core.items import ITEMS
+	from lol.forms import MapModeForm
+
+	champion_id=int(champion_id)
+	form=MapModeForm(request.GET)
+	form.is_valid()
+	key='global_stats/{}'.format(champion_id)
+	games=Player.objects.filter(champion_id=champion_id)
+	if form.cleaned_data['game_map'] not in ('', '-1'):
+		key+='/'+form.cleaned_data['game_map']
+		games=games.filter(game__game_map=form.cleaned_data['game_map'])
+	else: key+='/-1'
+	if form.cleaned_data['game_mode'] not in ('', '-1'):
+		key+='/'+form.cleaned_data['game_mode']
+		games=games.filter(game__game_mode=form.cleaned_data['game_mode'])
+	else: key+='/-1'
+	stats=cache.get(key)
+	if stats==None:
+		generating=True
+		if cache.get(key+'/generating')==None:
+			cache.set(key+'/generating', True, 60*10)
+			generate_global_stats.delay(key, games.query, True, champion=champion_id, champion_history=True)
+	else:
+		generating=False
+	return render_to_response('view_champion_items.html.j2', {'stats':stats, 'champion_id':champion_id, 'champion':CHAMPIONS[champion_id], 'items':ITEMS, 'form':form, 'generating':generating}, RequestContext(request))
 
 
 def run_auto(request):
