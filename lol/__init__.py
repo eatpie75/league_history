@@ -3,6 +3,7 @@ import random
 from datetime import datetime, timedelta
 from django.conf import settings
 from django.core.cache import cache
+from redis.exceptions import ConnectionError
 
 
 class NoServersAvailable(Exception):
@@ -61,10 +62,13 @@ class Server_List:
 		else:
 			return random.choice(choices)
 
-servers=cache.get('servers')
-if servers==None:
-	sl=Server_List(settings.LOL_CLIENT_SERVERS)
-	cache.set('servers', sl, 60*60*24*30)
-else:
-	if servers.updated<datetime.now()-timedelta(hours=1):
-		servers.check_servers()
+try:
+	servers=cache.get('servers')
+	if servers==None:
+		sl=Server_List(settings.LOL_CLIENT_SERVERS)
+		cache.set('servers', sl, 60*60*24*30)
+	else:
+		if servers.updated<datetime.now()-timedelta(hours=1):
+			servers.check_servers()
+except ConnectionError:
+	print 'Couldn\'t connect to redis server, lots of things will be broken'

@@ -1,3 +1,21 @@
+__rengar_trophy={
+	'name':"Bonetooth Necklace",
+	'description':"""
++10 Attack Damage<br>
++2 Attack Damage per level<br>
+UNIQUE Passive: Rengar collects trophies when killing Champions, and gains bonus effects based on how many trophies he has. Kills and assists grant 1 trophy, and 1 trophy is lost on death.
+<dl><dt>3 Trophies:<ul>
+<li>+10 Armor Penetration</li>
+<li>+5% Cooldown Reduction</li></ul></dt>
+<dt>6 Trophies:<ul>
+<li>+25 Movement Speed</li></ul></dt>
+<dt>9 Trophies:<ul>
+<li>Rengar's leap gains 150 bonus range.</li></ul></dt>
+<dt>14 Trophies:<ul>
+<li>Thrill of the Hunt's duration is increased by 3 seconds. Additionally, Rengar's next ability used after activating Thrill of the Hunt generates 1 bonus Ferocity.</li></ul></dt>
+</dl>
+"""
+}
 ITEMS={
 	0:{'name':"", 'description':""},
 	1001:{'name':"Boots of Speed", 'description':"UNIQUE Passive: Enhanced Movement 1 (does not stack with other Boots)."},
@@ -104,7 +122,7 @@ ITEMS={
 	3138:{'name':"Leviathan", 'description':"+180 Health<br>UNIQUE Passive: Your champion gains 32 Health per stack, receiving 2 stacks for a kill or 1 stack for an assist (stacks up to 20). You lose a third of your stacks on death. At 20 stacks, your champion takes 15% less damage."},
 	3140:{'name':"Quicksilver Sash", 'description':"+48 Magic Resist<br>UNIQUE Active: Removes all debuffs from your champion (90 second cooldown)."},
 	3141:{'name':"Sword of the Occult", 'description':"+10 Attack Damage<br>UNIQUE Passive: Your champion gains 5 Attack Damage per stack, receiving 2 stacks for a kill or 1 stack for an assist (stacks up to 20). You lose a third of your stacks on death. At 20 stacks, your champion's Movement Speed is increased by 15%."},
-	3142:{'name':"Youmuu's Ghostblade", 'description':"+30 Attack Damage<br>+15% Critical Strike Chance<br>UNIQUE +15% Cooldown Reduction.<br>UNIQUE Passive: +20 Armor Penetration.<br>UNIQUE Active: You gain 20% Movement Speed and 50% Attack Speed for 4 seconds. Melee basic attacks increase the duration by 2 seconds up to a maximum duration of 8 seconds (60 second cooldown)."},
+	3142:{'name':"Youmuu's Ghostblade", 'description':"+30 Attack Damage<br>+15% Critical Strike Chance<br>UNIQUE Passive: +15% Cooldown Reduction.<br>UNIQUE Passive: +20 Armor Penetration.<br>UNIQUE Active: You gain 20% Movement Speed and 50% Attack Speed for 4 seconds. Melee basic attacks increase the duration by 2 seconds up to a maximum duration of 8 seconds (60 second cooldown)."},
 	3143:{'name':"Randuin's Omen", 'description':"+350 Health<br>+75 Armor<br>+25 Health Regen per 5 seconds<br>UNIQUE Passive: +5% Cooldown Reduction.<br>UNIQUE Passive: 20% chance on being hit by basic attacks to slow the attacker's Movement and Attack Speeds by 35% for 3 seconds.<br>UNIQUE Active: Slows the Movement and Attack Speeds of surrounding enemy units by 35% for 2 seconds + 0.5 seconds for each 100 combined Armor and Magic Resist your champion has (60 second cooldown)."},
 	3144:{'name':"Bilgewater Cutlass", 'description':"+35 Attack Damage<br>+15% Life Steal<br>UNIQUE Active: Deals 150 magic damage and slows the target champion's Movement Speed by 50% for 3 seconds (60 second cooldown)."},
 	3145:{'name':"Hextech Revolver", 'description':"+40 Ability Power<br>UNIQUE Passive: +12% Spell Vamp."},
@@ -116,7 +134,12 @@ ITEMS={
 	3157:{'name':"Zhonya's Hourglass", 'description':"+100 Ability Power<br>+50 Armor<br>UNIQUE Active: Places your champion into Stasis for 2 seconds, rendering you invulnerable and untargetable but unable to take any action (90 second cooldown)."},
 	3158:{'name':"Ionian Boots of Lucidity", 'description':"UNIQUE Passive: +15% Cooldown Reduction<br>UNIQUE Passive: Enhanced Movement 2 (does not stack with other Boots)."},
 	3165:{'name':"Morello's Evil Tome", 'description':"+75 Ability Power<br>+12 Mana Regen per 5 seconds<br>UNIQUE Passive: +20% Cooldown Reduction.<br>UNIQUE Active: Inflicts target enemy champion with Grievous Wound, causing 50% reduced healing and regeneration for 8 seconds (20 second cooldown)."},
+	3166:__rengar_trophy,
+	3167:__rengar_trophy,
+	3168:__rengar_trophy,
+	3169:__rengar_trophy,
 	3170:{'name':"Moonflair Spellblade", 'description':"+50 Ability Power<br>UNIQUE Passive: +35 Tenacity (Tenacity reduces the duration of stuns, slows, taunts, fears, silences, blinds and immobilizes. Does not stack with other Tenacity items.)"},
+	3171:__rengar_trophy,
 	3172:{'name':"Cloak and Dagger", 'description':"+20% Attack Speed<br>+20% Critical Strike Chance<br>UNIQUE Passive: +35 Tenacity (Tenacity reduces the duration of stuns, slows, taunts, fears, silences, blinds and immobilizes. Does not stack with other Tenacity items.)"},
 	3173:{'name':"Eleisa's Miracle", 'description':"+25 Health Regen per 5 seconds<br>+20 Mana Regen per 5 seconds<br>UNIQUE Passive: +35 Tenacity (Tenacity reduces the duration of stuns, slows, taunts, fears, silences, blinds and immobilizes. Does not stack with other Tenacity items.)"},
 	3174:{'name':"Athene's Unholy Grail", 'description':"+90 Ability Power<br>+40 Magic Resist<br>+15 Mana Regen per 5 seconds<br>UNIQUE Passive: 15% Cooldown Reduction.<br>UNIQUE Passive: Restores 12% of your max mana on kill or assist.<br>UNIQUE Passive: Increases your Mana Regeneration by 1% per 1% Mana you are missing."},

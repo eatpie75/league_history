@@ -49,7 +49,7 @@
 				<div class='pull-left' style='width:940px;height:165px;position:absolute;top:0px;right:0px;'>
 					<div id='elo-graph' style='width:100%;height:100%;'></div>
 				</div>
-				<div class='bottom-right' id='last-updated-block'><!-- {{summoner.time_updated|timediff}}/{{summoner.time_updated}} !-->
+				<div class='bottom-right' id='last-updated-block'>
 					{% if not update_in_queue and summoner.time_updated|timediff > 60*30 %}<a href='javascript:void(0);' id='force-update'>{% endif %}
 					<small id='last-updated'>LAST UPDATED:{% if not update_in_queue %}{{summoner.time_updated|naturaltime|upper}}{% else %}{{update_in_queue}}{% endif %}</small>
 					{% if not update_in_queue and summoner.time_updated|timediff > 60*30 %}</a>{% endif %}
@@ -107,8 +107,6 @@
 			</div>
 			<br>
 			<div class='hori-bar purple' title='magic'><div class='red' style='width:10%;' title='physical'></div></div>
-			{# {{stats.by_count|pprint}} #}
-			<div class='well'>{{sql_queries|length}}</div>
 		</div>
 	</body>
 </html>

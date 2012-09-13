@@ -1,3 +1,21 @@
+__rengar_trophy={
+	'name':"Bonetooth Necklace",
+	'description':"
++10 Attack Damage<br>
++2 Attack Damage per level<br>
+UNIQUE Passive: Rengar collects trophies when killing Champions, and gains bonus effects based on how many trophies he has. Kills and assists grant 1 trophy, and 1 trophy is lost on death.
+<dl><dt>3 Trophies:<ul>
+<li>+10 Armor Penetration</li>
+<li>+5% Cooldown Reduction</li></ul></dt>
+<dt>6 Trophies:<ul>
+<li>+25 Movement Speed</li></ul></dt>
+<dt>9 Trophies:<ul>
+<li>Rengar's leap gains 150 bonus range.</li></ul></dt>
+<dt>14 Trophies:<ul>
+<li>Thrill of the Hunt's duration is increased by 3 seconds. Additionally, Rengar's next ability used after activating Thrill of the Hunt generates 1 bonus Ferocity.</li></ul></dt>
+</dl>
+"
+}
 items=
 	0:
 		name:""
@@ -316,7 +334,7 @@ items=
 		description:"+10 Attack Damage<br>UNIQUE Passive: Your champion gains 5 Attack Damage per stack, receiving 2 stacks for a kill or 1 stack for an assist (stacks up to 20). You lose a third of your stacks on death. At 20 stacks, your champion's Movement Speed is increased by 15%."
 	3142:
 		name:"Youmuu's Ghostblade"
-		description:"+30 Attack Damage<br>+15% Critical Strike Chance<br>UNIQUE +15% Cooldown Reduction.<br>UNIQUE Passive: +20 Armor Penetration.<br>UNIQUE Active: You gain 20% Movement Speed and 50% Attack Speed for 4 seconds. Melee basic attacks increase the duration by 2 seconds up to a maximum duration of 8 seconds (60 second cooldown)."
+		description:"+30 Attack Damage<br>+15% Critical Strike Chance<br>UNIQUE Passive: +15% Cooldown Reduction.<br>UNIQUE Passive: +20 Armor Penetration.<br>UNIQUE Active: You gain 20% Movement Speed and 50% Attack Speed for 4 seconds. Melee basic attacks increase the duration by 2 seconds up to a maximum duration of 8 seconds (60 second cooldown)."
 	3143:
 		name:"Randuin's Omen"
 		description:"+350 Health<br>+75 Armor<br>+25 Health Regen per 5 seconds<br>UNIQUE Passive: +5% Cooldown Reduction.<br>UNIQUE Passive: 20% chance on being hit by basic attacks to slow the attacker's Movement and Attack Speeds by 35% for 3 seconds.<br>UNIQUE Active: Slows the Movement and Attack Speeds of surrounding enemy units by 35% for 2 seconds + 0.5 seconds for each 100 combined Armor and Magic Resist your champion has (60 second cooldown)."
@@ -350,9 +368,14 @@ items=
 	3165:
 		name:"Morello's Evil Tome"
 		description:"+75 Ability Power<br>+12 Mana Regen per 5 seconds<br>UNIQUE Passive: +20% Cooldown Reduction.<br>UNIQUE Active: Inflicts target enemy champion with Grievous Wound, causing 50% reduced healing and regeneration for 8 seconds (20 second cooldown)."
+	3166:__rengar_trophy
+	3167:__rengar_trophy
+	3168:__rengar_trophy
+	3169:__rengar_trophy
 	3170:
 		name:"Moonflair Spellblade"
 		description:"+50 Ability Power<br>UNIQUE Passive: +35 Tenacity (Tenacity reduces the duration of stuns, slows, taunts, fears, silences, blinds and immobilizes. Does not stack with other Tenacity items.)"
+	3171:__rengar_trophy
 	3172:
 		name:"Cloak and Dagger"
 		description:"+20% Attack Speed<br>+20% Critical Strike Chance<br>UNIQUE Passive: +35 Tenacity (Tenacity reduces the duration of stuns, slows, taunts, fears, silences, blinds and immobilizes. Does not stack with other Tenacity items.)"
@@ -408,13 +431,12 @@ $(document).ready(->
 	wat=(tip, el)->
 		el=$(el)
 		tip=$(tip)
-		offset=el.position()
-		# eheight=tip.height()
-		# ewidth=el.width()
-		# wheight=window.innerHeight
-		# wwidth=window.innerWidth
 		scroll=window.scrollY
-		if offset.top-scroll-150>=0
+		offset=el.offset().top-scroll
+		tip.css('display', 'none').appendTo(document.body)
+		[height, width]=[tip.height(), tip.width()]
+		tip.remove()
+		if offset-height>=0
 			return 'top'
 		else
 			return 'bottom'
@@ -425,6 +447,8 @@ $(document).ready(->
 				content:item.description
 				title:item.name
 				placement:wat
+				trigger:'hover'
+				animation:false
 			})
 		)
 	window.connect_items()

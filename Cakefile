@@ -1,9 +1,9 @@
 fs			= require ('fs')
 {exec}		= require('child_process')
-async		= require('./wat/node_modules/async')
-colors		= require('./wat/node_modules/colors')
-uglifyjs	= require('./wat/node_modules/uglify-js')
-uglifycss	= require('./wat/node_modules/uglifycss')
+async		= require('./clientemu/node_modules/async')
+colors		= require('./clientemu/node_modules/colors')
+uglifyjs	= require('./clientemu/node_modules/uglify-js')
+uglifycss	= require('./clientemu/node_modules/uglifycss')
 
 Cakefile		= 'Cakefile'
 BASE			= 'lol'

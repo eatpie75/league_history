@@ -88,6 +88,7 @@ CHAMPIONS={
 	104:"Graves",
 	105:"Fizz",
 	106:"Volibear",
+	107:"Rengar",
 	110:"Varus",
 	111:"Nautilus",
 	112:"Viktor",
@@ -100,5 +101,6 @@ CHAMPIONS={
 	122:"Darius",
 	126:"Jayce",
 	131:"Diana",
+	134:"Syndra",
 	143:"Zyra"
 }

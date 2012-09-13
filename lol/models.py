@@ -26,7 +26,7 @@ class Summoner(models.Model):
 	update_automatically=models.BooleanField(db_index=True, default=False)
 	fully_update=models.BooleanField(default=False)
 	time_created=models.DateTimeField(auto_now_add=True)
-	time_updated=models.DateTimeField(default=datetime.utcnow())
+	time_updated=models.DateTimeField(default=datetime.now(timezone('UTC')))
 	# time_extra_updated=models.DateTimeField(auto_now_add=True)
 
 	@models.permalink
@@ -100,6 +100,9 @@ class Summoner(models.Model):
 	def __unicode__(self):
 		return self.name
 
+	class Meta:
+		unique_together=(("region", "account_id"))
+
 
 class SummonerRankedStatistics(models.Model):
 	summoner=models.ForeignKey(Summoner, db_index=True)
@@ -136,6 +139,9 @@ class SummonerRating(models.Model):
 	current_rating=models.IntegerField(null=True, blank=True)
 	top_rating=models.IntegerField(null=True, blank=True)
 
+	class Meta:
+		unique_together=(("summoner", "game_map", "game_mode"))
+
 
 class Game(models.Model):
 	region=models.IntegerField(choices=REGIONS, default=0)
@@ -160,6 +166,7 @@ class Game(models.Model):
 
 	class Meta:
 		ordering=['-time',]
+		unique_together=(("region", "game_id"))
 
 
 class Player(models.Model):
@@ -223,6 +230,7 @@ class Player(models.Model):
 
 	class Meta:
 		ordering=['game',]
+		unique_together=(("game", "summoner"))
 
 
 def choose_server(region, exclude=None):
@@ -296,7 +304,7 @@ def update_summoners(all_summoners, games=True, runes=False):
 				parse_games(data['games'], summoner, True)
 			else:
 				parse_games(data['games'], summoner)
-			summoner.time_updated=datetime.utcnow().replace(tzinfo=timezone('UTC'))
+			summoner.time_updated=datetime.now(timezone('UTC'))
 			summoner.save()
 			cache.delete('{}/{}/updating'.format(summoner.region, summoner.account_id))
 			transaction.commit()
@@ -424,13 +432,6 @@ def parse_games(games, summoner, full=False, current=None):
 			player.save(force_insert=True)
 		else:
 			player=Player.objects.get(game=game, summoner=summoner)
-		# if player not in game.players.all():
-		# 	game.players.add(player)
-		# 	game.save(force_update=True)
-		# if not game.fetched and game.time>(datetime.utcnow().replace(tzinfo=timezone('UTC'))-timedelta(days=2)) and full and game!=current:
-			# print u'Fully updating game:{}'.format(game.game_id)
-			# print u'For summoner:{}'.format(summoner.name)
-			# fill_game(game, True)
 	transaction.commit()
 
 

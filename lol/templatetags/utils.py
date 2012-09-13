@@ -33,7 +33,8 @@ def is_in_game(player, game):
 
 
 @register.filter
-def timediff(val1, val2=datetime.now(timezone('UTC'))):
-	print val2.tzinfo, val1.tzinfo
+def timediff(val1, val2=None):
+	if val2==None:
+		val2=datetime.now(timezone('UTC'))
 	diff=val2-val1
 	return diff.total_seconds()

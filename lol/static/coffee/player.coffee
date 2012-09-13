@@ -57,24 +57,54 @@ class ChampionSort
 			@icon=@column.children('span').children('i')
 			@column.addClass('active')
 			@icon.addClass(@_icons["#{@direction}"])
-		@sort(el.data('column'))
+		@sort(el.data('column'), el.data('spec-order'))
 		qs=querystring(window.location.hash.slice(1))
 		qs['sort']=el.data('column')
 		if @direction==-1 then qs['direction']=@direction else delete qs.direction
 		window.location.hash=$.param(qs)
-	sort:(column)->
-		_sort=(a,b)=>
-			pregex=new RegExp('(\\d+)%', 'i')
-			c=$(a).children(".#{column}").text()
-			d=$(b).children(".#{column}").text()
-			if not isNaN(Number(c)) and not isNaN(Number(d))
-				[c,d]=[Number(c), Number(d)]
-				if c>d then -1*@direction else if c==d then 0 else 1*@direction
-			else if pregex.test(c) and pregex.test(d)
-				[c,d]=[Number(c.match(pregex)[1]), Number(d.match(pregex)[1])]
-				if c>d then -1*@direction else if c==d then 0 else 1*@direction
+	sort:(column, spec_order=null)->
+		pregex=new RegExp('(\\d+)%', 'i')
+		_base=(value_1, value_2, total_1, total_2)=>
+			if value_1>value_2
+				-1*@direction
+			else if value_1==value_2
+				if total_1>total_2 then -1*@direction else 1*@direction
 			else
-				if c>d then 1*@direction else if c==d then 0 else -1*@direction
+				1*@direction
+		_sort=(a, b)=>
+			[a, b]=[$(a), $(b)]
+			value_1=a.children(".#{column}").text()
+			value_2=b.children(".#{column}").text()
+			if spec_order? and spec_order=='swin'
+				[value_1,value_2]=[Number(value_1.match(pregex)[1]), Number(value_2.match(pregex)[1])]
+				minimum=Math.round(window.num_games*0.04)
+				lower_min=Math.round(window.num_games*0.01)
+				total_1=Number(a.children(".total").text())
+				total_2=Number(b.children(".total").text())
+				if total_1>=minimum
+					if total_2>=minimum
+						_base(value_1, value_2, total_1, total_2)
+					else
+						-1*@direction
+				else
+					if total_2>=minimum
+						1*@direction
+					else
+						if total_1>=lower_min
+							if total_2>=lower_min
+								_base(value_1, value_2, total_1, total_2)
+							else
+								-1*@direction
+						else
+							_base(value_1, value_2, total_1, total_2)
+			else if not isNaN(Number(value_1)) and not isNaN(Number(value_2))
+				[value_1,value_2]=[Number(value_1), Number(value_2)]
+				if value_1>value_2 then -1*@direction else if value_1==value_2 then 0 else 1*@direction
+			else if pregex.test(value_1) and pregex.test(value_2)
+				[value_1,value_2]=[Number(value_1.match(pregex)[1]), Number(value_2.match(pregex)[1])]
+				if value_1>value_2 then -1*@direction else if value_1==value_2 then 0 else 1*@direction
+			else
+				if value_1>value_2 then 1*@direction else if value_1==value_2 then 0 else -1*@direction
 		$('.cbody').append($('.cbody .sort').sort(_sort))
 		@current_column=column
 
