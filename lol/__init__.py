@@ -66,9 +66,11 @@ try:
 	servers=cache.get('servers')
 	if servers==None:
 		sl=Server_List(settings.LOL_CLIENT_SERVERS)
-		cache.set('servers', sl, 60*60*24*30)
+		cache.set('servers', sl, timeout=0)
 	else:
 		if servers.updated<datetime.now()-timedelta(hours=1):
 			servers.check_servers()
+	if cache.get('queue_len')==None:
+		cache.set('queue_len', 0, timeout=0)
 except ConnectionError:
-	print 'Couldn\'t connect to redis server, lots of things will be broken'
+	print 'Couldn\'t connect to redis, lots of things will be broken'

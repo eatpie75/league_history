@@ -25,13 +25,15 @@ class Stats:
 			self.games=queryset_manager(self.qs)
 			self.indexed=False
 			self.items_indexed=False
-			self.index={'champions':{}, 'elo':{}}
+			self.index={'champions':{}, 'elo':{}, 'global_stats':{}}
 			self.count=0
 			self.champion=kwargs.get('champion', None)
 			self.summoner_name=kwargs.get('summoner_name', None)
+			self.summoner_time_updated=kwargs.get('summoner_time_updated', None)
 			self.cached=kwargs.get('cached', False)
 			self.index_elo=kwargs.get('elo', False)
 			self.champion_history=kwargs.get('champion_history', False)
+			self.global_stats=kwargs.get('global_stats', False)
 			self.display_count=kwargs.get('display_count', self.count)
 
 		def __getstate__(self):
@@ -74,6 +76,7 @@ class Stats:
 			champions={}
 			history={}
 			elo={}
+			global_stats={'blue_side':{'won':0, 'lost':0}}
 			for game in self.games:
 				itime=game.game.time.strftime('%Y-%m-%d')
 				if itime not in history:
@@ -105,6 +108,9 @@ class Stats:
 						}
 					history[itime]['champions'][game.champion_id]['count']+=1
 					history[itime]['champions'][game.champion_id]['won' if game.won else 'lost']+=1
+				if self.global_stats:
+					if game.game.game_map==1 and game.game.game_mode!=1:
+						global_stats['blue_side']['won' if game.game.blue_team_won else 'lost']+=1
 				if game.champion_id not in champions:
 					champions[game.champion_id]={
 						'count':		0,
@@ -123,7 +129,6 @@ class Stats:
 						'avg_gold':		0,
 						'items':		{}
 					}
-
 				champions[game.champion_id]['count']+=1
 				for key, mapping in {'kills':'kills', 'deaths':'deaths', 'assists':'assists', 'minion_kills':'cs', 'neutral_minions_killed':'cs', 'gold':'gold'}.iteritems():
 					champions[game.champion_id][mapping]+=getattr(game, key)
@@ -133,7 +138,7 @@ class Stats:
 				else:
 					champions[game.champion_id]['kdr']=round(float(champions[game.champion_id]['kills']), 2)
 				champions[game.champion_id]['won' if game.won else 'lost']+=1
-			self.index={'champions':champions, 'elo':sorted(elo.iteritems(), key=lambda x:x[0]), 'history':sorted(history.iteritems(), key=lambda x:x[0])[:-1]}
+			self.index={'champions':champions, 'elo':sorted(elo.iteritems(), key=lambda x:x[0]), 'history':sorted(history.iteritems(), key=lambda x:x[0])[:-1], 'global_stats':global_stats}
 			self.indexed=True
 			self.__update_count()
 			self.games=queryset_manager(self.qs)

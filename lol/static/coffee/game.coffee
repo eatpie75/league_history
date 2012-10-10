@@ -21,7 +21,7 @@ class TellMeMore
 		"<td colspan=11>
 			<div class='span4'>
 				<b>Physical/Magical Damage</b><br>
-				<div class='hori-bar purple' title='Magical Damage'><div class='red' title='Physical Damage' style='width:#{(args.physical_damage_dealt/args.damage_dealt)*100}%;'></div></div>
+				<div class='hori-bar blue' title='Magical Damage'><div class='red' title='Physical Damage' style='width:#{(args.physical_damage_dealt/args.damage_dealt)*100}%;'></div></div>
 			</div>
 		</td>"
 	get_info:(player)->

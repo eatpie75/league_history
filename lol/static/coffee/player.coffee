@@ -4,6 +4,9 @@ class PlayerGamePageHandler
 		@account_id=window.account_id
 		@region=window.region
 		@_bind()
+		@qs=querystring(window.location.hash.slice(1))
+		if 'page' of @qs
+			@change_page(qs.page)
 	_bind:->
 		_this_=@
 		$('.page_link').bind('click', (e)->
@@ -19,24 +22,26 @@ class PlayerGamePageHandler
 			success: (msg)=>
 				$('#games').html(msg)
 				@_bind()
+				@page=page
+				# @qs['page']=@page
+				# window.location.hash=$.param(@qs)
 		)
 
 class ChampionSort
 	constructor:()->
 		@column=$('.table-sort.active:first')
-		if @column.length>0
-			@column_str=@column.data('column')
-			@direction=1
-			@icon=@column.children('span').children('i')
-			@_icons={'-1':'icon-arrow-up', '1':'icon-arrow-down'}
-			@_bind()
-			qs=querystring(window.location.hash.slice(1))
-			if 'sort' of qs
-				if 'direction' of qs
-					@direction=Number(qs.direction)
-				@change($('.table-sort').filter((e)->
-					$(@).data('column')==qs['sort']
-				).first(), true)
+		@column_str=@column.data('column')
+		@direction=1
+		@icon=@column.children('span').children('i')
+		@_icons={'-1':'icon-arrow-up', '1':'icon-arrow-down'}
+		@_bind()
+		qs=querystring(window.location.hash.slice(1))
+		if 'sort' of qs
+			if 'direction' of qs
+				@direction=Number(qs.direction)
+			@change($('.table-sort').filter((e)->
+				$(@).data('column')==qs['sort']
+			).first(), true)
 	_bind:->
 		_this_=@
 		$('.table-sort').bind('click', (e)->
@@ -157,18 +162,19 @@ draw_bgchart=(data, y='rating', aoptions={}, data_parse='default')->
 	# console.log data
 	container=document.getElementById("elo-graph")
 	defaults={
-		# subtitle:'ELO GRAPH'
+		colors: ['#3269b4', '#C0D800', '#CB4B4B', '#4DA74D', '#9440ED']
+		subtitle:'ELO GRAPH'
 		# fontColor:'#fff'
-		# shadowSize:0
+		shadowSize:0
 		xaxis: {
 			mode:'time'
-			showLabels:false
+			# showLabels:false
 		}
 		yaxis: {
 			autoscale: true
 			autoscaleMargin:1
-			showLabels:false
-			tickFormatter:(num)->"#{num}%"
+			# showLabels:false
+			# tickFormatter:(num)->"#{num}%"
 		}
 		mouse: {
 			track:true
@@ -185,12 +191,12 @@ draw_bgchart=(data, y='rating', aoptions={}, data_parse='default')->
 			show:true
 			lineWidth:1
 			radius:2
-			fillColor:'#00A8F0'
+			fillColor:'#9D261D'
 		}
 		grid: {
-			color:'#fff'
+			color:'#000'
 			verticalLines:false
-			horizontalLines:false
+			# horizontalLines:false
 			outline:''
 		}
 	}
@@ -223,9 +229,9 @@ draw_bgchart=(data, y='rating', aoptions={}, data_parse='default')->
 	Flotr.draw(container, [parsed], options)
 
 $(document).ready(->
-	window.page_handler=new PlayerGamePageHandler()
-	window.champion_sort=new ChampionSort()
-	window.stat_filter=new StatFilter()
+	if $('.page_link').length>0 then window.page_handler=new PlayerGamePageHandler()
+	if $('.table-sort.active:first').length>0 then window.champion_sort=new ChampionSort()
+	if $('#stat-filter').length>0 then window.stat_filter=new StatFilter()
 	window.draw_chart=draw_bgchart
 	$('#force-update').bind('click', force_update)
 	if window.bgchart? then draw_bgchart(window.data, window.bgchart)

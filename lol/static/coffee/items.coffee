@@ -385,6 +385,9 @@ items=
 	3174:
 		name:"Athene's Unholy Grail"
 		description:"+90 Ability Power<br>+40 Magic Resist<br>+15 Mana Regen per 5 seconds<br>UNIQUE Passive: 15% Cooldown Reduction.<br>UNIQUE Passive: Restores 12% of your max mana on kill or assist.<br>UNIQUE Passive: Increases your Mana Regeneration by 1% per 1% Mana you are missing."
+	3175:
+		name:"Head of Kha'Zix"
+		description:"+10 Attack Damage<br>+2 Attack Damage per level<br>+10 Armor Penetration<br>+5% Cooldown Reduction<br>+25 Movement Speed<br>Rengar's leap gains 150 bonus range.<br>Thrill of the Hunt's duration is increased by 3 seconds. Additionally, Rengar's next ability used after activating Thrill of the Hunt generates 1 bonus Ferocity."
 	3178:
 		name:"Ionic Spark"
 		description:"+50% Attack Speed<br>+250 Health<br>UNIQUE Passive: Every fourth basic attack unleashes a chain lightning, dealing 125 magic damage to up to 4 targets."

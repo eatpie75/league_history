@@ -3,6 +3,7 @@ from django.core.cache import cache
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 # from django.shortcuts import render_to_response
+from django.template import RequestContext
 from coffin.shortcuts import render_to_response
 from lol.tasks import summoner_auto_task
 from lol.models import Player, Summoner
@@ -26,7 +27,7 @@ def summoner_games(request, region, account_id):
 		games=paginator.page(1)
 	except EmptyPage:
 		games=paginator.page(paginator.num_pages)
-	return render_to_response('ajax/summoner_games.html.j2', {'summoner':summoner, 'games':games}, mimetype='text/html')
+	return render_to_response('ajax/summoner_games.html.j2', {'summoner':summoner, 'games':games}, RequestContext(request), mimetype='text/html')
 
 
 def force_update(request, region, account_id):
@@ -34,8 +35,7 @@ def force_update(request, region, account_id):
 	c=cache.get('summoner/{}/{}/updating'.format(region, account_id))
 	if c!=None or summoner.time_updated>(datetime.now(timezone('UTC'))-timedelta(minutes=30)):
 		return HttpResponse(simplejson.dumps({'status':'DONE', 'msg':'REFRESH PAGE TO SEE UPDATED STATS'}), mimetype='application/json')
-	result=summoner_auto_task.apply_async(args=[summoner.pk,], ignore_result=True, priority=0)
-	cache.set('summoner/{}/{}/updating'.format(summoner.region, summoner.account_id), result, 60*20)
+	summoner_auto_task.apply_async(args=[summoner.pk,], ignore_result=True, priority=0)
 	return HttpResponse(simplejson.dumps({'status':'QUEUE', 'msg':'UPDATE IN QUEUE', 'delay':3000}), mimetype='application/json')
 
 

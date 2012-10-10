@@ -98,6 +98,7 @@ champions=
 	117:"Lulu"
 	119:"Draven"
 	120:"Hecarim"
+	121:"Kha'Zix"
 	122:"Darius"
 	126:"Jayce"
 	131:"Diana"

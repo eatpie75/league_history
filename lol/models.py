@@ -78,21 +78,6 @@ class Summoner(models.Model):
 			return False
 	needs_update=property(_needs_update)
 
-	def update_status(self, task=''):
-		if task=='': task=cache.get('summoner/{}/{}/updating'.format(self.region, self.account_id))
-		if task!=None:
-			if task.state=='PENDING':
-				return 'UPDATE IN QUEUE.'
-			elif task.state=='STARTED':
-				return 'UPDATE RUNNING.'
-			elif task.state=='SUCCESS':
-				cache.delete('summoner/{}/{}/updating'.format(self.region, self.account_id))
-				return False
-			else:
-				return '?'
-		else:
-			return False
-
 	def _slug(self):
 		return slugify(self.name) if len(slugify(self.name))>0 else '-'
 	slug=property(_slug)
@@ -150,7 +135,7 @@ class Game(models.Model):
 	game_mode=models.IntegerField(choices=MODES, db_index=True)
 	time=models.DateTimeField()
 	blue_team_won=models.BooleanField()
-	# players=models.ManyToManyField('Player', related_name='game_players')
+	invalid=models.BooleanField(default=False)
 	unfetched_players=models.CharField(max_length=128, blank=True)
 	fetched=models.BooleanField(default=False)
 
@@ -211,15 +196,18 @@ class Player(models.Model):
 	neutral_minions_killed=models.IntegerField()
 	turrets_destroyed=models.IntegerField()
 	inhibitors_destroyed=models.IntegerField()
-	nodes_neutralised=models.IntegerField(null=True, blank=True)
-	node_neutralisation_assists=models.IntegerField(null=True, blank=True)
-	nodes_captured=models.IntegerField(null=True, blank=True)
-	victory_points=models.IntegerField(null=True, blank=True)
-	objectives=models.IntegerField(null=True, blank=True)
-	total_score=models.IntegerField(null=True, blank=True)
-	objective_score=models.IntegerField(null=True, blank=True)
-	combat_score=models.IntegerField(null=True, blank=True)
-	rank=models.IntegerField(null=True, blank=True)
+	sight_wards_bought_in_game=models.IntegerField()
+	vision_wards_bought_in_game=models.IntegerField()
+	node_neutralize=models.IntegerField(null=True, blank=True)
+	node_neutralize_assist=models.IntegerField(null=True, blank=True)
+	node_capture=models.IntegerField(null=True, blank=True)
+	node_capture_assist=models.IntegerField(null=True, blank=True)
+	victory_point_total=models.IntegerField(null=True, blank=True)
+	team_objective=models.IntegerField(null=True, blank=True)
+	total_player_score=models.IntegerField(null=True, blank=True)
+	objective_player_score=models.IntegerField(null=True, blank=True)
+	combat_player_score=models.IntegerField(null=True, blank=True)
+	total_score_rank=models.IntegerField(null=True, blank=True)
 
 	def _get_items(self):
 		return self.items.split('|')[1:-1]
@@ -329,7 +317,8 @@ def parse_games(games, summoner, full=False, current=None):
 			game=Game(
 				region=summoner.region,
 				game_id=ogame['id'],
-				time=date
+				time=date,
+				invalid=ogame['invalid']
 			)
 			if ogame['game_type']=='PRACTICE_GAME':
 				game.game_mode=0
@@ -379,43 +368,36 @@ def parse_games(games, summoner, full=False, current=None):
 				sr=0
 			player=Player(
 				game=game,
-				summoner=summoner,
-				rating=sr,
-				afk=ogame['afk'],
-				leaver=ogame['leaver'],
-				ping=ogame['ping'],
-				queue_length=ogame['queue_length'],
-				premade_size=ogame['premade_size'],
-				experience_earned=ogame['xp_earned'],
-				boosted_experience_earned=ogame['boost_xp'],
-				ip_earned=ogame['ip_earned'],
-				boosted_ip_earned=ogame['boost_ip'],
+				summoner=summoner, rating=sr,
+				afk=ogame['afk'], leaver=ogame['leaver'],
+				ping=ogame['ping'],	queue_length=ogame['queue_length'],	premade_size=ogame['premade_size'],
+				experience_earned=ogame['xp_earned'], boosted_experience_earned=ogame['boost_xp'],
+				ip_earned=ogame['ip_earned'], boosted_ip_earned=ogame['boost_ip'],
 				summoner_level=ogame['summoner_level'],
-				summoner_spell1=ogame['summoner_spell_one'],
-				summoner_spell2=ogame['summoner_spell_two'],
+				summoner_spell1=ogame['summoner_spell_one'], summoner_spell2=ogame['summoner_spell_two'],
 				champion_id=ogame['champion'],
-				skin_index=ogame['skin_index'],
-				skin_name=ogame['skin_name'],
+				skin_index=ogame['skin_index'], skin_name=ogame['skin_name'],
 				champion_level=ogame['stats']['level'],
 				kills=ogame['stats']['champions_killed'],
 				deaths=ogame['stats']['num_deaths'],
 				assists=ogame['stats']['assists'],
-				minion_kills=ogame['stats']['minions_killed'],
+				minion_kills=ogame['stats']['minions_killed'], neutral_minions_killed=ogame['stats']['neutral_minions_killed'],
 				gold=ogame['stats']['gold_earned'],
-				damage_dealt=ogame['stats']['damage_dealt'],
-				physical_damage_dealt=ogame['stats']['physical_damage_dealt_player'],
-				magic_damage_dealt=ogame['stats']['magic_damage_dealt_player'],
-				damage_taken=ogame['stats']['damage_taken'],
-				physical_damage_taken=ogame['stats']['physical_damage_taken'],
-				magic_damage_taken=ogame['stats']['magic_damage_taken'],
+				damage_dealt=ogame['stats']['damage_dealt'], physical_damage_dealt=ogame['stats']['physical_damage_dealt_player'],	magic_damage_dealt=ogame['stats']['magic_damage_dealt_player'],
+				damage_taken=ogame['stats']['damage_taken'], physical_damage_taken=ogame['stats']['physical_damage_taken'], magic_damage_taken=ogame['stats']['magic_damage_taken'],
 				total_healing_done=ogame['stats']['total_heal'],
 				time_spent_dead=ogame['stats']['total_time_spent_dead'],
 				largest_multikill=ogame['stats']['largest_multi_kill'],
 				largest_killing_spree=ogame['stats']['largest_killing_spree'],
 				largest_critical_strike=ogame['stats']['largest_critical_strike'],
-				neutral_minions_killed=ogame['stats']['neutral_minions_killed'],
-				turrets_destroyed=ogame['stats']['turrets_killed'],
-				inhibitors_destroyed=ogame['stats']['inhibitors_destroyed'],
+				turrets_destroyed=ogame['stats']['turrets_killed'], inhibitors_destroyed=ogame['stats']['inhibitors_destroyed'],
+				sight_wards_bought_in_game=ogame['stats']['sight_wards_bought_in_game'], vision_wards_bought_in_game=ogame['stats']['vision_wards_bought_in_game'],
+				node_neutralize=ogame['stats']['node_neutralize'], node_neutralize_assist=ogame['stats']['node_neutralize_assist'],
+				node_capture=ogame['stats']['node_capture'], node_capture_assist=ogame['stats']['node_capture_assist'],
+				victory_point_total=ogame['stats']['victory_point_total'],
+				team_objective=ogame['stats']['team_objective'],
+				objective_player_score=ogame['stats']['objective_player_score'], combat_player_score=ogame['stats']['combat_player_score'], total_player_score=ogame['stats']['total_player_score'],
+				total_score_rank=ogame['stats']['total_score_rank']
 			)
 			if ogame['team']=='blue':
 				player.blue_team=True

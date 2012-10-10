@@ -30,6 +30,7 @@ CACHES = {
 	'default': {
 		'BACKEND':	'redis_cache.cache.RedisCache',
 		'LOCATION':	'127.0.0.1:6379',
+		'TIMEOUT':	0,
 		'OPTIONS': {
 			'DB': 0,
 			'PICKLE_VERSION':2

@@ -1,9 +1,8 @@
 <div style='height:406px;'>
 	<table class='game-list table table-condensed' style='min-height:406px;'>
 		<thead>
-			<tr><!--612!-->
+			<tr>
 				<th style='width:40px;'></th>
-				<th style='width:100px;'>Summoner</th>
 				<th style='width:50px'>K/D/A</th>
 				<th style='width:50px'>Gold</th>
 				<th style='width:50px'>CS</th>
@@ -11,13 +10,14 @@
 				<th style='width:50px'>Taken</th>
 				<th style='width:85px;'>Spells</th>
 				<th style='width:215px;'>Items</th>
-				<th style='width:150px;'></th>
+				<th style='width:60px;'>Map</th>
+				<th style='width:50px;'>Date</th>
+				<th style='width:130px;'></th>
 			</tr>
 		</thead>
 		<tbody>{% for player in games %}
 			<tr class='{% if player.won %}good{% else %}bad{% endif %}'>
 				<td class='champion'><div class='sprite sprite-champions-small-{{player.champion_id}}'></div><small>{{player.champion_level}}</small></td>
-				<td><a href='{{player.summoner.get_absolute_url()}}'>{{player.summoner.name}}</a></td>
 				<td>{{player.kills}}/{{player.deaths}}/{{player.assists}}</td>
 				<td>{{player.gold|to_k_format}}</td>
 				<td>{{player.minion_kills+player.neutral_minions_killed}}</td>
@@ -27,6 +27,8 @@
 				<td>{% for item in player.get_items %}
 					<div class='item sprite sprite-items-small-{{item}}' data-item="_{{item}}"></div>{% endfor %}
 				</td>
+				<td><img src='{{STATIC_URL}}img/maps/{{player.game.game_map}}.png'></td>
+				<td>{{player.game.time|date('M d')}}</td>
 				<td><a href='{{player.game.get_absolute_url()}}'>View</a></td>
 			</tr>{% endfor %}
 		</tbody>
