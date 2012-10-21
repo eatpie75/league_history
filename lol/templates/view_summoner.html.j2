@@ -102,7 +102,11 @@
 						<strong>Best Champions</strong>
 					</div>
 					{% for champion in stats.best_ratio()[:3] %}<div class='champion'>
-						<div class='sprite sprite-champions-{{champion.0}}'></div><div class='vert-bar green'><div class='red' style='height:{{champion.1.lost|get_percent(champion.1.count)}};'></div></div>
+						<div class='sprite sprite-champions-{{champion.0}}'></div>
+						<div class='vert-bar'>
+							<div class='red' style='height:{{champion.1.lost|get_percent(champion.1.count)}};'></div>
+							<div class='green' style='height:{{champion.1.won|get_percent(champion.1.count)}};'></div>
+						</div>
 						<div class='stats pull-right'>
 							<small>GAMES:</small><b>{{champion.1.count}}</b><br>
 							<small>WINS:</small><b>{{champion.1.won}}</b><br>

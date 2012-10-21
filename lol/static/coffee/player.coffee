@@ -168,6 +168,7 @@ draw_bgchart=(data, y='rating', aoptions={}, data_parse='default')->
 		shadowSize:0
 		xaxis: {
 			mode:'time'
+			noTicks:10
 			# showLabels:false
 		}
 		yaxis: {

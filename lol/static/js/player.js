@@ -296,7 +296,8 @@
       subtitle: 'ELO GRAPH',
       shadowSize: 0,
       xaxis: {
-        mode: 'time'
+        mode: 'time',
+        noTicks: 10
       },
       yaxis: {
         autoscale: true,

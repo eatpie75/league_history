@@ -1,7 +1,7 @@
 .vert-bar {
 	display:inline-block;
 	.ie7-inline-block();
-	.box-shadow(0px 0px 2px);
+	// .box-shadow(0px 0px 2px);
 	overflow: hidden;
 	height:120px;
 	width:12px;
@@ -35,20 +35,26 @@
 }
 
 .hori-bar {
-	display:inline-block;
+	display:block;
 	line-height:0px;
 	text-align:right;
-	.ie7-inline-block();
+	// .ie7-inline-block();
 	overflow: hidden;
 	height:12px;
 	width:120px;
 	// #gradient > .vertical(@good, darken(@good, 10%));
 	& > div {
-		.box-sizing(border-box);
 		.transition(width .6s ease);
-		display:inline-block;
 		height:100%;
 		width:0%;
+		float:left;
+	}
+	&.large {
+		height:32px;
+		width:320px;
+	}
+	&.centered {
+		.center-block();
 	}
 	&.red, .red {
 		background-color:@bad;

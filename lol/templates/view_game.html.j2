@@ -39,7 +39,7 @@
 						<small>MODE</small>
 					</div>
 					<div>
-						<b>{{metadata.map}}</b>
+						<b>{{metadata.map|upper}}</b>
 						<small>MAP</small>
 					</div>
 					<div>
@@ -62,7 +62,7 @@
 			<div class='row span12'>{% if not update_in_queue %}
 				<table class='game-list table table-condensed'>
 					<thead>
-						<tr><!--612!-->
+						<tr>
 							<th style='width:40px;'></th>
 							<th style='width:100px;'>Summoner</th>
 							<th style='width:50px'>K/D/A</th>
@@ -75,7 +75,7 @@
 							<th style='width:150px;'></th>
 						</tr>
 					</thead>{% for team in players|groupby('won')|reverse %}
-					{% if loop.index0 == 0 %}<tr class='interlude win'><td colspan=10>WINNING TEAM</td></tr>{% else %}<tr class='interlude lose'><td colspan=10>LOSING TEAM</td></tr>{% endif %}{% for player in team.list %}
+					{% if loop.first %}<tr class='interlude win'><td colspan=10>WINNING TEAM</td></tr>{% else %}<tr class='interlude lose'><td colspan=10>LOSING TEAM</td></tr>{% endif %}{% for player in team.list %}
 					<tr class='player{% if player.blue_team %} team_blue{% else %} team_purple{% endif %}{% if player.won %} won{% else %} lose{% endif %}{% if player.afk or player.leaver %} leaver {% endif %}'>
 						<td class='champion'><div class='sprite sprite-champions-small-{{player.champion_id}}'></div><small>{{player.champion_level}}</small></td>
 						<td><a href='{{player.summoner.get_absolute_url()}}'{% if metadata.ranked %} title='Rating: {{player.rating}}'{% endif %}>{{player.summoner.name}}</a></td>
@@ -95,8 +95,11 @@
 			{% else %}
 			{{update_in_queue}}
 			{% endif %}
-			{{game.fetched}}<br>
+			<br>{{game.fetched}}<br>
 			{{metadata}}<br>
+			<div style='line-height:0px;'>
+				<div class='hori-bar large'><div class='blue' style='width:29%;'></div><div class='purple' style='width:71%;'></div></div>
+			</div>
 		</div>
 	</body>
 </html>
