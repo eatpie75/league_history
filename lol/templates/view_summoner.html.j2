@@ -23,7 +23,7 @@
 			var AJAX_BASE="{{AJAX_BASE}}";
 			var account_id={{summoner.account_id}};
 			var region={{summoner.region}};
-			{%- if stats.index.elo|length>0 %}
+			{%- if stats.index.elo|length>1 %}
 			var bgchart='rating';
 			var data={{stats.elo_toJSON()|safe}};
 			{% endif %}

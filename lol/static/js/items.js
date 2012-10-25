@@ -4,7 +4,7 @@
 
   __rengar_trophy = {
     'name': "Bonetooth Necklace",
-    'description': "+10 Attack Damage<br>+2 Attack Damage per level<br>UNIQUE Passive: Rengar collects trophies when killing Champions, and gains bonus effects based on how many trophies he has. Kills and assists grant 1 trophy, and 1 trophy is lost on death.<dl><dt>3 Trophies:<ul><li>+10 Armor Penetration</li><li>+5% Cooldown Reduction</li></ul></dt><dt>6 Trophies:<ul><li>+25 Movement Speed</li></ul></dt><dt>9 Trophies:<ul><li>Rengar's leap gains 150 bonus range.</li></ul></dt><dt>14 Trophies:<ul><li>Thrill of the Hunt's duration is increased by 3 seconds. Additionally, Rengar's next ability used after activating Thrill of the Hunt generates 1 bonus Ferocity.</li></ul></dt></dl>"
+    'description': "+2 Attack Damage per level<br>UNIQUE Passive: Rengar collects trophies when killing Champions, and gains bonus effects based on how many trophies he has. Kills and assists grant 1 trophy, and 1 trophy is lost on death.<dl><dt>3 Trophies:<ul><li>+10 Armor Penetration</li><li>+5% Cooldown Reduction</li></ul></dt><dt>6 Trophies:<ul><li>+25 Movement Speed</li></ul></dt><dt>9 Trophies:<ul><li>Rengar's leap gains 150 bonus range.</li></ul></dt><dt>14 Trophies:<ul><li>Thrill of the Hunt's duration is increased by 3 seconds. Additionally, Rengar's next ability used after activating Thrill of the Hunt generates 1 bonus Ferocity.</li></ul></dt></dl>"
   };
 
   items = {
@@ -126,39 +126,47 @@
     },
     2003: {
       name: "Health Potion",
-      description: "Click to Consume: Restores 150 Health over 15 seconds."
+      description: "Restores 150 Health over 15 seconds."
     },
     2004: {
       name: "Mana Potion",
-      description: "Click to Consume: Restores 100 Mana over 15 seconds."
+      description: "Restores 100 Mana over 15 seconds."
     },
     2037: {
       name: "Elixir of Fortitude",
-      description: "Click to Consume: Grants 140-235 Health, based on champion level, and 10 Attack Damage for 4 minutes."
+      description: "On use, grants 140–235 Health, based on champion level and 10 Attack Damage for 4 minutes."
     },
     2038: {
       name: "Elixir of Agility",
-      description: "Click to Consume: Grants 12-22% Attack Speed, based on champion level, and 8% Critical Strike Chance for 4 minutes."
+      description: "On use, grants 12–22% Attack Speed, based on champion level, and 8% Critical Strike for 4 minutes."
     },
     2039: {
       name: "Elixir of Brilliance",
-      description: "Click to Consume: Grants 20-40 Ability Power, based on champion level, and 10% Cooldown Reduction for 4 minutes."
+      description: "On use, grants 20–40 Ability Power, based on champion level, and 10% Cooldown Reduction for 4 minutes."
+    },
+    2040: {
+      name: "Ichor of Rage",
+      description: "On use, grants 20–42 Attack Damage, based on champion level, 20–42 Attack Speed (based on champion level) and 15% increased damage to Turrets for 4 minutes."
     },
     2042: {
       name: "Oracle's Elixir",
-      description: "Click to Consume: Grants stealth detection until your champion dies."
+      description: "Grants 750 radius stealth detection to champion until death."
     },
     2043: {
       name: "Vision Ward",
-      description: "Click to Consume: Places an invisible ward that reveals the surrounding area and stealthed units in the area for 3 minutes."
+      description: "Places an invisible ward with 1100 range. Lasts 3 minutes."
     },
     2044: {
       name: "Sight Ward",
-      description: "Click to Consume: Places an invisible ward that reveals the surrounding area for 3 minutes."
+      description: "Places an invisible ward with 1000 range Magical Sight (can see invisible units). Lasts 3 minutes."
     },
     2047: {
       name: "Oracle's Extract",
-      description: "Click to Consume: Grants stealth detection for 5 minutes or until your champion dies."
+      description: "Grants your champion stealth detection for 5 minutes or until they die."
+    },
+    2048: {
+      name: "Ichor of Illumination",
+      description: "On use, grants 30–64 Ability Power based on champion level, 15% Cooldown Reduction and a huge boost to Mana and Energy Rengeneration for 4 minutes."
     },
     3001: {
       name: "Abyssal Scepter",
@@ -230,7 +238,7 @@
     },
     3044: {
       name: "Phage",
-      description: "+225 Health<br>+18 Attack Damage<br>UNIQUE Passive: Your basic attacks have a 25% chance to slow your target's Movement Speed by 30% for 2.5 seconds."
+      description: "+225 Health<br>+18 Attack Damage<br>UNIQUE Passive: Your basic attacks have a 25% chance to slow your target's Movement Speed by 30% for 2 seconds (20% for ranged attacks)."
     },
     3046: {
       name: "Phantom Dancer",
@@ -239,6 +247,10 @@
     3047: {
       name: "Ninja Tabi",
       description: "+25 Armor<br>UNIQUE Passive: Reduces the damage taken from non-turret basic attacks by 10%.<br>UNIQUE Passive: Enhanced Movement 2 (does not stack with other Boots)."
+    },
+    3048: {
+      name: "Overlord's Bloodmail",
+      description: "+850 Health<br>UNIQUE Passive: On kill or assist, restores 200 health over 5 seconds."
     },
     3050: {
       name: "Zeke's Herald",
@@ -286,7 +298,7 @@
     },
     3078: {
       name: "Trinity Force",
-      description: "+30 Attack Damage<br>+30 Ability Power<br>+30% Attack Speed<br>+15% Critical Strike Chance<br>+12% Movement Speed<br>UNIQUE Passive: Your basic attacks have a 25% chance to slow your target's Movement Speed by 35% for 2.5 seconds.<br>UNIQUE Passive: After using an ability, your next basic attack deals bonus physical damage equal to 150% of your base Attack Damage (2 second cooldown). Does not stack with Sheen or Lich Bane."
+      description: "+30 Attack Damage<br>+30 Ability Power<br>+30% Attack Speed<br>+15% Critical Strike Chance<br>+12% Movement Speed<br>UNIQUE Passive: Your basic attacks have a 25% chance to slow your target's movement speed by 35% for 2.5 seconds (25% for ranged attacks). <br>UNIQUE Passive: After using an ability, your next basic attack deals bonus physical damage equal to 150% of your base Attack Damage (2 second cooldown). Does not stack with Sheen or Lich Bane."
     },
     3082: {
       name: "Warden's Mail",
@@ -303,6 +315,10 @@
     3089: {
       name: "Rabadon's Deathcap",
       description: "+140 Ability Power<br>UNIQUE Passive: Increases Ability Power by 30%."
+    },
+    3090: {
+      name: "Wooglet's Witchcap",
+      description: "+100 Ability Power<br>UNIQUE Passive: +10% Movement Speed.<br> UNIQUE Passive: +25% Ability Power."
     },
     3091: {
       name: "Wit's End",
@@ -339,6 +355,10 @@
     3102: {
       name: "Banshee's Veil",
       description: "+375 Health<br>+375 Mana<br>+50 Magic Resist<br>UNIQUE Passive: Gain a spell shield that blocks the next incoming enemy ability (45 second cooldown)."
+    },
+    3104: {
+      name: "Lord Van Damm's Pillager",
+      description: "+40 Attack Damage<br>+350 Health<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +25 Armor Penetration.<br>UNIQUE Passive: +10 Spell Vamp."
     },
     3105: {
       name: "Aegis of the Legion",
@@ -380,6 +400,10 @@
       name: "Boots of Mobility",
       description: "UNIQUE Passive: Enhanced Movement 2, increases to Enhanced Movement 5 when out of combat for 5 seconds (does not stack with other Boots)."
     },
+    3122: {
+      name: "Wicked Hatchet",
+      description: "+20 Attack Damage<br>+18% Critical Strike Chance<br>Passive: Your basic attacks inflict with Grievous Wound on enemy champions, causing 50% reduced healing and regeneration for 1.5 seconds."
+    },
     3123: {
       name: "Executioner's Calling",
       description: "+18% Life Steal<br>+15% Critical Strike Chance<br>UNIQUE Passive: Your basic attacks apply a mark to the target that deals 4 bonus magic damage each second for 8 seconds.<br>UNIQUE Active: Inflicts target enemy champion with Grievous Wound, causing 50% reduced healing and regeneration for 8 seconds (20 second cooldown)."
@@ -394,7 +418,7 @@
     },
     3128: {
       name: "Deathfire Grasp",
-      description: "+80 Ability Power<br>UNIQUE Passive: +15% Cooldown Reduction.<br>UNIQUE Active: Deals magic damage to target champion equal to 25% of their current Health (+4% per 100 Ability Power) with a minimum of 200 damage (60 second cooldown)."
+      description: "+80 Ability Power<br>UNIQUE Active: Deals magic damage to target champion equal to 15% of their current health (+5% per 100 ability power) with a minimum of 200 damage. 1 minute cooldown. (750 range)"
     },
     3131: {
       name: "Sword of the Divine",
@@ -452,6 +476,10 @@
       name: "Will of the Ancients",
       description: "+50 Ability Power<br>UNIQUE Aura: Grants nearby allied champions 30 Ability Power and 20% Spell Vamp."
     },
+    3153: {
+      name: "Blade of the Ruined King",
+      description: "+40 Attack Damage<br>+10% Life Steal<br>UNIQUE Passive: Your attacks deal 4% of the target's current health in magic damage and heals you for half the amount (120 max vs minions).<br>UNIQUE Active: Drains target champion, dealing 150 physical damage plus 50% of your attack damage and healing you by the same amount. Additionally you steal 30% of their movement speed for 2 seconds - 60 second cooldown. (500 range)"
+    },
     3154: {
       name: "Wriggle's Lantern",
       description: "+23 Attack Damage<br>+30 Armor<br>+12% Life Steal<br>UNIQUE Passive: Your basic attacks against minions and monsters have a 20% chance to deal 425 bonus magic damage.<br>UNIQUE Active: Places an invisible Sight Ward that reveals the surrounding area for 3 minutes (3 minute cooldown)."
@@ -471,6 +499,10 @@
     3158: {
       name: "Ionian Boots of Lucidity",
       description: "UNIQUE Passive: +15% Cooldown Reduction<br>UNIQUE Passive: Enhanced Movement 2 (does not stack with other Boots)."
+    },
+    3159: {
+      name: "Grez's Spectral Lantern",
+      description: "+25 Attack Damage<br>+30 Armor<br>UNIQUE Passive: Your basic attacks against minions and monsters have a 20% chance to deal 300 bonus magic damage.<br>UNIQUE Active: A stealth-detecting mist grants vision in the target area for 10 seconds. 60 second cooldown. (1000 Range, 375 AOE)."
     },
     3165: {
       name: "Morello's Evil Tome",
@@ -499,7 +531,7 @@
     },
     3175: {
       name: "Head of Kha'Zix",
-      description: "+10 Attack Damage<br>+2 Attack Damage per level<br>+10 Armor Penetration<br>+5% Cooldown Reduction<br>+25 Movement Speed<br>Rengar's leap gains 150 bonus range.<br>Thrill of the Hunt's duration is increased by 3 seconds. Additionally, Rengar's next ability used after activating Thrill of the Hunt generates 1 bonus Ferocity."
+      description: "+2 Attack Damage per level<br>+10 Armor Penetration<br>+5% Cooldown Reduction<br>+25 Movement Speed<br>Rengar's leap gains 150 bonus range.<br>Thrill of the Hunt's duration is increased by 3 seconds. Additionally, Rengar's next ability used after activating Thrill of the Hunt generates 1 bonus Ferocity."
     },
     3178: {
       name: "Ionic Spark",
@@ -531,7 +563,11 @@
     },
     3187: {
       name: "Hextech Sweeper",
-      description: "+40 Ability Power<br>+300 Health<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: Dealing spell damage grants vision of your target (including stealthed targets) for 4 seconds.<br>UNIQUE Active: A stealth-detecting mist grants vision in the target area for 6 seconds (1 minute cooldown)."
+      description: "+25 Ability Power<br>+300 Health<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: Dealing spell damage grants vision of your target (including stealthed targets) for 4 seconds.<br>UNIQUE Active: Covers an area with stealth-detecting mist for 10 seconds, granting vision of units which pass through it for 6 seconds. 60 second cooldown. (1000 Range, 375 AOE estimate)."
+    },
+    3188: {
+      name: "Blackfire Torch",
+      description: "+50 Ability Power<br>+300 Health<br>+350 Mana<br>UNIQUE Passive: Your spells burn for an additional 5% of the target's current health in magic damage over 3 seconds (effect halved for AoE and DoT)"
     },
     3190: {
       name: "Locket of the Iron Solari",

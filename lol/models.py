@@ -7,7 +7,7 @@ from time import sleep
 import requests
 import simplejson
 
-MAPS=((0, 'Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Aram'), (9, '?'))
+MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Aram'), (4, 'Twisted Treeline'), (9, '?'))
 MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (9, '?'))
 GAME_TYPES={'RankedPremade5x5':(4,1), 'RankedTeam5x5':(5,1), 'RankedPremade3x3':(4,0), 'RankedTeam3x3':(5,0), 'Unranked':(2,1), 'OdinUnranked':(2,2), 'RankedSolo5x5':(3,1), 'CoopVsAi':(1,1)}
 REGIONS=((0, 'NA'), (1, 'EUW'), (2, 'EUNE'), (3, 'BR'))
@@ -239,26 +239,45 @@ def check_server(server, region):
 		return choose_server(region, [server,])
 
 
+class ClientEmuError(Exception):
+	pass
+
+
 def get_data(url, query, region='NA'):
 	# server=choose_server(region)
 	servers=cache.get('servers')
 	server=servers.choose_server(region)
 	print 'using server:{}'.format(server)
-	try:
-		res=requests.get('{}/{}/'.format(server, url), params=query, config={'encode_uri':False}, timeout=20.0)
-	except requests.exceptions.Timeout:
+
+	def _attempt(server, url):
+		try:
+			res=requests.get('{}/{}/'.format(server, url), params=query, config={'encode_uri':False}, timeout=20.0)
+		except (requests.exceptions.Timeout, requests.packages.urllib3.exceptions.MaxRetryError, requests.packages.urllib3.exceptions.TimeoutError) as e:
+			res=e
+		return res
+	res=_attempt(server, url)
+	if type(res) in (requests.exceptions.Timeout, requests.packages.urllib3.exceptions.TimeoutError, requests.packages.urllib3.exceptions.MaxRetryError):
 		print 'got timeout with:{}'.format(query)
 		sleep(5)
 		print 'retrying'
 		server=servers.check_servers([{'location':server, 'region':region},])
-		res=requests.get('{}/{}/'.format(server, url), params=query, config={'encode_uri':False}, timeout=20.0)
-	if res.status_code==500:
+		res=_attempt(server, url)
+		if type(res) in (requests.exceptions.Timeout, requests.packages.urllib3.exceptions.TimeoutError, requests.packages.urllib3.exceptions.MaxRetryError):
+			print 'second error'
+			raise ClientEmuError()
+		elif res.status_code==500:
+			raise ClientEmuError()
+	elif res.status_code==500:
 		print 'got 500 error with:{}'.format(query)
 		sleep(5)
 		print 'retrying'
 		server=servers.check_servers([{'location':server, 'region':region},])
-		res=requests.get('{}/{}/'.format(server, url), params=query, config={'encode_uri':False}, timeout=20.0)
-	#print res.text
+		res=_attempt(server, url)
+		if res in (requests.exceptions.Timeout, requests.packages.urllib3.exceptions.TimeoutError, requests.packages.urllib3.exceptions.MaxRetryError):
+			print 'second error'
+			raise ClientEmuError()
+		elif res.status_code==500:
+			raise ClientEmuError()
 	return res.json
 
 
@@ -351,6 +370,8 @@ def parse_games(games, summoner, full=False, current=None):
 				game.game_map=3
 			elif ogame['game_map']==8:
 				game.game_map=2
+			elif ogame['game_map']==10:
+				game.game_map=4
 			if (ogame['team']=='blue' and ogame['stats']['win']==1) or (ogame['team']=='purple' and ogame['stats']['win']==0):
 				game.blue_team_won=True
 			else:

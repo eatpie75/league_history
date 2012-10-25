@@ -40,13 +40,13 @@ class Server_List:
 						continue
 					self.servers[region][server]=__check(server)
 			self.updated=datetime.now()
-			cache.set('servers', self, 60*60*24)
+			cache.set('servers', self, timeout=0)
 		else:
 			for s in server:
 				region=s['region']
 				location=s['location']
 				self.servers[region][location]=__check(location)
-				cache.set('servers', self, 60*60*24*30)
+				cache.set('servers', self, timeout=0)
 			return self.choose_server(region)
 
 	def __filter_up(self, region):

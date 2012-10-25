@@ -56,7 +56,11 @@
 						<strong>Best Items</strong>
 					</div>
 					{% for item in stats.items_best_ratio()[:6] %}<div class='item'>
-						<div class='item sprite sprite-items-{{item.0}}' data-item='_{{item.0}}'></div><div class='vert-bar'><div class='red' style='height:{{item.1.lost|get_percent(item.1.count)}};'></div></div>
+						<div class='item sprite sprite-items-{{item.0}}' data-item='_{{item.0}}'></div>
+						<div class='vert-bar'>
+							<div class='red' style='height:{{item.1.lost|get_percent(item.1.count)}};'></div>
+							<div class='green' style='height:{{item.1.won|get_percent(item.1.count)}};'></div>
+						</div>
 						<div class='stats pull-right'>
 							<small>GAMES:</small><b>{{item.1.count}}</b><br>
 							<small>WINS:</small><b>{{item.1.won}}</b><br>
