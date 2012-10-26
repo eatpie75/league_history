@@ -54,6 +54,7 @@ CHAMPIONS={
 	57:"Maokai",
 	58:"Renekton",
 	59:"Jarvan IV",
+	60:"Elise",
 	61:"Orianna",
 	62:"Wukong",
 	63:"Brand",
