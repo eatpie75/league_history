@@ -196,9 +196,6 @@ items=
 	3047:
 		name:"Ninja Tabi"
 		description:"+25 Armor<br>UNIQUE Passive: Reduces the damage taken from non-turret basic attacks by 10%.<br>UNIQUE Passive: Enhanced Movement 2 (does not stack with other Boots)."
-	3048:
-		name:"Overlord's Bloodmail"
-		description:"+850 Health<br>UNIQUE Passive: On kill or assist, restores 200 health over 5 seconds."
 	3050:
 		name:"Zeke's Herald"
 		description:"+250 Health<br>UNIQUE Passive: +15% Cooldown Reduction.<br>UNIQUE Aura: Grants nearby allied champions 12% Life Steal and 20% Attack Speed."
@@ -241,6 +238,9 @@ items=
 	3083:
 		name:"Warmog's Armor"
 		description:"+920 Health<br>+30 Health Regen per 5 seconds<br>Passive: Gain +3.5 health and +0.1 health regeneration per minion kill. Champion kills and assists grant +35 health and +1 health regeneration. Bonuses cap at +350 health and +10 health regeneration."
+	3084:
+		name:"Overlord's Bloodmail"
+		description:"+850 Health<br>UNIQUE Passive: On kill or assist, restores 200 health over 5 seconds."
 	3086:
 		name:"Zeal"
 		description:"+20% Attack Speed<br>+10% Critical Strike Chance<br>+6% Movement Speed"
