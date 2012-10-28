@@ -1,0 +1,19 @@
+{%- macro item(id, size='small', style='') %}
+{%- if size == 'small'%}{% set sprite_code='sprite-items-small' %}{% elif size == 'large' %}{% set sprite_code='sprite-items' %}{% endif -%}
+<div class='item sprite {{sprite_code}}-{{id}}' data-item="_{{id}}"{% if style !='' %} style='{{style}}'{% endif %}></div>
+{%- endmacro %}
+
+{%- macro champion(id, size='small', style='') %}
+{%- if size == 'small'%}{% set sprite_code='sprite-champions-small' %}{% elif size == 'large' %}{% set sprite_code='sprite-champions' %}{% endif -%}
+<div class='sprite {{sprite_code}}-{{id}}'{% if style !='' %} style='{{style}}'{% endif %}></div>
+{%- endmacro %}
+
+{%- macro summoner(id, size='small', style='') %}
+{%- if size == 'small'%}{% set sprite_code='sprite-summoner-small' %}{% elif size == 'large' %}{% set sprite_code='sprite-summoner' %}{% endif -%}
+<div class='sprite {{sprite_code}}-{{id}}'{% if style !='' %} style='{{style}}'{% endif %}></div>
+{%- endmacro %}
+
+{%- macro profile(id, size='small', style='') %}
+{%- if size == 'small'%}{% set sprite_code='sprite-champions-small' %}{% elif size == 'large' %}{% set sprite_code='sprite-champions' %}{% endif -%}
+<div class='sprite {{sprite_code}}-{{id}}'{% if style !='' %} style='{{style}}'{% endif %}></div>
+{%- endmacro %}

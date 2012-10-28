@@ -1,29 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>index</title>
-		<!--[if lt IE 9]>
-		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-		<link href="{{STATIC_URL}}css/bootstrap.css" rel="stylesheet" type="text/css">
-		{%- if debug %}
-		<link href="{{STATIC_URL}}less/main.less" rel="stylesheet/less" type="text/css">
-		<script src="{{STATIC_URL}}js/less.js" type="text/javascript"></script>
-		{% else%}
-		<link href="{{STATIC_URL}}css/main.css" rel="stylesheet" type="text/css">
-		{% endif -%}
-		<link href="{{STATIC_URL}}css/sprites.css" rel="stylesheet" type="text/css">
-		<script src="{{STATIC_URL}}js/jquery.min.js" type="text/javascript"></script>
-		<script src="{{STATIC_URL}}js/bootstrap.min.js" type="text/javascript"></script>
-		<script src="{{STATIC_URL}}js/items.js" type="text/javascript"></script>
+{% extends 'base.html.j2' %}
+
+{% block post_scripts %}
 		<script src="{{STATIC_URL}}js/player.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			var num_games={% if not generating %}{{stats.display_count}}{% else %}0{% endif %};
 		</script>
-	</head>
-	<body>
-		<div class='container'>
+{%- endblock %}
+
+{% block content %}
 			<div class='summoner-header row span12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{champion_id}}.png)'>
 				<div class='pull-left sprite sprite-champions-{{champion_id}}'></div>
 				<div class='info-block pull-right'>
@@ -59,7 +43,7 @@
 					</thead>
 					<tbody class='cbody'>{% for item in stats.items_most_used() %}
 						<tr class='sort'>
-							<th><div class='item sprite sprite-items-small-{{item.0}}' data-item='_{{item.0}}'></div></th>
+							<th>{{sprites.item(item.0)}}</th>
 							<td class='name'>{{items[item.0]['name']}}</td>
 							<td class='total'>{{item.1.count}}</td>
 							<td class='won'>{{item.1.won}}</td>
@@ -73,6 +57,4 @@
 			</div>{% else %}
 			STATS ARE BEING COMPILED
 			{% endif %}
-		</div>
-	</body>
-</html>
+{%- endblock %}

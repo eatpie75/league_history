@@ -46,7 +46,8 @@ class Stats:
 			self.__dict__.update(state)
 			self.qs=Player.objects.all()
 			self.qs.query=state['qs']
-			self.games=queryset_manager(self.qs)
+			if not self.indexed or not self.items_indexed:
+				self.games=queryset_manager(self.qs)
 
 		def __repr__(self):
 			if self.champion!=None:
@@ -151,7 +152,7 @@ class Stats:
 			for game in self.games:
 				for item in game.get_items:
 					item=int(item)
-					if item in (0, 2003, 2004, 2037, 2038, 2039, 2042, 2043, 2044, 2047): continue
+					if item in (0, 2003, 2004, 2037, 2038, 2039, 2040, 2042, 2043, 2044, 2047, 2048): continue
 					if item not in self.index['champions'][game.champion_id]['items']:
 						self.index['champions'][game.champion_id]['items'][item]={
 							'count':0,

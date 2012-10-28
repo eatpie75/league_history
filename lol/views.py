@@ -231,8 +231,8 @@ def view_all_champions(request):
 	form=MapModeForm(request.GET)
 	form.is_valid()
 	key='global_stats/all'
-	games=Player.objects.all().select_related('game__time')
-	count=Game.objects.all()
+	games=Player.objects.filter(game__time__gt=(datetime.now(timezone('UTC')))-timedelta(weeks=2)).select_related('game__time')
+	count=Game.objects.filter(time__gt=(datetime.now(timezone('UTC')))-timedelta(weeks=2))
 	if form.cleaned_data['game_map'] not in ('', '-1'):
 		key+='/'+form.cleaned_data['game_map']
 		games=games.filter(game__game_map=form.cleaned_data['game_map'])
