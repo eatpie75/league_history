@@ -37,11 +37,21 @@ class GameAdmin(admin.ModelAdmin):
 	search_fields=('game_id', 'unfetched_players')
 
 
+class SummonerRatingForm(forms.ModelForm):
+	def __init__(self, *args, **kwargs):
+		super(SummonerRatingForm, self).__init__(*args, **kwargs)
+		#self.fields['winner_tags'].widget=forms.SelectMultiple(attrs={'style':'height:250px'})
+		if 'instance' in kwargs:
+			self.fields['summoner'].queryset=Summoner.objects.filter(pk=kwargs['instance'].summoner.pk)
+		else:
+			self.fields['summoner'].queryset=Player.objects.none()
+
+
 class SummonerRatingAdmin(admin.ModelAdmin):
 	list_display=('summoner', 'game_map', 'game_mode', 'current_rating', 'wins', 'losses')
 	list_filter=('summoner__region', 'game_map', 'game_mode')
 	search_fields=('summoner__name',)
-	#form=GameForm
+	form=SummonerRatingForm
 
 
 admin.site.register(Player, PlayerAdmin)

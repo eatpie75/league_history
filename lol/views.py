@@ -149,10 +149,10 @@ def view_summoner(request, region, account_id, slug):
 	else: update_in_queue=False
 	if summoner.slug!=slug: return HttpResponseRedirect(summoner.get_absolute_url())
 	rating=summoner.get_rating()
-	games=Player.objects.filter(summoner=summoner).defer('summoner').select_related()
+	games=Player.objects.filter(summoner=summoner).select_related()
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats==None:
-		stats=Stats(games, summoner_name=summoner.name, cached=True, elo=True)
+		stats=Stats(games, summoner_name=summoner.name, cached=True, index_elo=True, index_items=False)
 		stats.generate_index()
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
 	#spectate=cache.get('summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id))

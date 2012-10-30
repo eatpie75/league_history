@@ -31,7 +31,8 @@ class Stats:
 			self.summoner_name=kwargs.get('summoner_name', None)
 			self.summoner_time_updated=kwargs.get('summoner_time_updated', None)
 			self.cached=kwargs.get('cached', False)
-			self.index_elo=kwargs.get('elo', False)
+			self.index_elo=kwargs.get('index_elo', False)
+			self.index_items=kwargs.get('index_items', True)
 			self.champion_history=kwargs.get('champion_history', False)
 			self.global_stats=kwargs.get('global_stats', False)
 			self.display_count=kwargs.get('display_count', self.count)
@@ -46,7 +47,7 @@ class Stats:
 			self.__dict__.update(state)
 			self.qs=Player.objects.all()
 			self.qs.query=state['qs']
-			if not self.indexed or not self.items_indexed:
+			if not self.indexed or (not self.items_indexed and self.index_items):
 				self.games=queryset_manager(self.qs)
 
 		def __repr__(self):

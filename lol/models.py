@@ -9,7 +9,7 @@ import simplejson
 
 MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Aram'), (4, 'Twisted Treeline'), (9, '?'))
 MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (9, '?'))
-GAME_TYPES={'RankedPremade5x5':(4,1), 'RankedTeam5x5':(5,1), 'RankedPremade3x3':(4,0), 'RankedTeam3x3':(5,0), 'Unranked':(2,1), 'OdinUnranked':(2,2), 'RankedSolo5x5':(3,1), 'CoopVsAi':(1,1)}
+GAME_TYPES={'RankedPremade5x5':(4,1), 'RankedTeam5x5':(5,1), 'RankedPremade3x3':(4,4), 'RankedTeam3x3':(5,4), 'Unranked':(2,1), 'OdinUnranked':(2,2), 'RankedSolo5x5':(3,1), 'CoopVsAi':(1,1), 'OldRankedPremade3x3':(4,0), 'OldRankedTeam3x3':(5,0)}
 REGIONS=((0, 'NA'), (1, 'EUW'), (2, 'EUNE'), (3, 'BR'))
 
 
@@ -116,8 +116,8 @@ class SummonerRankedStatistics(models.Model):
 
 class SummonerRating(models.Model):
 	summoner=models.ForeignKey(Summoner, db_index=True)
-	game_map=models.IntegerField(choices=MAPS, db_index=True)
-	game_mode=models.IntegerField(choices=MODES, db_index=True)
+	game_map=models.IntegerField(choices=MAPS, db_index=True, null=False)
+	game_mode=models.IntegerField(choices=MODES, db_index=True, null=False)
 	wins=models.IntegerField()
 	losses=models.IntegerField()
 	leaves=models.IntegerField()
@@ -281,43 +281,6 @@ def get_data(url, query, region='NA'):
 	return res.json
 
 
-def update_summoners(all_summoners, games=True, runes=False):
-	for region in xrange(0,3):
-		# if region==1: continue
-		summoners=all_summoners.filter(region=region)
-		if len(summoners)==0:
-			continue
-		elif len(summoners)>5:
-			print u'running autoupdate for:{}'.format(', '.join(summoners.values_list('name', flat=True)))
-			queue=map(unicode, summoners.values_list('account_id', flat=True))
-			tmp={}
-			while len(queue)>0:
-				query={'accounts':u','.join(queue[0:5]), 'games':1}
-				res=get_data('mass_update', query, summoners[0].get_region_display())
-				tmp.update(res['accounts'])
-				for item in queue[0:0+5]:
-					queue.remove(item)
-				sleep(2)
-			res=tmp
-		else:
-			print u'running autoupdate for:{}'.format(u', '.join(summoners.values_list('name', flat=True)))
-			query={'accounts':u','.join(map(unicode, summoners.values_list('account_id', flat=True))), 'games':1}
-			res=get_data('mass_update', query, summoners[0].get_region_display())['accounts']
-		for account, data in res.iteritems():
-			summoner=Summoner.objects.get(account_id=int(account), region=region)
-			summoner=parse_summoner(data['profile'], summoner)
-			parse_ratings(data['stats'], summoner)
-			if summoner.fully_update:
-				parse_games(data['games'], summoner, True)
-			else:
-				parse_games(data['games'], summoner)
-			summoner.time_updated=datetime.now(timezone('UTC'))
-			summoner.save()
-			cache.delete('{}/{}/updating'.format(summoner.region, summoner.account_id))
-			transaction.commit()
-	return all_summoners
-
-
 @transaction.commit_on_success
 def parse_games(games, summoner, full=False, current=None):
 	for ogame in games:
@@ -349,7 +312,7 @@ def parse_games(games, summoner, full=False, current=None):
 				game.game_mode=2
 			elif ogame['queue_type']=='RANKED_SOLO_5x5':
 				game.game_mode=3
-			elif ogame['queue_type']=='BOT':
+			elif ogame['queue_type'] in ('BOT', 'BOT_3x3'):
 				game.game_mode=1
 			elif ogame['queue_type']=='NONE' and ogame['game_type']=='CUSTOM_GAME':
 				game.game_mode=0
@@ -372,6 +335,9 @@ def parse_games(games, summoner, full=False, current=None):
 				game.game_map=2
 			elif ogame['game_map']==10:
 				game.game_map=4
+			else:
+				print 'couldn\'t figure out game map for game #{}'.format(game.game_id)
+				print ogame['game_map']
 			if (ogame['team']=='blue' and ogame['stats']['win']==1) or (ogame['team']=='purple' and ogame['stats']['win']==0):
 				game.blue_team_won=True
 			else:
@@ -482,21 +448,25 @@ def parse_summoner(data, summoner):
 
 @transaction.commit_on_success
 def parse_ratings(ratings, summoner):
-	# MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (9, '?'))
-	# MAPS=((0, 'Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (9, '?'))
-	for rating in SummonerRating.objects.filter(summoner=summoner):
-		for r in ratings:
-			if r['game_type'] in GAME_TYPES:
-				game_mode, game_map=GAME_TYPES[r['game_type']]
-			else:
-				game_mode, game_map=(9, 9)
-			if game_mode==rating.game_mode and game_map==rating.game_map:
-				if rating.wins!=int(r['wins']) or rating.losses!=int(r['losses']) or rating.current_rating!=int(r['rating']) or rating.top_rating!=int(r['rating_max']):
-					rating.wins=r['wins']
-					rating.losses=r['losses']
-					rating.current_rating=r['rating']
-					rating.top_rating=r['rating_max']
-					rating.save(force_update=True)
+	# MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Aram'), (4, 'Twisted Treeline'), (9, '?'))
+	# MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (9, '?'))
+	pre_ratings=SummonerRating.objects.filter(summoner=summoner)
+	for rating in ratings:
+		if rating['game_type'] in GAME_TYPES:
+			game_mode, game_map=GAME_TYPES[rating['game_type']]
+		else:
+			continue
+		# print game_mode, game_map
+		tmp=pre_ratings.get_or_create(game_mode=game_mode, game_map=game_map, defaults={'summoner':summoner, 'wins':rating['wins'], 'losses':rating['losses'], 'leaves':rating['leaves'], 'current_rating':rating['rating'], 'top_rating':rating['rating_max']})
+		if tmp[1]==0:
+			r=tmp[0]
+			if r.wins!=int(rating['wins']) or r.losses!=int(rating['losses']) or r.leaves!=int(rating['leaves']) or r.current_rating!=int(rating['rating']) or r.top_rating!=int(rating['rating_max']):
+				r.wins=rating['wins']
+				r.losses=rating['losses']
+				r.leaves=rating['leaves']
+				r.current_rating=rating['rating']
+				r.top_rating=rating['rating_max']
+				r.save(force_update=True)
 
 
 def parse_masteries(masteries, summoner):
