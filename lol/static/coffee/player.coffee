@@ -10,9 +10,14 @@ class PlayerGamePageHandler
 	_bind:->
 		_this_=@
 		$('.page_link').bind('click', (e)->
+			_this_.destroy_items()
 			_this_.change_page($(@))
 		)
 		window.connect_items()
+	destroy_items:()->
+		$('div.item.sprite').each(->
+			$(@).popover('destroy')
+		)
 	change_page:(el=1)->
 		if typeof(el)=='object' then page=el.data('page') else page=el
 		$.ajax(
@@ -158,84 +163,11 @@ force_update=(e)->
 				setTimeout(_update_status, msg.delay)
 	)
 
-draw_bgchart=(data, y='rating', aoptions={}, data_parse='default')->
-	# console.log data
-	container=document.getElementById("elo-graph")
-	defaults={
-		colors: ['#3269b4', '#C0D800', '#CB4B4B', '#4DA74D', '#9440ED']
-		subtitle:'ELO GRAPH'
-		# fontColor:'#fff'
-		shadowSize:0
-		xaxis: {
-			mode:'time'
-			noTicks:10
-			# showLabels:false
-		}
-		yaxis: {
-			autoscale: true
-			autoscaleMargin:1
-			# showLabels:false
-			# tickFormatter:(num)->"#{num}%"
-		}
-		mouse: {
-			track:true
-			trackFormatter:(obj)->"#{Flotr.Date.format(obj.x, '%y-%m-%d')}: #{Math.round(obj.y)}"
-			sensiblility:3
-			lineColor:'#fff'
-			relative:true
-		}
-		lines: {
-			fill:true
-			show:true
-		}
-		points: {
-			show:true
-			lineWidth:1
-			radius:2
-			fillColor:'#9D261D'
-		}
-		grid: {
-			color:'#000'
-			verticalLines:false
-			# horizontalLines:false
-			outline:''
-		}
-	}
-
-	options=$.extend({}, defaults)
-	$.extend(true, options, aoptions)
-	# console.log options
-
-	if data_parse=='default'
-		parsed=[]
-		for day in data
-			if day[1][y]<10
-				continue
-			parsed.push([new Date(day[0]), day[1][y]])
-	else if data_parse=='chistorywr'
-		parsed=[]
-		for day in data
-			date=new Date(day[0])
-			now=new Date()
-			if day[1]['champions'][y]['count']<10# or (date.getUTCMonth()!=now.getUTCMonth()|date.getUTCFullYear()!=now.getUTCFullYear())
-				continue
-			parsed.push([date, (day[1]['champions'][y]['won']/day[1]['champions'][y]['count'])*100])
-	else if data_parse=='chistorypop'
-		parsed=[]
-		for day in data
-			if day[1]['champions'][y]['count']<10
-				continue
-			parsed.push([new Date(day[0]), (day[1]['champions'][y]['won']/day[1]['count'])*100])
-
-	Flotr.draw(container, [parsed], options)
-
 $(document).ready(->
 	if $('.page_link').length>0 then window.page_handler=new PlayerGamePageHandler()
 	if $('.table-sort.active:first').length>0 then window.champion_sort=new ChampionSort()
 	if $('#stat-filter').length>0 then window.stat_filter=new StatFilter()
-	window.draw_chart=draw_bgchart
 	$('#force-update').bind('click', force_update)
-	if window.bgchart? then draw_bgchart(window.data, window.bgchart)
 	$('a[data-toggle="tab"]').click((e)->
 		e.preventDefault()
 		$(@).tab('show')

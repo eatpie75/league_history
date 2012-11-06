@@ -14,6 +14,7 @@ JSTOCOMPRESS	= [
 	'game.js'
 	'items.js'
 	'champions.js'
+	'graph.js'
 ]
 LESSINDIR		= "#{BASE}/static/less"
 LESSINFILES		= [

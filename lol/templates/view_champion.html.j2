@@ -1,14 +1,15 @@
 {% extends 'base.html.j2' %}
 
 {% block post_scripts %}
+		<script src='{{STATIC_URL}}js/morris.js' type='text/javascript'></script>
+		<script src='{{STATIC_URL}}js/graph.js' type='text/javascript'></script>
 		<script src="{{STATIC_URL}}js/player.js" type="text/javascript"></script>
-		<script src='{{STATIC_URL}}js/flotr2.min.js' type='text/javascript'></script>
 		<script type="text/javascript">{% if not generating %}
 			var AJAX_BASE="{{AJAX_BASE}}";
 			var champion_id={{champion_id}};
 			var data={{stats.history_toJSON()|safe}};
 			$(document).ready(function(){
-				window.draw_chart(window.data, window.champion_id, {title:'Win rate',xaxis:{showLabels:true},yaxis:{autoscale:false,showLabels:true,min:0,max:100,noTicks:10},grid:{outline:'sw',color:'#000',}}, 'chistorywr')
+				window.draw_chart(window.data, window.champion_id, {ymin:0,ymax:100,smooth:true}, 'chistorywr')
 			});
 		{% endif %}</script>
 {%- endblock %}

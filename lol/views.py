@@ -86,6 +86,8 @@ def view_game(request, region, game_id):
 		players=Player.objects.filter(game=game).order_by('blue_team', '-gold').select_related()
 	BASE={
 		'num_players':	0,
+		'total_elo':	0.0,
+		'avg_elo':		0,
 		'kills':		0,
 		'avg_kills':	0,
 		'deaths':		0,
@@ -122,6 +124,9 @@ def view_game(request, region, game_id):
 		metadata['stats'][team]['sw_bought']+=player.sight_wards_bought_in_game
 		metadata['stats'][team]['vw_bought']+=player.vision_wards_bought_in_game
 		metadata['stats'][team]['tw_bought']+=metadata['stats'][team]['sw_bought']+metadata['stats'][team]['vw_bought']
+		if game.game_mode in (3, 4, 5) and player.rating>0:
+			metadata['stats'][team]['total_elo']+=player.rating
+			metadata['stats'][team]['avg_elo']=round(metadata['stats'][team]['total_elo']/metadata['stats'][team]['num_players'], 1)
 	if game.game_mode in (3, 4, 5):
 		metadata['avg_elo']=players.filter(rating__gt=0).aggregate(Avg('rating'))['rating__avg']
 	return render_to_response('view_game.html.j2', {'game':game, 'players':players, 'metadata':metadata, 'update_in_queue':update_in_queue}, RequestContext(request))
@@ -248,7 +253,7 @@ def view_all_champions(request):
 		generating=True
 		if cache.get(key+'/generating')==None:
 			cache.set(key+'/generating', True, 60*10)
-			generate_global_stats.delay(key, games.query, False, display_count=count.count(), champion_history=True, global_stats=True)
+			generate_global_stats.delay(key, games.query, False, display_count=count.count(), champion_history=True, global_stats=True, index_items=False)
 	else:
 		generating=False
 	return render_to_response('view_all_champions.html.j2', {'stats':stats, 'champions':CHAMPIONS, 'form':form, 'generating':generating}, RequestContext(request))

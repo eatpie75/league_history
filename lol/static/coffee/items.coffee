@@ -471,8 +471,9 @@ $(document).ready(->
 			return 'bottom'
 	window.connect_items=->
 		$('div.item.sprite').each(->
-			item=items[$(@).data('item').slice(1)]
-			$(@).popover({
+			el=$(@)
+			item=items[el.data('item').slice(1)]
+			el.popover({
 				content:item.description
 				title:item.name
 				placement:wat

@@ -612,9 +612,10 @@
     };
     window.connect_items = function() {
       return $('div.item.sprite').each(function() {
-        var item;
-        item = items[$(this).data('item').slice(1)];
-        return $(this).popover({
+        var el, item;
+        el = $(this);
+        item = items[el.data('item').slice(1)];
+        return el.popover({
           content: item.description,
           title: item.name,
           placement: wat,
