@@ -154,11 +154,11 @@
     },
     2043: {
       name: "Vision Ward",
-      description: "Places an invisible ward with 1100 range. Lasts 3 minutes."
+      description: "Places an invisible ward with 1000 range Magical Sight (can see invisible units). Lasts 3 minutes."
     },
     2044: {
       name: "Sight Ward",
-      description: "Places an invisible ward with 1000 range Magical Sight (can see invisible units). Lasts 3 minutes."
+      description: "Places an invisible ward with 1100 range. Lasts 3 minutes."
     },
     2047: {
       name: "Oracle's Extract",
@@ -616,11 +616,12 @@
         el = $(this);
         item = items[el.data('item').slice(1)];
         return el.popover({
-          content: item.description,
-          title: item.name,
-          placement: wat,
-          trigger: 'hover',
-          animation: false
+          'html': true,
+          'content': item.description,
+          'title': item.name,
+          'placement': wat,
+          'trigger': 'hover',
+          'animation': false
         });
       });
     };
