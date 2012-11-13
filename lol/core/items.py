@@ -169,5 +169,5 @@ ITEMS={
 
 
 if __name__ == "__main__":
-	import simplejson
-	print simplejson.dumps(ITEMS)
+	import json
+	print json.dumps(ITEMS)

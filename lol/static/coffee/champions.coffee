@@ -105,3 +105,4 @@ champions=
 	131:"Diana"
 	134:"Syndra"
 	143:"Zyra"
+	238:"Zed"

@@ -1,4 +1,5 @@
-fs			= require ('fs')
+fs			= require('fs')
+path		= require('path')
 {exec}		= require('child_process')
 async		= require('./clientemu/node_modules/async')
 colors		= require('./clientemu/node_modules/colors')
@@ -8,13 +9,15 @@ uglifycss	= require('./clientemu/node_modules/uglifycss')
 Cakefile		= 'Cakefile'
 BASE			= 'lol'
 COFFEEINDIR		= "#{BASE}/static/coffee"
-COFFEEOUTDIR	= "#{BASE}/static/js"
-JSTOCOMPRESS	= [
+COFFEEOUTDIR	= "#{BASE}/static/debug"
+JSOUTDIR		= "#{BASE}/static/js"
+JSTOCOMBINE	= [
+	'items.js'
 	'player.js'
 	'game.js'
-	'items.js'
-	'champions.js'
+	# 'champions.js'
 	'graph.js'
+	'core.js'
 ]
 LESSINDIR		= "#{BASE}/static/less"
 LESSINFILES		= [
@@ -30,19 +33,24 @@ TMPDIR			= 'tmp'
 
 
 compile_coffee=(cb)->
+	fs.mkdirSync(TMPDIR)
 	console.log(">coffee -o #{COFFEEOUTDIR}/ -c #{COFFEEINDIR}/".yellow)
+	# exec("coffee -o #{COFFEEOUTDIR}/ -c #{COFFEEINDIR}/", (err, stdout, stderr)->
 	exec("coffee -o #{COFFEEOUTDIR}/ -c #{COFFEEINDIR}/", (err, stdout, stderr)->
 		if stderr or err then console.log(err, stderr)
 		cb(null)
 	)
 compress_js=(cb)->
-	for file in JSTOCOMPRESS
-		console.log("Compressing #{file}".yellow)
-		ast=uglifyjs.parser.parse(fs.readFileSync("#{COFFEEOUTDIR}/#{file}", 'utf8'))
-		ast=uglifyjs.uglify.ast_mangle(ast)
-		ast=uglifyjs.uglify.ast_squeeze(ast)
-		result=uglifyjs.uglify.gen_code(ast)
-		fs.writeFileSync("#{COFFEEOUTDIR}/#{file}", result)
+	tmp=''
+	for file in JSTOCOMBINE
+		tmp+=fs.readFileSync("#{COFFEEOUTDIR}/#{file}", 'utf8')
+		# fs.unlinkSync("#{TMPDIR}/#{file}")
+	# console.log("Compressing #{file}".yellow)
+	ast=uglifyjs.parser.parse(tmp)
+	ast=uglifyjs.uglify.ast_mangle(ast)
+	ast=uglifyjs.uglify.ast_squeeze(ast)
+	result=uglifyjs.uglify.gen_code(ast)
+	fs.writeFileSync("#{JSOUTDIR}/main.js", result)
 	cb(null)
 compile_less=(cb)->
 	OPENCHILDREN=0
@@ -78,23 +86,27 @@ compile_sprites=(cb)->
 compress_sprites=(cb)->
 	tmp=''
 	for file in fs.readdirSync(TMPDIR)
+		if path.extname("#{TMPDIR}/#{file}")!='.css' then continue
 		tmp+=fs.readFileSync("#{TMPDIR}/#{file}")
 		fs.unlinkSync("#{TMPDIR}/#{file}")
 	ptmp=tmp.length
 	tmp=uglifycss.processString(tmp)
 	console.log("#{SPRITEOUTFILE} >> Before:"+"#{ptmp}".cyan+" After:"+"#{tmp.length}".green+" Diff:"+"#{tmp.length-ptmp}".magenta)
 	fs.writeFileSync("#{SPRITECSSOUTDIR}/#{SPRITEOUTFILE}", tmp)
-	fs.rmdirSync(TMPDIR)
 	cb(null)
 clean_build=(cb)->
+	for file in fs.readdirSync(TMPDIR)
+		fs.unlinkSync("#{TMPDIR}/#{file}")
+	fs.rmdirSync(TMPDIR)
 	cb(null)
 
 task('build', ->
 	async.waterfall([
 		compile_coffee
-		# compress_js
+		compress_js
 		compile_less
 		compress_css
+		clean_build
 	], (err, results)->
 		console.log('Build Complete.'.green)
 	)
@@ -110,7 +122,7 @@ task('all', ->
 		compress_css
 		compile_sprites
 		compress_sprites
-		# clean_build
+		clean_build
 	], (err, results)->
 		console.log('Build Complete.'.green)
 	)

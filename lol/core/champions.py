@@ -104,5 +104,6 @@ CHAMPIONS={
 	126:"Jayce",
 	131:"Diana",
 	134:"Syndra",
-	143:"Zyra"
+	143:"Zyra",
+	238:"Zed"
 }
