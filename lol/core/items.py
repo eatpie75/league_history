@@ -58,7 +58,7 @@ ITEMS={
 	2048:{'name':"Ichor of Illumination", 'description':"On use, grants 30-64 Ability Power based on champion level, 15% Cooldown Reduction and a huge boost to Mana and Energy Rengeneration for 4 minutes."},
 	3001:{'name':"Abyssal Scepter", 'description':"+70 Ability Power<br>+57 Magic Resist<br>UNIQUE Aura: Reduces the Magic Resist of nearby enemy champions by 20."},
 	3003:{'name':"Archangel's Staff", 'description':"+400 Mana<br>+25 Mana Regen per 5 seconds<br>+45 Ability Power<br>Passive: Grants ability power equal to 3% of your maximum mana.<br>UNIQUE Passive: Every time you use an ability, your maximum mana increases by 4 (3 second cooldown). Bonus caps at 1000 mana. Does not stack with Tear of the Goddess or Manamune."},
-	3004:{'name':"Manamune", 'description':"+350 Mana<br>+7 Mana Regen per 5 seconds<br>+20 Attack Damage<br>UNIQUE Passive: 2% of your maximum mana is converted to attack damage.<br>UNIQUE Passive: On hit, you gain +1 maximum mana (maximum +1000 maximum mana). 3 second cooldown.<br>UNIQUE Passive: Unique: On cast, you gain +4 maximum mana (contributes to same maximum). 3 second cooldown."},
+	3004:{'name':"Manamune", 'description':"+350 Mana<br>+7 Mana Regen per 5 seconds<br>+20 Attack Damage<br>UNIQUE Passive: 2% of your maximum mana is converted to attack damage.<br>UNIQUE Passive: On hit, you gain +1 maximum mana (maximum +1000 maximum mana). 3 second cooldown.<br>UNIQUE Passive: On cast, you gain +4 maximum mana (contributes to same maximum). 3 second cooldown."},
 	3005:{'name':"Atma's Impaler", 'description':"+45 Armor<br>+18% Critical Strike Chance<br>UNIQUE Passive: Gain Attack Damage equal to 1.5% of your maximum Health."},
 	3006:{'name':"Berserker's Greaves", 'description':" +25% Attack Speed<br>UNIQUE Passive: Enhanced Movement 2 (does not stack with other Boots)."},
 	3009:{'name':"Boots of Swiftness", 'description':"UNIQUE Passive: Enhanced Movement 3 (does not stack with other Boots)"},
@@ -93,7 +93,7 @@ ITEMS={
 	3084:{'name':"Overlord's Bloodmail", 'description':"+850 Health<br>UNIQUE Passive: On kill or assist, restores 200 health over 5 seconds."},
 	3086:{'name':"Zeal", 'description':"+20% Attack Speed<br>+10% Critical Strike Chance<br>+6% Movement Speed"},
 	3089:{'name':"Rabadon's Deathcap", 'description':"+140 Ability Power<br>UNIQUE Passive: Increases Ability Power by 30%."},
-	3090:{'name':"Wooglet's Witchcap", 'description':"+100 Ability Power<br>UNIQUE Passive: +10% Movement Speed.<br> UNIQUE Passive: +25% Ability Power."},
+	3090:{'name':"Wooglet's Witchcap", 'description':"+100 Ability Power<br>+50 Armor<br>UNIQUE Passive: +25% Ability Power.<br>UNIQUE Active: Places your champion into Stasis for 2.5 seconds, rendering you invulnerable and untargetable but unable to take any action (90 second cooldown)."},
 	3091:{'name':"Wit's End", 'description':"+40% Attack Speed<br>+30 Magic Resist<br>UNIQUE Passive: Your basic attacks deal 42 bonus magic damage.<br>UNIQUE Passive: Your basic attacks increase your Magic Resist by 5 for 5 seconds (effect stacks up to 4 times)."},
 	3093:{'name':"Avarice Blade", 'description':"+12% Critical Strike Chance<br>UNIQUE Passive: Gain an additional 5 Gold every 10 seconds."},
 	3096:{'name':"Philosopher's Stone", 'description':"+15 Health Regen per 5 seconds<br>+8 Mana Regen per 5 seconds<br>UNIQUE Passive: Gain an additional 5 Gold every 10 seconds."},
@@ -103,7 +103,7 @@ ITEMS={
 	3100:{'name':"Lich Bane", 'description':"+350 Mana<br>+80 Ability Power<br>+30 Magic Resist<br>+7% Movement Speed<br>UNIQUE Passive: After using an ability, your next basic attack gains bonus physical damage equal to your Ability Power (2 second cooldown). Does not stack with Sheen or Trinity Force."},
 	3101:{'name':"Stinger", 'description':"+40% Attack Speed<br>UNIQUE Passive: +10% Cooldown Reduction."},
 	3102:{'name':"Banshee's Veil", 'description':"+375 Health<br>+375 Mana<br>+50 Magic Resist<br>UNIQUE Passive: Gain a spell shield that blocks the next incoming enemy ability (45 second cooldown)."},
-	3104:{'name':"Lord Van Damm's Pillager", 'description':"+40 Attack Damage<br>+350 Health<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +25 Armor Penetration.<br>UNIQUE Passive: +10 Spell Vamp."},
+	3104:{'name':"Lord Van Damm's Pillager", 'description':"+40 Attack Damage<br>+300 Health<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +20 Armor Penetration.<br>UNIQUE Passive: +10 Spell Vamp."},
 	3105:{'name':"Aegis of the Legion", 'description':"+270 Health<br>+18 Armor<br>+24 Magic Resist<br>UNIQUE Aura: Nearby allied champions gain 12 Armor, 15 Magic Resist, and 8 Attack Damage."},
 	3106:{'name':"Madred's Razors", 'description':"+15 Attack Damage<br>+23 Armor<br>UNIQUE Passive: Your basic attacks against minions and monsters have a 20% chance to deal 300 bonus magic damage."},
 	3108:{'name':"Fiendish Codex", 'description':"+30 Ability Power<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: +10% Cooldown Reduction."},
@@ -158,11 +158,16 @@ ITEMS={
 	3184:{'name':"Entropy", 'description':"+275 Health<br>+70 Attack Damage<br>UNIQUE Passive: Your basic attacks have a 25% chance to reduce your target's Movement Speed by 30% for 2.5 seconds.<br>UNIQUE Active: For the next 5 seconds, your basic attacks reduce your target's Movement Speed by 30% and deal 80 true damage over 2.5 seconds (60 second cooldown)."},
 	3185:{'name':"The Lightbringer", 'description':"+50% Attack Speed<br>+20 Attack Damage<br>UNIQUE Passive: Your basic attacks grant vision of your target for 5 seconds."},
 	3186:{'name':"Kitae's Bloodrazor", 'description':"+30 Attack Damage<br>+40% Attack Speed<br>UNIQUE Passive: Your basic attacks deal magic damage equal to 2.5% of the target's maximum Health."},
-	3187:{'name':"Hextech Sweeper", 'description':"+25 Ability Power<br>+300 Health<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: Dealing spell damage grants vision of your target (including stealthed targets) for 4 seconds.<br>UNIQUE Active: Covers an area with stealth-detecting mist for 10 seconds, granting vision of units which pass through it for 6 seconds. 60 second cooldown. (1000 Range, 375 AOE estimate)."},
-	3188:{'name':"Blackfire Torch", 'description':"+50 Ability Power<br>+300 Health<br>+350 Mana<br>UNIQUE Passive: Your spells burn for an additional 5% of the target's current health in magic damage over 3 seconds (effect halved for AoE and DoT)"},
+	3187:{'name':"Hextech Sweeper", 'description':"+50 Ability Power<br>+300 Health<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +10% Movement Speed.<br>UNIQUE Active: Covers an area with stealth-detecting mist for 10 seconds, granting vision of units which pass through it for 6 seconds. 60 second cooldown. (1000 Range, 375 AOE estimate)."},
+	3188:{'name':"Blackfire Torch", 'description':"+70 Ability Power<br>+250 Health<br>UNIQUE Passive: +15% Cooldown Reduction.<br>UNIQUE Passive: +20 Magic Penetration.<br>UNIQUE Passive: Your spells burn for an additional 5% of the target champion's maximum Health in magic damage over 3 seconds. Each second burned consumes a charge. One charge is generated each second."},
 	3190:{'name':"Locket of the Iron Solari", 'description':"+300 Health<br>+35 Armor<br>UNIQUE Aura: Nearby allied Champions gain 15 Health Regen per 5 seconds.<br>UNIQUE Active: Shield yourself and nearby allies for 5 seconds, absorbing up to 50 (+10 per level) damage (60 second cooldown)."},
 	3196:{'name':"Augment: Power", 'description':"+3 Ability Power per level<br>+220 Health<br>+6 Health Regen per 5 seconds<br>Ability Augment: Power Transfer increases Viktor's Movement Speed by 30% for 3 seconds."},
 	3197:{'name':"Augment: Gravity", 'description':"+3 Ability Power per level<br>+200 Mana<br>+10% Cooldown Reduction<br>+5 Mana Regen per 5 seconds<br>Ability Augment: Gravity Field has an additional 30% cast range."},
 	3198:{'name':"Augment: Death", 'description':"+3 Ability Power per level<br>+45 Ability Power<br>Augment Ability: Death Ray sets fire to enemies, dealing 30% additional magic damage over 4 seconds."},
 	3200:{'name':"The Hex Core", 'description':"+3 Ability Power per level<br>This item can be upgraded into one of three augments that enhance Viktor's basic abilities. Click the item in the store to discover its upgrades."},
 }
+
+
+if __name__ == "__main__":
+	import simplejson
+	print simplejson.dumps(ITEMS)

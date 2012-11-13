@@ -78,5 +78,5 @@ draw_chart=(data, y='rating', aoptions={}, data_parse='default', container='elo-
 
 $(document).ready(->
 	window.draw_chart=draw_chart
-	if window.chart? then draw_chart(window.data, window.bgchart)
+	if window.chart? then draw_chart(window.chart_data, window.chart)
 )

@@ -56,15 +56,6 @@ CELERYBEAT_SCHEDULE = {
 	},
 }
 
-# LOL_CLIENT_SERVERS={
-# 	'NA':['http://127.0.0.1:8081', 'http://127.0.0.1:8082', 'http://127.0.0.1:8085'],
-# 	'EUW':['http://127.0.0.1:8083', ],
-# }
-
-LOL_CLIENT_SERVERS={
-	'NA':['http://127.0.0.1:8081',],
-}
-
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -187,7 +178,7 @@ INSTALLED_APPS = (
 	# Uncomment the next line to enable the admin:
 	'django.contrib.admin',
 	# Uncomment the next line to enable admin documentation:
-	'django.contrib.admindocs',
+	# 'django.contrib.admindocs',
 	'south',
 	'djcelery',
 	'lol',
