@@ -13,11 +13,11 @@ COFFEEOUTDIR	= "#{BASE}/static/debug"
 JSOUTDIR		= "#{BASE}/static/js"
 JSTOCOMBINE	= [
 	'items.js'
+	'core.js'
 	'player.js'
 	'game.js'
 	# 'champions.js'
 	'graph.js'
-	'core.js'
 ]
 LESSINDIR		= "#{BASE}/static/less"
 LESSINFILES		= [
@@ -41,16 +41,20 @@ compile_coffee=(cb)->
 		cb(null)
 	)
 compress_js=(cb)->
-	tmp=''
+	js=''
+	size=0
 	for file in JSTOCOMBINE
-		tmp+=fs.readFileSync("#{COFFEEOUTDIR}/#{file}", 'utf8')
+		tmp=fs.readFileSync("#{COFFEEOUTDIR}/#{file}", 'utf8')
+		js+=tmp
+		size+=tmp.length
 		# fs.unlinkSync("#{TMPDIR}/#{file}")
 	# console.log("Compressing #{file}".yellow)
-	ast=uglifyjs.parser.parse(tmp)
+	ast=uglifyjs.parser.parse(js)
 	ast=uglifyjs.uglify.ast_mangle(ast)
 	ast=uglifyjs.uglify.ast_squeeze(ast)
 	result=uglifyjs.uglify.gen_code(ast)
 	fs.writeFileSync("#{JSOUTDIR}/main.js", result)
+	console.log("main.js >> Before:"+"#{size}".cyan+" After:"+"#{result.length}".green+" Diff:"+"#{result.length-size}".magenta)
 	cb(null)
 compile_less=(cb)->
 	OPENCHILDREN=0
@@ -114,7 +118,7 @@ task('build', ->
 
 task('all', ->
 	invoke('clean')
-	fs.mkdirSync(TMPDIR)
+	# fs.mkdirSync(TMPDIR)
 	async.waterfall([
 		compile_coffee
 		compress_js

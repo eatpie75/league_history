@@ -99,6 +99,8 @@ def fill_game(game_pk, auto=False):
 				summoner=parse_masteries(data['masteries'], summoner)
 			except Summoner.DoesNotExist:
 				summoner=create_summoner(data['profile'], game.region)
+				summoner=parse_runes(data['runes'], summoner)
+				summoner=parse_masteries(data['masteries'], summoner)
 			parse_ratings(data['stats'], summoner)
 			if summoner.fully_update and not auto:
 				parse_games(data['games'], summoner, True, game)

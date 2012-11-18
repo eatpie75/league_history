@@ -24,7 +24,7 @@ class PlayerAdmin(admin.ModelAdmin):
 
 
 class SummonerAdmin(admin.ModelAdmin):
-	list_display=('name', 'level', 'time_updated', 'update_automatically', 'fully_update')
+	list_display=('name', 'level', 'time_updated', 'profile_icon', 'update_automatically', 'fully_update')
 	list_editable=('update_automatically', 'fully_update')
 	list_filter=('region', 'update_automatically')
 	search_fields=('summoner_id', 'account_id', 'name')

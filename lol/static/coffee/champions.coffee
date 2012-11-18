@@ -106,3 +106,4 @@ champions=
 	134:"Syndra"
 	143:"Zyra"
 	238:"Zed"
+	267:"Nami"
