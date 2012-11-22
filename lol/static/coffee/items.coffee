@@ -116,7 +116,7 @@ items=
 		name:"Mana Potion"
 		description:"Restores 100 Mana over 15 seconds."
 	2009:
-		name:"Total Biscuit of Rejuvination"
+		name:"Total Biscuit of Rejuvenation"
 		description:"Restores 80 Health and 50 Mana over 10 seconds."
 	2037:
 		name:"Elixir of Fortitude"
@@ -185,13 +185,13 @@ items=
 		name:"Frozen Mallet"
 		description:"+700 Health<br>+30 Attack Damage<br>UNIQUE Passive: Icy: Your basic attacks slow your target's Movement Speed by 40% for 1.5 seconds (30% slow for ranged attacks)."
 	3023:
-		name:"Wraith Collar"
-		description:"+50 Ability Power<br>+30 Magic Resistance<br>+5% Movement Speed<br>UNIQUE Active: Hunt: Summons 2 invulnerable ghosts for 6 seconds to seek the two nearest enemy champions.  If they touch an enemy champion, they slow his Movement Speed by 40% and reveal him for 2.5 seconds - 120 second cooldown."
+		name:"Twin Shadows"
+		description:"+50 Ability Power<br>+30 Magic Resistance<br>+5% Movement Speed<br>UNIQUE Active: Hunt: Summons up to 2 invulnerable ghosts for 6 seconds to seek the two nearest enemy champions.  If they touch an enemy champion, they slow his Movement Speed by 40% and reveal him for 2.5 seconds - 120 second cooldown."
 	3024:
 		name:"Glacial Shroud"
 		description:"+300 Mana<br>+40 Armor<br>UNIQUE Passive: +15% Cooldown Reduction."
 	3025:
-		name:"Frozen Fist"
+		name:"Iceborn Gauntlet"
 		description:"+40 Ability Power<br>+500 Mana<br>+60 Armor<br>+15% Cooldown Reduction<br>UNIQUE Passive: Spellblade: After using an ability, your next basic attack deals bonus physical damage equal to 125% of your base Attack Damage to surrounding enemies and creates a field for 3 seconds that slows enemies inside by 35% - 2 second cooldown."
 	3026:
 		name:"Guardian Angel"
@@ -258,7 +258,7 @@ items=
 		description:"+250 Mana<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Mana Charge: Each time you cast a spell or spend Mana, your maximum Mana increases by 4 (3 second cooldown). Bonus caps at +750 Mana."
 	3071:
 		name:"The Black Cleaver"
-		description:"+250 Health<br>+50 Attack Damage<br>+10% Cooldown Reduction<br>+10 Armor Penetration<br>Passive: Dealing physical damage to an enemy champion reduces their Armor by 7.5% for 4 seconds. This effect stacks up to 4 times."
+		description:"+250 Health<br>+50 Attack Damage<br>+10% Cooldown Reduction<br>+15 Armor Penetration<br>Passive: Dealing physical damage to an enemy champion reduces their Armor by 7.5% for 4 seconds. This effect stacks up to 4 times."
 	3072:
 		name:"The Bloodthirster"
 		description:"+70 Attack Damage<br>+12% Life Steal<br>Passive: Gains 1 stack per kill, up to a maximum of 30. Each stack grants +1 Attack Damage and +0.2% Life Steal (max: +30 Attack Damage and +6% Life Steal). Half of the current stacks are lost upon death."
@@ -291,7 +291,7 @@ items=
 		description:"+18% Attack Speed<br>+10% Critical Strike Chance<br>+5% Movement Speed"
 	3087:
 		name:"Statikk Shiv"
-		description:"+40% Attack Speed<br>+20% Critical Strike Chance<br>+6% Movement Speed<br>UNIQUE Passive: Moving and attacking builds Static Charges. At 100 Charges, your next attack expends the Charges to deal 100 magic damage to up to 4 targets. This damage can critically strike."
+		description:"+40% Attack Speed<br>+20% Critical Strike Chance<br>+6% Movement Speed<br>UNIQUE Passive: Moving and attacking build Static Charges. At 100 Charges, your next attack expends the Charges to deal 100 magic damage to up to 4 targets. This damage can critically strike."
 	3089:
 		name:"Rabadon's Deathcap"
 		description:"+120 Ability Power<br>UNIQUE Passive: Increases Ability Power by 25%."
@@ -302,7 +302,7 @@ items=
 		name:"Wit's End"
 		description:"+40% Attack Speed<br>+20 Magic Resist<br>UNIQUE Passive: Your basic attacks deal 42 bonus magic damage.<br>UNIQUE Passive: Your basic attacks increase your Magic Resist by 5 for 5 seconds (effect stacks up to 4 times)."
 	3092:
-		name:"Kage's Last Breath"
+		name:"Shard of True Ice"
 		description:"+45 Ability Power<br>UNIQUE Passive: Lucky Shadow: Gain an additional 4 Gold every 10 seconds.<br>UNIQUE Aura: Mana Warp: Nearby allied champions gain 6 Mana Regen per 5 seconds.<br>UNIQUE Active: Surrounds an ally with a blizzard for 4 seconds that slows nearby enemy movement speed by 30% - 60 second cooldown."
 	3093:
 		name:"Avarice Blade"
@@ -321,7 +321,7 @@ items=
 		description:"+520 Health<br>UNIQUE Aura: Nearby allied champions gain 10% Cooldown Reduction and 12 Mana Regen per 5 seconds."
 	3100:
 		name:"Lich Bane"
-		description:"+80 Ability Power<br>+250 Mana<br>+5% Movement Speed<br>UNIQUE Passive: Spellblade: After casting a spell, your next basic attack deals bonus magic damage equal to 50 + 75% of your Ability Power - 2 second cooldown."
+		description:"+80 Ability Power<br>+250 Mana<br>+5% Movement Speed<br>UNIQUE Passive: Spellblade: After using an ability, your next basic attack deals bonus magic damage equal to 50 + 75% of your Ability Power - 2 second cooldown."
 	3101:
 		name:"Stinger"
 		description:"+40% Attack Speed<br>UNIQUE Passive: +10% Cooldown Reduction."
@@ -381,13 +381,13 @@ items=
 		description:"+100 Ability Power<br>+15% Cooldown Reduction<br>UNIQUE Active: Deals 15% of target champion's maximum Health in Magic Damage then amplifies all magic damage they take by 20% for 4 seconds - 60 second cooldown."
 	3131:
 		name:"Sword of the Divine"
-		description:"+40% attack speed<br>Passive: Kills or Assist halve this item's cooldown.<br>UNIQUE Active: Gain 100% Attack Speed and 100% Critical Strike Chance for 4 seconds or 3 critical attacks. While this item is on cooldown, it does not give Attack Speed - 25 second cooldown."
+		description:"+45% Attack Speed<br>Passive: This item does not grant any Attack Speed while on cooldown. Champion kills reduce the current cooldown by 50%.<br>UNIQUE Active: Gain 100% Attack Speed and 100% Critical Strike Chance for 3 seconds or 3 critical strikes - 60 second cooldown."
 	3132:
 		name:"Heart of Gold"
 		description:"+325 Health<br>UNIQUE Passive: You gain an additional 5 Gold every 10 seconds."
 	3134:
 		name:"The Brutalizer"
-		description:"+25 Attack Damage<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +10 Armor Penetration."
+		description:"+25 Attack Damage<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +15 Armor Penetration."
 	3135:
 		name:"Void Staff"
 		description:"+70 Ability Power<br>UNIQUE Passive: +35% Magic Penetration."
@@ -399,16 +399,16 @@ items=
 		description:"+180 Health<br>UNIQUE Passive: Your champion gains 32 Health per stack, receiving 2 stacks for a kill or 1 stack for an assist (stacks up to 20). You lose a third of your stacks on death. At 20 stacks, your champion takes 15% less damage."
 	3139:
 		name:"Mercurial Scimitar"
-		description:"+65 Attack Damage<br>+45 Magic Resist<br>UNIQUE Active: Removes all debuffs from your champion and grants 100% Movement Speed for 1 second - 90 second cooldown."
+		description:"+60 Attack Damage<br>+45 Magic Resist<br>UNIQUE Active: Quicksilver: Removes all debuffs from your champion and grants 50% bonus Movement Speed for 1 second - 90 second cooldown."
 	3140:
 		name:"Quicksilver Sash"
-		description:"+45 Magic Resist<br>UNIQUE Active: Removes all debuffs from your champion (90 second cooldown)."
+		description:"+45 Magic Resist<br>UNIQUE Active: Quicksilver: Removes all debuffs from your champion (90 second cooldown)."
 	3141:
 		name:"Sword of the Occult"
 		description:"+10 Attack Damage<br>UNIQUE Passive: Your champion gains 5 Attack Damage per stack, receiving 2 stacks for a kill or 1 stack for an assist (stacks up to 20). You lose a third of your stacks on death. At 20 stacks, your champion's Movement Speed is increased by 15%."
 	3142:
 		name:"Youmuu's Ghostblade"
-		description:"+30 Attack Damage<br>+15% Critical Strike Chance<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +15 Armor Penetration.<br>UNIQUE Active: Gain 20% Movement Speed and 40% Attack Speed for 6 seconds (4 seconds if you're ranged) - 45 second cooldown."
+		description:"+30 Attack Damage<br>+15% Critical Strike Chance<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +20 Armor Penetration.<br>UNIQUE Active: Gain 20% Movement Speed and 40% Attack Speed for 6 seconds (4 seconds if you're ranged) - 45 second cooldown."
 	3143:
 		name:"Randuin's Omen"
 		description:"+500 Health<br>+70 Armor<br>UNIQUE Passive: Cold Steel: If you are hit by a basic attack, you slow the attacker's Attack Speed by 20% and their Movement Speed by 10% for 1.5 seconds.<br>UNIQUE Active: Slows the Movement Speed of nearby enemy units by 35% for 2 seconds + 1 second for every 100 Armor and Magic Resistance you have - 60 second cooldown."
@@ -432,10 +432,10 @@ items=
 		description:"+40 Attack Damage<br>+10% Life Steal<br>UNIQUE Passive: Your attacks deal 4% of the target's current health in magic damage and heals you for half the amount (120 max vs minions).<br>UNIQUE Active: Drains target champion, dealing 150 physical damage plus 50% of your attack damage and healing you by the same amount. Additionally you steal 30% of their movement speed for 2 seconds - 60 second cooldown. (500 range)"
 	3154:
 		name:"Wriggle's Lantern"
-		description:"+15 Attack Damage<br>+30 Armor<br>+10% Life Steal<br>UNIQUE Passive: Main: Your basic attacks against minions and monsters have a 25% chance to deal 450 additional magic damage.<br>UNIQUE Active: Places an invisible Sight Ward that reveals the surrounding area for 3 minutes - 3 minute cooldown."
+		description:"+15 Attack Damage<br>+30 Armor<br>+10% Life Steal<br>UNIQUE Passive: Maim: Your basic attacks against minions and monsters have a 25% chance to deal 500 additional magic damage.<br>UNIQUE Active: Places an invisible Sight Ward that reveals the surrounding area for 3 minutes - 3 minute cooldown."
 	3155:
 		name:"Hexdrinker"
-		description:"+25 Attack Damage<br>+25 Magic Resist<br>UNIQUE Passive: Lifeline: If you would take magic damage that would leave you at less than 30% Health, you first gain a shield that absorbs 250 magic damage for 5 seconds."
+		description:"+25 Attack Damage<br>+25 Magic Resist<br>UNIQUE Passive: Lifeline: If you would take magic damage that would leave you at less than 30% Health, you first gain a shield that absorbs 250 magic damage for 5 seconds - 90 second cooldown."
 	3156:
 		name:"Maw of Malmortius"
 		description:"+55 Attack Damage<br>+36 Magic Resist<br>UNIQUE Passive: Gain +1 Attack Damage for every 2.5% of your Maximum Health you are missing.<br>UNIQUE Passive: Lifeline: If you would take magic damage that would leave you at less than 30% Health, you first gain a shield that absorbs 400 magic damage for 5 seconds - 90 second cooldown."
@@ -447,7 +447,7 @@ items=
 		description:"UNIQUE Passive: +15% Cooldown Reduction.<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed"
 	3159:
 		name:"Grez's Spectral Lantern"
-		description:"+25 Attack Damage<br>+20 Armor<br>+12% Life Steal<br>UNIQUE Passive: Your basic attacks against minions and monsters have a 20% chance to deal 300 bonus magic damage.<br>UNIQUE Active: A stealth-detecting mist grants vision in the target area for 10 seconds. 60 second cooldown. (1000 Range, 375 AOE)."
+		description:"+25 Attack Damage<br>+20 Armor<br>+12% Life Steal<br>UNIQUE Passive: Your basic attacks against minions and monsters have a 20% chance to deal 200 bonus magic damage.<br>UNIQUE Active: A stealth-detecting mist grants vision in the target area for 10 seconds. 60 second cooldown. (1000 Range, 375 AOE)."
 	3165:
 		name:"Morellonomicon"
 		description:"+75 Ability Power<br>+12 Mana Regen per 5 seconds<br>+20% Cooldown Reduction<br>UNIQUE Passive: Dealing magic damage to an enemy champion below 40% health inflicts Grievous Wounds to them for 4 seconds."
@@ -488,7 +488,7 @@ items=
 		description:"+25 Health Regeneration per 5 seconds<br>UNIQUE Passive : +15% Capture Rate (Does not stack with other Capture Rate modifiers).<br>UNIQUE Active: +30% movement speed for 2 seconds. 60 second cooldown."
 	3184:
 		name:"Entropy"
-		description:"+275 Health<br>+70 Attack Damage<br>UNIQUE Passive: Your basic attacks have a 25% chance to reduce your target's Movement Speed by 30% for 2.5 seconds.<br>UNIQUE Active: For the next 5 seconds, your basic attacks reduce your target's Movement Speed by 30% and deal 80 true damage over 2.5 seconds (60 second cooldown)."
+		description:"+275 Health<br>+70 Attack Damage<br>UNIQUE Passive: Icy: Your basic attacks have a 25% chance to reduce your target's Movement Speed by 30% for 2.5 seconds.<br>UNIQUE Active: For the next 5 seconds, your basic attacks reduce your target's Movement Speed by 30% and deal 80 true damage over 2.5 seconds (60 second cooldown)."
 	3185:
 		name:"The Lightbringer"
 		description:"+50% Attack Speed<br>+20 Attack Damage<br>UNIQUE Passive: Your basic attacks grant vision of your target for 5 seconds."
@@ -500,7 +500,7 @@ items=
 		description:"+50 Ability Power<br>+300 Health<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +10% Movement Speed.<br>UNIQUE Active: Covers an area with stealth-detecting mist for 10 seconds, granting vision of units which pass through it for 6 seconds. 60 second cooldown. (1000 Range, 375 AOE estimate)."
 	3188:
 		name:"Blackfire Torch"
-		description:"+70 Ability Power<br>+250 Health<br>UNIQUE Passive: +15% Cooldown Reduction.<br>UNIQUE Passive: Eyes of Pain: +15 Magic Penetration.<br>UNIQUE Passive: Your spells burn for an additional 3.5% of the target champion's maximum Health in magic damage over 2 seconds. Each second burned consumes a charge. Charges are generated when not in use."
+		description:"+70 Ability Power<br>+250 Health<br>UNIQUE Passive: +15% Cooldown Reduction.<br>UNIQUE Passive: Eyes of Pain: +15 Magic Penetration.<br>UNIQUE Passive: Your spells burn for an additional 3.5% of the target champion's maximum Health in magic damage over 2 seconds. Each second burned consumes a charge. Up to 18 charges are generated when not in use."
 	3190:
 		name:"Locket of the Iron Solari"
 		description:"+425 Health<br>+35 Armor<br>+15% Cooldown Reduction<br>+10 Health Regen per 5 seconds<br>UNIQUE Active: Shield yourself and nearby allied champions for 5 seconds, absorbing up to 50 + 10 per level damage - 60 second cooldown."
@@ -518,18 +518,18 @@ items=
 		description:"+3 Ability Power per level<br>This item can be upgraded into one of three augments that enhance Viktor's basic abilities."
 	3206:
 		name:"Spirit of the Spectral Wraith"
-		description:"+30 Ability Power<br>+15 Mana Regen per 5 seconds<br>UNIQUE Passive: +20% Spell Vamp.<br>UNIQUE Passive: +15% Cooldown Reduction.<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 20%."
+		description:"+40 Ability Power<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: +20% Spell Vamp.<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 25%."
 	3207:
 		name:"Spirit of the Ancient Golem"
-		description:"+500 Health<br>+30 Armor<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 20%.<br>UNIQUE Passive: Tenacity: The durations of stuns, slows, taunts, fears, silences, blinds, and immobilizes are reduced by 35%."
+		description:"+500 Health<br>+30 Armor<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 25%.<br>UNIQUE Passive: Tenacity: The durations of stuns, slows, taunts, fears, silences, blinds, and immobilizes are reduced by 35%."
 	3209:
 		name:"Spirit of the Elder Lizard"
-		description:"+50 Attack Damage<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 20%.<br>UNIQUE Passive: Incinerate: Basic attacks and non-periodic spell damage burn the target for 15-66 (based on level) true damage over 3 seconds."
+		description:"+50 Attack Damage<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 25%.<br>UNIQUE Passive: Incinerate: Basic attacks and non-periodic spell damage burn the target for 15-66 (based on level) true damage over 3 seconds."
 	3222:
 		name:"Mikael's Crucible"
 		description:"+300 Mana<br>+40 Magic Resist<br>+9 Mana Regen per 5 seconds<br>UNIQUE Passive: Mana Font: Increases your Mana Regen by 1% per 1% Mana you are missing.<br>UNIQUE Active: Removes all stuns, roots, taunts, fears, silences and slows on an ally and heals them for 150 + 15% of their missing health - 180 second cooldown."
 	9001:
 		name:"Cloak and Dagger"
-		description:"+20% Attack Speed<br>+20% Critical Strike Chance<br>UNIQUE Passive: +35 Tenacity (Tenacity reduces the duration of stuns, slows, taunts, fears, silences, blinds and immobilizes. Does not stack with other Tenacity items.)"
+		description:"+20% Attack Speed<br>+20% Critical Strike Chance<br>UNIQUE Passive: Tenacity: The durations of stuns, slows, taunts, fears, silences, blinds, and immobilizes are reduced by 35%."
 
 window.items=items

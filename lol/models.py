@@ -221,33 +221,14 @@ class Player(models.Model):
 		unique_together=(("game", "summoner"))
 
 
-def choose_server(region, exclude=None):
-	servers=cache.get('servers')
-	return servers.choose_server(region)
-
-
-def check_server(server, region):
-	try:
-		res=requests.get('{}/{}/'.format(server, 'status'), config={'encode_uri':False}, timeout=20.0)
-		if res.json['connected']==True:
-			return server
-		else:
-			print 'switching servers'
-			return choose_server(region, [server,])
-	except requests.exceptions.Timeout:
-		print 'switching servers'
-		return choose_server(region, [server,])
-
-
 class ClientEmuError(Exception):
 	pass
 
 
 def get_data(url, query, region='NA'):
-	# server=choose_server(region)
 	servers=cache.get('servers')
 	server=servers.choose_server(region)
-	print 'using server:{}'.format(server)
+	# print 'using server:{}'.format(server)
 
 	def _attempt(server, url):
 		try:
@@ -257,7 +238,7 @@ def get_data(url, query, region='NA'):
 		return res
 	res=_attempt(server, url)
 	if type(res) in (requests.exceptions.Timeout, requests.packages.urllib3.exceptions.TimeoutError, requests.packages.urllib3.exceptions.MaxRetryError):
-		print 'got timeout with:{}'.format(query)
+		print 'got timeout on:{} - with query:{}'.format(server, query)
 		sleep(5)
 		print 'retrying'
 		server=servers.check_servers([{'location':server, 'region':region},])
@@ -268,7 +249,7 @@ def get_data(url, query, region='NA'):
 		elif res.status_code==500:
 			raise ClientEmuError()
 	elif res.status_code==500:
-		print 'got 500 error with:{}'.format(query)
+		print 'got 500 error on:{} - with query:{}'.format(server, query)
 		sleep(5)
 		print 'retrying'
 		server=servers.check_servers([{'location':server, 'region':region},])
