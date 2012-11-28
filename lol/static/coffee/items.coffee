@@ -528,6 +528,111 @@ items=
 	3222:
 		name:"Mikael's Crucible"
 		description:"+300 Mana<br>+40 Magic Resist<br>+9 Mana Regen per 5 seconds<br>UNIQUE Passive: Mana Font: Increases your Mana Regen by 1% per 1% Mana you are missing.<br>UNIQUE Active: Removes all stuns, roots, taunts, fears, silences and slows on an ally and heals them for 150 + 15% of their missing health (180 second cooldown)."
+	3250:
+		name:"Berserker's Greaves - Homeguard"
+		description:"+20% Attack Speed<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed.<br>UNIQUE Passive: Homeguard: When you are at fountain and have been out of combat for 8 seconds, you gain full health, mana, and a 200% movement speed boost that decays over 8 seconds. You lose the movement speed when you enter combat."
+	3251:
+		name:"Berserker's Greaves - Captain"
+		description:"+20% Attack Speed<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed.<br>UNIQUE Passive: Captain: Allied champions running towards you gain a 8% movement speed boost. Allied minions around you gain a 20% movement speed boost."
+	3252:
+		name:"Berserker's Greaves - Furor"
+		description:"+20% Attack Speed<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed.<br>UNIQUE Passive: Furor: Whenever you deal damage with a single target attack or spell, you gain 12% movement speed that decays over 2 seconds."
+	3253:
+		name:"Berserker's Greaves - Distortion"
+		description:"+20% Attack Speed<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed.<br>UNIQUE Passive: Distortion: Your Teleport, Flash and Ghost summoner spell cooldowns are reduced by 25%."
+	3254:
+		name:"Berserker's Greaves - Alacrity"
+		description:"+20% Attack Speed<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed.<br>UNIQUE Passive: Alacrity: +15 Movement Speed."
+	3255:
+		name:"Sorcerer's Shoes - Homeguard"
+		description:"+15 Magic Penetration<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Homeguard: When you are at fountain and have been out of combat for 8 seconds, you gain full health, mana, and a 200% movement speed boost that decays over 8 seconds. You lose the movement speed when you enter combat."
+	3256:
+		name:"Sorcerer's Shoes - Captain"
+		description:"+15 Magic Penetration<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Captain: Allied champions running towards you gain a 8% movement speed boost. Allied minions around you gain a 20% movement speed boost."
+	3257:
+		name:"Sorcerer's Shoes - Furor"
+		description:"+15 Magic Penetration<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Furor: Whenever you deal damage with a single target attack or spell, you gain 12% movement speed that decays over 2 seconds."
+	3258:
+		name:"Sorcerer's Shoes - Distortion"
+		description:"+15 Magic Penetration<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Distortion: Your Teleport, Flash and Ghost summoner spell cooldowns are reduced by 25%."
+	3259:
+		name:"Sorcerer's Shoes - Alacrity"
+		description:"+15 Magic Penetration<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Alacrity: +15 Movement Speed."
+	3260:
+		name:"Ninja Tabi - Homeguard"
+		description:"+25 Armor<br>UNIQUE Passive: Blocks 10% of the damage from champion basic attacks.<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Homeguard: When you are at fountain and have been out of combat for 8 seconds, you gain full health, mana, and a 200% movement speed boost that decays over 8 seconds. You lose the movement speed when you enter combat."
+	3261:
+		name:"Ninja Tabi - Captain"
+		description:"+25 Armor<br>UNIQUE Passive: Blocks 10% of the damage from champion basic attacks.<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Captain: Allied champions running towards you gain a 8% movement speed boost. Allied minions around you gain a 20% movement speed boost."
+	3262:
+		name:"Ninja Tabi - Furor"
+		description:"+25 Armor<br>UNIQUE Passive: Blocks 10% of the damage from champion basic attacks.<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Furor: Whenever you deal damage with a single target attack or spell, you gain 12% movement speed that decays over 2 seconds."
+	3263:
+		name:"Ninja Tabi - Distortion"
+		description:"+25 Armor<br>UNIQUE Passive: Blocks 10% of the damage from champion basic attacks.<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Distortion: Your Teleport, Flash and Ghost summoner spell cooldowns are reduced by 25%."
+	3264:
+		name:"Ninja Tabi - Alacrity"
+		description:"+25 Armor<br>UNIQUE Passive: Blocks 10% of the damage from champion basic attacks.<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Alacrity: +15 Movement Speed."
+	3265:
+		name:"Mercury's Treads - Homeguard"
+		description:"+25 Magic Resist<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Tenacity: The duration of stuns, slows, taunts, fears, silences, blinds and immobilizes are reduced by 35%.<br>UNIQUE Passive: Homeguard: When you are at fountain and have been out of combat for 8 seconds, you gain full health, mana, and a 200% movement speed boost that decays over 8 seconds. You lose the movement speed when you enter combat."
+	3266:
+		name:"Mercury's Treads - Captain"
+		description:"+25 Magic Resist<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Tenacity: The duration of stuns, slows, taunts, fears, silences, blinds and immobilizes are reduced by 35%.<br>UNIQUE Passive: Captain: Allied champions running towards you gain a 8% movement speed boost. Allied minions around you gain a 20% movement speed boost."
+	3267:
+		name:"Mercury's Treads - Furor"
+		description:"+25 Magic Resist<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Tenacity: The duration of stuns, slows, taunts, fears, silences, blinds and immobilizes are reduced by 35%.<br>UNIQUE Passive: Furor: Whenever you deal damage with a single target attack or spell, you gain 12% movement speed that decays over 2 seconds."
+	3268:
+		name:"Mercury's Treads - Distortion"
+		description:"+25 Magic Resist<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Tenacity: The duration of stuns, slows, taunts, fears, silences, blinds and immobilizes are reduced by 35%.<br>UNIQUE Passive: Distortion: Your Teleport, Flash and Ghost summoner spell cooldowns are reduced by 25%."
+	3269:
+		name:"Mercury's Treads - Alacrity"
+		description:"+25 Magic Resist<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Tenacity: The duration of stuns, slows, taunts, fears, silences, blinds and immobilizes are reduced by 35%.<br>UNIQUE Passive: Alacrity: +15 Movement Speed."
+	3270:
+		name:"Boots of Mobility - Homeguard"
+		description:"UNIQUE Passive: Enhanced Movement: +45 Movement Speed. Increases to +105 Movement Speed when out of combat for 5 seconds.<br>UNIQUE Passive: Homeguard: When you are at fountain and have been out of combat for 8 seconds, you gain full health, mana, and a 200% movement speed boost that decays over 8 seconds. You lose the movement speed when you enter combat."
+	3271:
+		name:"Boots of Mobility - Captain"
+		description:"UNIQUE Passive: Enhanced Movement: +45 Movement Speed. Increases to +105 Movement Speed when out of combat for 5 seconds.<br>UNIQUE Passive: Captain: Allied champions running towards you gain a 8% movement speed boost. Allied minions around you gain a 20% movement speed boost."
+	3272:
+		name:"Boots of Mobility - Furor"
+		description:"UNIQUE Passive: Enhanced Movement: +45 Movement Speed. Increases to +105 Movement Speed when out of combat for 5 seconds.<br>UNIQUE Passive: Furor: Whenever you deal damage with a single target attack or spell, you gain 12% movement speed that decays over 2 seconds."
+	3273:
+		name:"Boots of Mobility - Distortion"
+		description:"UNIQUE Passive: Enhanced Movement: +45 Movement Speed. Increases to +105 Movement Speed when out of combat for 5 seconds.<br>UNIQUE Passive: Distortion: Your Teleport, Flash and Ghost summoner spell cooldowns are reduced by 25%."
+	3274:
+		name:"Boots of Mobility - Alacrity"
+		description:"UNIQUE Passive: Enhanced Movement: +45 Movement Speed. Increases to +105 Movement Speed when out of combat for 5 seconds.<br>UNIQUE Passive: Alacrity: +15 Movement Speed."
+	3275:
+		name:"Ionian Boots of Lucidity - Homeguard"
+		description:"UNIQUE Passive: +15% Cooldown Reduction.<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Homeguard: When you are at fountain and have been out of combat for 8 seconds, you gain full health, mana, and a 200% movement speed boost that decays over 8 seconds. You lose the movement speed when you enter combat."
+	3276:
+		name:"Ionian Boots of Lucidity - Captain"
+		description:"UNIQUE Passive: +15% Cooldown Reduction.<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Captain: Allied champions running towards you gain a 8% movement speed boost. Allied minions around you gain a 20% movement speed boost."
+	3277:
+		name:"Ionian Boots of Lucidity - Furor"
+		description:"UNIQUE Passive: +15% Cooldown Reduction.<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Furor: Whenever you deal damage with a single target attack or spell, you gain 12% movement speed that decays over 2 seconds."
+	3278:
+		name:"Ionian Boots of Lucidity - Distortion"
+		description:"UNIQUE Passive: +15% Cooldown Reduction.<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Distortion: Your Teleport, Flash and Ghost summoner spell cooldowns are reduced by 25%."
+	3279:
+		name:"Ionian Boots of Lucidity - Alacrity"
+		description:"UNIQUE Passive: +15% Cooldown Reduction.<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Alacrity: +15 Movement Speed."
+	3280:
+		name:"Boots of Swiftness - Homeguard"
+		description:"UNIQUE Passive: Enhanced Movement: +60 Movement Speed<br>UNIQUE Passive: Slow Resist: Movement slowing effects are reduced by 25%.<br>UNIQUE Passive: Homeguard: When you are at fountain and have been out of combat for 8 seconds, you gain full health, mana, and a 200% movement speed boost that decays over 8 seconds. You lose the movement speed when you enter combat."
+	3281:
+		name:"Boots of Swiftness - Captain"
+		description:"UNIQUE Passive: Enhanced Movement: +60 Movement Speed<br>UNIQUE Passive: Slow Resist: Movement slowing effects are reduced by 25%.<br>UNIQUE Passive: Captain: Allied champions running towards you gain a 8% movement speed boost. Allied minions around you gain a 20% movement speed boost."
+	3282:
+		name:"Boots of Swiftness - Furor"
+		description:"UNIQUE Passive: Enhanced Movement: +60 Movement Speed<br>UNIQUE Passive: Slow Resist: Movement slowing effects are reduced by 25%.<br>UNIQUE Passive: Furor: Whenever you deal damage with a single target attack or spell, you gain 12% movement speed that decays over 2 seconds."
+	3283:
+		name:"Boots of Swiftness - Distortion"
+		description:"UNIQUE Passive: Enhanced Movement: +60 Movement Speed<br>UNIQUE Passive: Slow Resist: Movement slowing effects are reduced by 25%.<br>UNIQUE Passive: Distortion: Your Teleport, Flash and Ghost summoner spell cooldowns are reduced by 25%."
+	3284:
+		name:"Boots of Swiftness - Alacrity"
+		description:"UNIQUE Passive: Enhanced Movement: +60 Movement Speed<br>UNIQUE Passive: Slow Resist: Movement slowing effects are reduced by 25%.<br>UNIQUE Passive: Alacrity: +15 Movement Speed."
 	9001:
 		name:"Cloak and Dagger"
 		description:"+20% Attack Speed<br>+20% Critical Strike Chance<br>UNIQUE Passive: Tenacity: The durations of stuns, slows, taunts, fears, silences, blinds, and immobilizes are reduced by 35%."
