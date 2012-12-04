@@ -123,7 +123,7 @@ def view_game(request, region, game_id):
 		metadata['stats'][team]['td_taken']+=player.damage_taken
 		metadata['stats'][team]['sw_bought']+=player.sight_wards_bought_in_game
 		metadata['stats'][team]['vw_bought']+=player.vision_wards_bought_in_game
-		metadata['stats'][team]['tw_bought']+=metadata['stats'][team]['sw_bought']+metadata['stats'][team]['vw_bought']
+		metadata['stats'][team]['tw_bought']+=player.sight_wards_bought_in_game+player.vision_wards_bought_in_game
 		if game.game_mode in (3, 4, 5) and player.rating>0:
 			metadata['stats'][team]['total_elo']+=player.rating
 			metadata['stats'][team]['avg_elo']=round(metadata['stats'][team]['total_elo']/metadata['stats'][team]['num_players'], 1)
