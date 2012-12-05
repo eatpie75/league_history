@@ -319,6 +319,7 @@ def view_champion_items(request, champion_id, champion_slug):
 	return render_to_response('view_champion_items.html.j2', {'stats':stats, 'champion_id':champion_id, 'champion':CHAMPIONS[champion_id], 'items':ITEMS, 'form':form, 'generating':generating}, RequestContext(request))
 
 
+@user_passes_test(lambda u:u.is_superuser)
 def run_auto(request):
 	if 'force' in request.GET:
 		summoners=Summoner.objects.filter(update_automatically=True)
@@ -326,6 +327,8 @@ def run_auto(request):
 		summoners=Summoner.objects.filter(update_automatically=True, time_updated__lt=(datetime.utcnow().replace(tzinfo=timezone('UTC'))-timedelta(hours=3)))
 	if 'fill' in request.GET:
 		games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.utcnow().replace(tzinfo=timezone('UTC'))-timedelta(days=2))).distinct('game').order_by()
+		if 'limit' in request.GET:
+			games=games[:request.GET['limit']]
 		for player in games:
 			fill_game.delay(player.game.pk)
 	elif 'test' in request.GET:
