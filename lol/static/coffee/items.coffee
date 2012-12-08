@@ -258,7 +258,7 @@ items=
 		description:"+250 Mana<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Mana Charge: Each time you cast a spell or spend Mana, your maximum Mana increases by 4 (3 second cooldown). Bonus caps at +750 Mana."
 	3071:
 		name:"The Black Cleaver"
-		description:"+250 Health<br>+50 Attack Damage<br>+10% Cooldown Reduction<br>+15 Armor Penetration<br>Passive: Dealing physical damage to an enemy champion reduces their Armor by 7.5% for 4 seconds. This effect stacks up to 4 times."
+		description:"+250 Health<br>+50 Attack Damage<br>+10% Cooldown Reduction<br>UNIQUE Passive: +10 Armor Penetration<br>Passive: Dealing physical damage to an enemy champion reduces their Armor by 6.25% for 4 seconds. This effect stacks up to 4 times (Maximum of 25% Armor Reduction)."
 	3072:
 		name:"The Bloodthirster"
 		description:"+70 Attack Damage<br>+12% Life Steal<br>Passive: Gains 1 stack per kill, up to a maximum of 30. Each stack grants +1 Attack Damage and +0.2% Life Steal (max: +30 Attack Damage and +6% Life Steal). Half of the current stacks are lost upon death."
@@ -387,7 +387,7 @@ items=
 		description:"+325 Health<br>UNIQUE Passive: You gain an additional 5 Gold every 10 seconds."
 	3134:
 		name:"The Brutalizer"
-		description:"+25 Attack Damage<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +15 Armor Penetration."
+		description:"+25 Attack Damage<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +10 Armor Penetration."
 	3135:
 		name:"Void Staff"
 		description:"+70 Ability Power<br>UNIQUE Passive: +35% Magic Penetration."
@@ -423,7 +423,7 @@ items=
 		description:"+45 Attack Damage<br>+65 Ability Power<br>+10% Life Steal<br>UNIQUE Passive: +20% Spell Vamp.<br>UNIQUE Passive: Your basic attacks and single target spells against champions reduce the cooldown of this item by 3 seconds.<br>UNIQUE Active: Deals 150 + 40% of your Ability Power as magic damage and slows target champion's Movement Speed by 40% for 2 seconds - 60 second cooldown."
 	3151:
 		name:"Liandry's Torment"
-		description:"+70 Ability Power<br>+200 Health<br>UNIQUE Passive: Eyes of Pain: +15 Magic Penetration<br>UNIQUE Passive: Dealing spell damage burns enemies for 5% of their current Health as magic damage over 3 seconds. If their movement is impaired, they take double damage from this effect(Half duration for multi-target or periodic effects, 300 max vs. monsters)."
+		description:"+70 Ability Power<br>+200 Health<br>UNIQUE Passive: Eyes of Pain: +15 Magic Penetration<br>UNIQUE Passive: Dealing spell damage burns enemies for 5% of their current Health as magic damage over 3 seconds. If their movement is impaired, they take double damage from this effect (Half duration for multi-target or periodic effects, 300 max vs. monsters)."
 	3152:
 		name:"Will of the Ancients"
 		description:"+50 Ability Power<br>UNIQUE Aura: Grants nearby allied champions 30 Ability Power and 20% Spell Vamp."

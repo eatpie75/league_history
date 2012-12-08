@@ -41,20 +41,22 @@ compile_coffee=(cb)->
 		cb(null)
 	)
 compress_js=(cb)->
-	js=''
+	js=[]
 	size=0
 	for file in JSTOCOMBINE
 		tmp=fs.readFileSync("#{COFFEEOUTDIR}/#{file}", 'utf8')
-		js+=tmp
+		# js+=tmp
 		size+=tmp.length
 		# fs.unlinkSync("#{TMPDIR}/#{file}")
+		js.push("#{COFFEEOUTDIR}/#{file}")
 	# console.log("Compressing #{file}".yellow)
-	ast=uglifyjs.parser.parse(js)
-	ast=uglifyjs.uglify.ast_mangle(ast)
-	ast=uglifyjs.uglify.ast_squeeze(ast)
-	result=uglifyjs.uglify.gen_code(ast)
-	fs.writeFileSync("#{JSOUTDIR}/main.js", result)
-	console.log("main.js >> Before:"+"#{size}".cyan+" After:"+"#{result.length}".green+" Diff:"+"#{result.length-size}".magenta)
+	# ast=uglifyjs.parser.parse(js)
+	# ast=uglifyjs.uglify.ast_mangle(ast)
+	# ast=uglifyjs.uglify.ast_squeeze(ast)
+	# result=uglifyjs.uglify.gen_code(ast)
+	result=uglifyjs.minify(js)
+	fs.writeFileSync("#{JSOUTDIR}/main.js", result.code)
+	console.log("main.js >> Before:"+"#{size}".cyan+" After:"+"#{result.code.length}".green+" Diff:"+"#{result.code.length-size}".magenta)
 	cb(null)
 compile_less=(cb)->
 	OPENCHILDREN=0

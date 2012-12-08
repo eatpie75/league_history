@@ -330,7 +330,7 @@
     },
     3071: {
       name: "The Black Cleaver",
-      description: "+250 Health<br>+50 Attack Damage<br>+10% Cooldown Reduction<br>+15 Armor Penetration<br>Passive: Dealing physical damage to an enemy champion reduces their Armor by 7.5% for 4 seconds. This effect stacks up to 4 times."
+      description: "+250 Health<br>+50 Attack Damage<br>+10% Cooldown Reduction<br>UNIQUE Passive: +10 Armor Penetration<br>Passive: Dealing physical damage to an enemy champion reduces their Armor by 6.25% for 4 seconds. This effect stacks up to 4 times (Maximum of 25% Armor Reduction)."
     },
     3072: {
       name: "The Bloodthirster",
@@ -502,7 +502,7 @@
     },
     3134: {
       name: "The Brutalizer",
-      description: "+25 Attack Damage<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +15 Armor Penetration."
+      description: "+25 Attack Damage<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +10 Armor Penetration."
     },
     3135: {
       name: "Void Staff",
@@ -550,7 +550,7 @@
     },
     3151: {
       name: "Liandry's Torment",
-      description: "+70 Ability Power<br>+200 Health<br>UNIQUE Passive: Eyes of Pain: +15 Magic Penetration<br>UNIQUE Passive: Dealing spell damage burns enemies for 5% of their current Health as magic damage over 3 seconds. If their movement is impaired, they take double damage from this effect(Half duration for multi-target or periodic effects, 300 max vs. monsters)."
+      description: "+70 Ability Power<br>+200 Health<br>UNIQUE Passive: Eyes of Pain: +15 Magic Penetration<br>UNIQUE Passive: Dealing spell damage burns enemies for 5% of their current Health as magic damage over 3 seconds. If their movement is impaired, they take double damage from this effect (Half duration for multi-target or periodic effects, 300 max vs. monsters)."
     },
     3152: {
       name: "Will of the Ancients",
