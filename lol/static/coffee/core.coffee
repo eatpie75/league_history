@@ -1,5 +1,5 @@
 $(document).ready(->
-	wat=(tip, el)->
+	measure_popover=(tip, el)->
 		el=$(el)
 		tip=$(tip)
 		scroll=window.scrollY
@@ -19,7 +19,7 @@ $(document).ready(->
 				'html':true
 				'content':item.description
 				'title':item.name
-				'placement':wat
+				'placement':measure_popover
 				'trigger':'hover'
 				'animation':false
 			})

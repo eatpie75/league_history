@@ -2,8 +2,8 @@
 (function() {
 
   $(document).ready(function() {
-    var wat;
-    wat = function(tip, el) {
+    var measure_popover;
+    measure_popover = function(tip, el) {
       var height, offset, scroll, width, _ref;
       el = $(el);
       tip = $(tip);
@@ -27,7 +27,7 @@
           'html': true,
           'content': item.description,
           'title': item.name,
-          'placement': wat,
+          'placement': measure_popover,
           'trigger': 'hover',
           'animation': false
         });
