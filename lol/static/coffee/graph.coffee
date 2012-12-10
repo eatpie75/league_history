@@ -1,7 +1,7 @@
-draw_chart=(data, y='rating', aoptions={}, data_parse='default', container='elo-graph')->
+draw_chart=(data, kwargs={})->
 	# console.log data
-	defaults={
-		element:container
+	chart_defaults={
+		element:'elo-graph'
 		xkey:'x'
 		ykeys:'y'
 		labels:['ELO']
@@ -10,71 +10,44 @@ draw_chart=(data, y='rating', aoptions={}, data_parse='default', container='elo-
 		# smooth:false
 		hideHover:true
 		lineColors: ['#3269b4', '#C0D800', '#CB4B4B', '#4DA74D', '#9440ED']
-		# subtitle:'ELO GRAPH'
-		# # fontColor:'#fff'
-		# shadowSize:0
-		# xaxis: {
-		# 	mode:'time'
-		# 	noTicks:10
-		# 	# showLabels:false
-		# }
-		# yaxis: {
-		# 	autoscale: true
-		# 	autoscaleMargin:1
-		# 	# showLabels:false
-		# 	# tickFormatter:(num)->"#{num}%"
-		# }
-		# mouse: {
-		# 	track:true
-		# 	trackFormatter:(obj)->"#{Flotr.Date.format(obj.x, '%y-%m-%d')}: #{Math.round(obj.y)}"
-		# 	sensiblility:3
-		# 	lineColor:'#fff'
-		# 	relative:true
-		# }
-		# lines: {
-		# 	fill:true
-		# 	show:true
-		# }
-		# points: {
-		# 	show:true
-		# 	lineWidth:1
-		# 	radius:2
-		# 	fillColor:'#9D261D'
-		# }
-		# grid: {
-		# 	color:'#000'
-		# 	verticalLines:false
-		# 	# horizontalLines:false
-		# 	outline:''
-		# }
+	}
+	data_defaults={
+		y:'rating'
+		data_parse:'default'
 	}
 
-	options=$.extend({}, defaults)
-	$.extend(true, options, aoptions)
+	chart_options=$.extend(true, {}, chart_defaults, kwargs.chart_options)
+	data_options=$.extend(true, {}, data_defaults, kwargs.data_options)
 	parsed=[]
-	# console.log options
+	# console.log chart_options
 
-	if data_parse=='default'
+	if data_options.data_parse=='default'
 		for day in data
-			if day[1][y]<10
+			if day[1][data_options.y]<10
 				continue
-			parsed.push({'x':day[0], 'y':day[1][y]})
-	else if data_parse=='chistorywr'
+			parsed.push({'x':day[0], 'y':day[1][data_options.y]})
+	else if data_options.data_parse=='elo'
+		season_start=new Date('2012-11-14')
+		for day in data
+			if day[1][data_options.y]<10 or new Date(day[0])<season_start
+				continue
+			parsed.push({'x':day[0], 'y':day[1][data_options.y]})
+	else if data_options.data_parse=='chistorywr'
 		for day in data
 			date=new Date(day[0])
 			now=new Date()
-			if day[1]['champions'][y]['count']<10# or (date.getUTCMonth()!=now.getUTCMonth()|date.getUTCFullYear()!=now.getUTCFullYear())
+			if day[1]['champions'][data_options.y]['count']<10# or (date.getUTCMonth()!=now.getUTCMonth()|date.getUTCFullYear()!=now.getUTCFullYear())
 				continue
-			parsed.push({'x':day[0], 'y':Math.round((day[1]['champions'][y]['won']/day[1]['champions'][y]['count'])*100)})
-	else if data_parse=='chistorypop'
+			parsed.push({'x':day[0], 'y':Math.round((day[1]['champions'][data_options.y]['won']/day[1]['champions'][data_options.y]['count'])*100)})
+	else if data_options.data_parse=='chistorypop'
 		for day in data
-			if day[1]['champions'][y]['count']<10
+			if day[1]['champions'][data_options.y]['count']<10
 				continue
-			parsed.push({'x':day[0], 'y':(day[1]['champions'][y]['won']/day[1]['count'])*100})
+			parsed.push({'x':day[0], 'y':(day[1]['champions'][data_options.y]['won']/day[1]['count'])*100})
 
-	options['data']=parsed
+	chart_options['data']=parsed
 
-	Morris.Line(options)
+	Morris.Line(chart_options)
 
 $(document).ready(->
 	window.draw_chart=draw_chart

@@ -2,22 +2,13 @@
 (function() {
   var draw_chart;
 
-  draw_chart = function(data, y, aoptions, data_parse, container) {
-    var date, day, defaults, now, options, parsed, _i, _j, _k, _len, _len1, _len2;
-    if (y == null) {
-      y = 'rating';
+  draw_chart = function(data, kwargs) {
+    var chart_defaults, chart_options, data_defaults, data_options, date, day, now, parsed, season_start, _i, _j, _k, _l, _len, _len1, _len2, _len3;
+    if (kwargs == null) {
+      kwargs = {};
     }
-    if (aoptions == null) {
-      aoptions = {};
-    }
-    if (data_parse == null) {
-      data_parse = 'default';
-    }
-    if (container == null) {
-      container = 'elo-graph';
-    }
-    defaults = {
-      element: container,
+    chart_defaults = {
+      element: 'elo-graph',
       xkey: 'x',
       ykeys: 'y',
       labels: ['ELO'],
@@ -26,47 +17,63 @@
       hideHover: true,
       lineColors: ['#3269b4', '#C0D800', '#CB4B4B', '#4DA74D', '#9440ED']
     };
-    options = $.extend({}, defaults);
-    $.extend(true, options, aoptions);
+    data_defaults = {
+      y: 'rating',
+      data_parse: 'default'
+    };
+    chart_options = $.extend(true, {}, chart_defaults, kwargs.chart_options);
+    data_options = $.extend(true, {}, data_defaults, kwargs.data_options);
     parsed = [];
-    if (data_parse === 'default') {
+    if (data_options.data_parse === 'default') {
       for (_i = 0, _len = data.length; _i < _len; _i++) {
         day = data[_i];
-        if (day[1][y] < 10) {
+        if (day[1][data_options.y] < 10) {
           continue;
         }
         parsed.push({
           'x': day[0],
-          'y': day[1][y]
+          'y': day[1][data_options.y]
         });
       }
-    } else if (data_parse === 'chistorywr') {
+    } else if (data_options.data_parse === 'elo') {
+      season_start = new Date('2012-11-14');
       for (_j = 0, _len1 = data.length; _j < _len1; _j++) {
         day = data[_j];
-        date = new Date(day[0]);
-        now = new Date();
-        if (day[1]['champions'][y]['count'] < 10) {
+        if (day[1][data_options.y] < 10 || new Date(day[0]) < season_start) {
           continue;
         }
         parsed.push({
           'x': day[0],
-          'y': Math.round((day[1]['champions'][y]['won'] / day[1]['champions'][y]['count']) * 100)
+          'y': day[1][data_options.y]
         });
       }
-    } else if (data_parse === 'chistorypop') {
+    } else if (data_options.data_parse === 'chistorywr') {
       for (_k = 0, _len2 = data.length; _k < _len2; _k++) {
         day = data[_k];
-        if (day[1]['champions'][y]['count'] < 10) {
+        date = new Date(day[0]);
+        now = new Date();
+        if (day[1]['champions'][data_options.y]['count'] < 10) {
           continue;
         }
         parsed.push({
           'x': day[0],
-          'y': (day[1]['champions'][y]['won'] / day[1]['count']) * 100
+          'y': Math.round((day[1]['champions'][data_options.y]['won'] / day[1]['champions'][data_options.y]['count']) * 100)
+        });
+      }
+    } else if (data_options.data_parse === 'chistorypop') {
+      for (_l = 0, _len3 = data.length; _l < _len3; _l++) {
+        day = data[_l];
+        if (day[1]['champions'][data_options.y]['count'] < 10) {
+          continue;
+        }
+        parsed.push({
+          'x': day[0],
+          'y': (day[1]['champions'][data_options.y]['won'] / day[1]['count']) * 100
         });
       }
     }
-    options['data'] = parsed;
-    return Morris.Line(options);
+    chart_options['data'] = parsed;
+    return Morris.Line(chart_options);
   };
 
   $(document).ready(function() {

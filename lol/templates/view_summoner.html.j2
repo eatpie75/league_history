@@ -15,7 +15,7 @@
 			var account_id={{summoner.account_id}};
 			var region={{summoner.region}};
 			{%- if stats.index.elo|length>1 %}
-			var chart='rating';
+			var chart={'data_options':{'data_parse':'elo', 'y':'rating'}};
 			var chart_data={{stats.elo_toJSON()|safe}};
 			{%- endif %}
 		</script>

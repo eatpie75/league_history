@@ -79,12 +79,14 @@
 					</tr>{% endfor %}{% endfor %}
 				</table>
 			</div>
-			{% else %}
+			{%- else %}
 			{{update_in_queue}}
 			{% endif %}
+			{%- if user.is_staff %}
 			<br>{{game.fetched}}<br>
-			{{metadata}}<br>
+			<pre>{{metadata|pprint}}</pre><br>
 			<div style='line-height:0px;'>
 				<div class='hori-bar large'><div class='blue' style='width:29%;'></div><div class='purple' style='width:71%;'></div></div>
 			</div>
+			{%- endif %}
 {%- endblock %}
