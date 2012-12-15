@@ -19,7 +19,7 @@
       }
     };
     window.connect_items = function() {
-      return $('div.item.sprite').each(function() {
+      return $('div.item.sprite,img.item.sprite').each(function() {
         var el, item;
         el = $(this);
         item = window.items[el.data('item').slice(1)];

@@ -12,7 +12,7 @@ $(document).ready(->
 		else
 			return 'bottom'
 	window.connect_items=->
-		$('div.item.sprite').each(->
+		$('div.item.sprite,img.item.sprite').each(->
 			el=$(@)
 			item=window.items[el.data('item').slice(1)]
 			el.popover({
