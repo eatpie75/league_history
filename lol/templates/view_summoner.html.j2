@@ -15,7 +15,7 @@
 			var account_id={{summoner.account_id}};
 			var region={{summoner.region}};
 			{%- if stats.index.elo|length>1 %}
-			var chart={'data_options':{'data_parse':'elo', 'y':'rating'}};
+			var chart={'data_options':{'data_parse':'elo', 'y':'rating', 'graph_begin_date':new Date('2012-11-14')}};
 			var chart_data={{stats.elo_toJSON()|safe}};
 			{%- endif %}
 		</script>
@@ -23,7 +23,8 @@
 
 {% block content %}
 			<div class='summoner-header row span12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{stats.by_count()|first|first}}.png)'>
-				<div class='pull-left sprite sprite-profile-{{summoner.profile_icon}}'></div>
+				{#- <div class='pull-left sprite sprite-profile-{{summoner.profile_icon}}'></div> #}
+				<div class='pull-left'>{{sprites.profile(summoner.profile_icon, size='large')}}</div>
 				<div class='info-block pull-right'>
 					<div>
 						<b>{{summoner.level}}</b>
@@ -78,7 +79,7 @@
 								<td>{{player.kills}}/{{player.deaths}}/{{player.assists}}</td>
 								<td>{{player.minion_kills+player.neutral_minions_killed}}</td>
 								<td>{{player.gold|to_k_format}}</td>
-								<td>{{sprites.summoner(player.summoner_spell1, style='margin-right:4px;')}}{{sprites.summoner(player.summoner_spell2)}}</td>
+								<td>{{sprites.summoner(player.summoner_spell1)}}{{sprites.summoner(player.summoner_spell2)}}</td>
 								<td>
 									{%- for item in player.get_items %}
 									{{sprites.item(item)}}

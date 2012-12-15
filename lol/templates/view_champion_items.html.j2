@@ -15,7 +15,8 @@
 
 {% block content %}
 			<div class='summoner-header row span12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{champion_id}}.png)'>
-				<div class='pull-left sprite sprite-champions-{{champion_id}}'></div>
+				{#- <div class='pull-left sprite sprite-champions-{{champion_id}}'></div> #}
+				<div class='pull-left'>{{sprites.champion(champion_id, size='large')}}</div>
 				<div class='info-block pull-right'>
 					<div>
 						<b>{% if not generating %}{{stats.display_count}}{% else %}?{% endif %}</b>

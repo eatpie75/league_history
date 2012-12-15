@@ -14,6 +14,7 @@ draw_chart=(data, kwargs={})->
 	data_defaults={
 		y:'rating'
 		data_parse:'default'
+		graph_begin_date:new Date('2010-01-01')
 	}
 
 	chart_options=$.extend(true, {}, chart_defaults, kwargs.chart_options)
@@ -27,9 +28,8 @@ draw_chart=(data, kwargs={})->
 				continue
 			parsed.push({'x':day[0], 'y':day[1][data_options.y]})
 	else if data_options.data_parse=='elo'
-		season_start=new Date('2012-11-14')
 		for day in data
-			if day[1][data_options.y]<10 or new Date(day[0])<season_start
+			if day[1][data_options.y]<10 or new Date(day[0])<data_options.graph_begin_date
 				continue
 			parsed.push({'x':day[0], 'y':day[1][data_options.y]})
 	else if data_options.data_parse=='chistorywr'
