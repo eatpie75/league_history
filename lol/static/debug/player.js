@@ -137,8 +137,10 @@
         } else if (value_1 === value_2) {
           if (total_1 > total_2) {
             return -1 * _this.direction;
-          } else {
+          } else if (total_1 < total_2) {
             return 1 * _this.direction;
+          } else {
+            return 0;
           }
         } else {
           return 1 * _this.direction;

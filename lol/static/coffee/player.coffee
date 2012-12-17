@@ -76,11 +76,11 @@ class ChampionSort
 		pregex=new RegExp('(\\d+)%', 'i')
 		_base=(value_1, value_2, total_1, total_2)=>
 			if value_1>value_2
-				-1*@direction
+				return -1*@direction
 			else if value_1==value_2
-				if total_1>total_2 then -1*@direction else 1*@direction
+				if total_1>total_2 then -1*@direction else if total_1<total_2 then 1*@direction else 0
 			else
-				1*@direction
+				return 1*@direction
 		_sort=(a, b)=>
 			[a, b]=[$(a), $(b)]
 			value_1=a.children(".#{column}").text()
@@ -93,20 +93,20 @@ class ChampionSort
 				total_2=Number(b.children(".total").text())
 				if total_1>=minimum
 					if total_2>=minimum
-						_base(value_1, value_2, total_1, total_2)
+						return _base(value_1, value_2, total_1, total_2)
 					else
-						-1*@direction
+						return -1*@direction
 				else
 					if total_2>=minimum
-						1*@direction
+						return 1*@direction
 					else
 						if total_1>=lower_min
 							if total_2>=lower_min
-								_base(value_1, value_2, total_1, total_2)
+								return _base(value_1, value_2, total_1, total_2)
 							else
-								-1*@direction
+								return -1*@direction
 						else
-							_base(value_1, value_2, total_1, total_2)
+							return _base(value_1, value_2, total_1, total_2)
 			else if not isNaN(Number(value_1)) and not isNaN(Number(value_2))
 				[value_1,value_2]=[Number(value_1), Number(value_2)]
 				if value_1>value_2 then -1*@direction else if value_1==value_2 then 0 else 1*@direction

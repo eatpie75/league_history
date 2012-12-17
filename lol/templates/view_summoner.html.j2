@@ -109,7 +109,9 @@
 					</div>{% endfor %}
 				</div>
 			</div>
+			{%- if stats.index.elo|length>1 %}
 			<div class='row span12'>
 				<div id='elo-graph' style='width:100%;height:250px;'></div>
 			</div>
+			{%- endif %}
 {%- endblock %}
