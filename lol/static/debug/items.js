@@ -146,19 +146,19 @@
     },
     2037: {
       name: "Elixir of Fortitude",
-      description: "On use, grants 120–235 Health, based on champion level and 15 Attack Damage for 3 minutes."
+      description: "On use, grants 120-235 Health, based on champion level and 15 Attack Damage for 3 minutes."
     },
     2038: {
       name: "Elixir of Agility",
-      description: "On use, grants 15–24% Attack Speed, based on champion level, and 8% Critical Strike for 3 minutes."
+      description: "On use, grants 15-24% Attack Speed, based on champion level, and 8% Critical Strike for 3 minutes."
     },
     2039: {
       name: "Elixir of Brilliance",
-      description: "On use, grants 25–40 Ability Power, based on champion level, and 10% Cooldown Reduction for 3 minutes."
+      description: "On use, grants 25-40 Ability Power, based on champion level, and 10% Cooldown Reduction for 3 minutes."
     },
     2040: {
       name: "Ichor of Rage",
-      description: "On use, grants 20–42 Attack Damage based on champion level, 20%–42% Attack Speed based on champion level, and 15% increased damage to Turrets for 4 minutes."
+      description: "On use, grants 20-42 Attack Damage based on champion level, 20%-42% Attack Speed based on champion level, and 15% increased damage to Turrets for 4 minutes."
     },
     2041: {
       name: "Crystalline Flask",
@@ -186,7 +186,7 @@
     },
     2048: {
       name: "Ichor of Illumination",
-      description: "On use, grants 30–64 Ability Power based on champion level, 15% Cooldown Reduction and a huge boost to Mana and Energy Rengeneration for 4 minutes."
+      description: "On use, grants 30-64 Ability Power based on champion level, 15% Cooldown Reduction and a huge boost to Mana and Energy Rengeneration for 4 minutes."
     },
     2049: {
       name: "Sightstone",
@@ -835,6 +835,10 @@
     }
   };
 
-  window.items = items;
+  if (typeof module.exports !== 'undefined') {
+    module.exports = items;
+  } else {
+    window.items = items;
+  }
 
 }).call(this);

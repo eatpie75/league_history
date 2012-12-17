@@ -120,16 +120,16 @@ items=
 		description:"Restores 80 Health and 50 Mana over 10 seconds."
 	2037:
 		name:"Elixir of Fortitude"
-		description:"On use, grants 120–235 Health, based on champion level and 15 Attack Damage for 3 minutes."
+		description:"On use, grants 120-235 Health, based on champion level and 15 Attack Damage for 3 minutes."
 	2038:
 		name:"Elixir of Agility"
-		description:"On use, grants 15–24% Attack Speed, based on champion level, and 8% Critical Strike for 3 minutes."
+		description:"On use, grants 15-24% Attack Speed, based on champion level, and 8% Critical Strike for 3 minutes."
 	2039:
 		name:"Elixir of Brilliance"
-		description:"On use, grants 25–40 Ability Power, based on champion level, and 10% Cooldown Reduction for 3 minutes."
+		description:"On use, grants 25-40 Ability Power, based on champion level, and 10% Cooldown Reduction for 3 minutes."
 	2040:
 		name:"Ichor of Rage"
-		description:"On use, grants 20–42 Attack Damage based on champion level, 20%–42% Attack Speed based on champion level, and 15% increased damage to Turrets for 4 minutes."
+		description:"On use, grants 20-42 Attack Damage based on champion level, 20%-42% Attack Speed based on champion level, and 15% increased damage to Turrets for 4 minutes."
 	2041:
 		name:"Crystalline Flask"
 		description:"UNIQUE Active: Consumes a charge to restore 100 health and 40 mana over 10 seconds.<br>UNIQUE Passive: Starts with 3 charges and refills each time you stop by your shop."
@@ -150,7 +150,7 @@ items=
 		description:"Grants 750 radius stealth detection for up to 5 minutes or until your champion dies."
 	2048:
 		name:"Ichor of Illumination"
-		description:"On use, grants 30–64 Ability Power based on champion level, 15% Cooldown Reduction and a huge boost to Mana and Energy Rengeneration for 4 minutes."
+		description:"On use, grants 30-64 Ability Power based on champion level, 15% Cooldown Reduction and a huge boost to Mana and Energy Rengeneration for 4 minutes."
 	2049:
 		name:"Sightstone"
 		description:"+100 Health<br>UNIQUE Passive: Ward Refresh: Starts with 4 charges and refills each time you visit your shop.<br>UNIQUE Active: Ghost Ward: Consumes a charge to place an invisible ward that reveals the surrounding area for 3 minutes. You may have a maximum of 2 wards placed from this item at once."
@@ -637,4 +637,7 @@ items=
 		name:"Cloak and Dagger"
 		description:"+20% Attack Speed<br>+20% Critical Strike Chance<br>UNIQUE Passive: Tenacity: The durations of stuns, slows, taunts, fears, silences, blinds, and immobilizes are reduced by 35%."
 
-window.items=items
+if typeof(module.exports)!='undefined'
+	module.exports=items 
+else
+	window.items=items
