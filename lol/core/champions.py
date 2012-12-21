@@ -106,5 +106,6 @@ CHAMPIONS={
 	134:"Syndra",
 	143:"Zyra",
 	238:"Zed",
+	254:"Vi",
 	267:"Nami"
 }
