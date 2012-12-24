@@ -31,7 +31,7 @@ def test_fill():
 		fill_game.apply_async(args=[player.game.pk,], priority=5)
 
 
-@task(ignore_result=True, priority=2)
+@task(ignore_result=True, priority=1)
 def check_servers(**kwargs):
 	server_list=cache.get('servers')
 	server_list.check_servers(up=kwargs.get('up', True), down=kwargs.get('down', True), unknown=kwargs.get('unknown', True))

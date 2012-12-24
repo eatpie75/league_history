@@ -232,7 +232,7 @@ def get_data(url, query, region='NA'):
 
 	def _attempt(server, url):
 		try:
-			res=requests.get('{}/{}/'.format(server, url), params=query, config={'encode_uri':False}, timeout=20.0)
+			res=requests.get('{}/{}/'.format(server, url), params=query, timeout=20.0)
 		except (requests.exceptions.Timeout, requests.packages.urllib3.exceptions.MaxRetryError, requests.packages.urllib3.exceptions.TimeoutError) as e:
 			res=e
 		return res
@@ -259,7 +259,7 @@ def get_data(url, query, region='NA'):
 			raise ClientEmuError()
 		elif res.status_code==500:
 			raise ClientEmuError()
-	return res.json
+	return res.json()
 
 
 @transaction.commit_on_success
@@ -351,8 +351,8 @@ def parse_games(games, summoner, full=False, current=None):
 				assists=ogame['stats']['assists'],
 				minion_kills=ogame['stats']['minions_killed'], neutral_minions_killed=ogame['stats']['neutral_minions_killed'],
 				gold=ogame['stats']['gold_earned'],
-				damage_dealt=ogame['stats']['damage_dealt'], physical_damage_dealt=ogame['stats']['physical_damage_dealt_player'],	magic_damage_dealt=ogame['stats']['magic_damage_dealt_player'],
-				damage_taken=ogame['stats']['damage_taken'], physical_damage_taken=ogame['stats']['physical_damage_taken'], magic_damage_taken=ogame['stats']['magic_damage_taken'],
+				damage_dealt=ogame['stats']['total_damage_dealt_to_champions'], physical_damage_dealt=ogame['stats']['physical_damage_dealt_to_champions'],	magic_damage_dealt=ogame['stats']['magic_damage_dealt_to_champions'],
+				damage_taken=ogame['stats']['total_damage_taken'], physical_damage_taken=ogame['stats']['physical_damage_taken'], magic_damage_taken=ogame['stats']['magic_damage_taken'],
 				total_healing_done=ogame['stats']['total_heal'],
 				time_spent_dead=ogame['stats']['total_time_spent_dead'],
 				largest_multikill=ogame['stats']['largest_multi_kill'],

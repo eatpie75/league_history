@@ -26,8 +26,8 @@ class Server_List:
 	def check_servers(self, server=None, **kwargs):
 		def __check(server):
 			try:
-				res=requests.get('{}/{}/'.format(server, 'status'), config={'encode_uri':False}, timeout=20.0)
-				if res.status_code==200 and res.json['connected']==True:
+				res=requests.get('{}/{}/'.format(server, 'status'), timeout=20.0)
+				if res.status_code==200 and res.json()['connected']==True:
 					return 1
 				else:
 					return 0

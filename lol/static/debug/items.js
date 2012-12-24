@@ -835,7 +835,7 @@
     }
   };
 
-  if (typeof module.exports !== 'undefined') {
+  if (typeof (typeof module !== "undefined" && module !== null ? module.exports : void 0) !== 'undefined') {
     module.exports = items;
   } else {
     window.items = items;

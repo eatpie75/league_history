@@ -637,7 +637,7 @@ items=
 		name:"Cloak and Dagger"
 		description:"+20% Attack Speed<br>+20% Critical Strike Chance<br>UNIQUE Passive: Tenacity: The durations of stuns, slows, taunts, fears, silences, blinds, and immobilizes are reduced by 35%."
 
-if typeof(module.exports)!='undefined'
+if typeof(module?.exports)!='undefined'
 	module.exports=items 
 else
 	window.items=items
