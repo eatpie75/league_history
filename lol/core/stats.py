@@ -1,6 +1,6 @@
 from champions import CHAMPIONS
 from lol.models import Player
-import simplejson
+import json
 
 
 class queryset_manager:
@@ -29,8 +29,6 @@ class Stats:
 			self.count=0
 			self.champion=kwargs.get('champion', None)
 			self.summoner_name=kwargs.get('summoner_name', None)
-			self.summoner_time_updated=kwargs.get('summoner_time_updated', None)
-			self.cached=kwargs.get('cached', False)
 			self.index_elo=kwargs.get('index_elo', False)
 			self.index_items=kwargs.get('index_items', True)
 			self.champion_history=kwargs.get('champion_history', False)
@@ -225,7 +223,7 @@ class Stats:
 			return sorted(self.index['champions'][champion_id]['items'].iteritems(), key=bsort, reverse=True)
 
 		def elo_toJSON(self):
-			return simplejson.dumps(self.index['elo'])
+			return json.dumps(self.index['elo'])
 
 		def history_toJSON(self):
-			return simplejson.dumps(self.index['history'])
+			return json.dumps(self.index['history'])

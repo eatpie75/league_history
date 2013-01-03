@@ -5,7 +5,7 @@ from django.template.defaultfilters import slugify
 from pytz import timezone
 from time import sleep
 import requests
-import simplejson
+import json
 
 MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Aram'), (4, 'Twisted Treeline'), (9, '?'))
 MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (9, '?'))
@@ -21,8 +21,8 @@ class Summoner(models.Model):
 	internal_name=models.CharField(max_length=64)
 	level=models.IntegerField()
 	profile_icon=models.IntegerField()
-	runes=models.TextField(default='', blank=True)
-	masteries=models.TextField(default='', blank=True)
+	runes=models.TextField(default='{}', blank=True)
+	masteries=models.TextField(default='{}', blank=True)
 	update_automatically=models.BooleanField(db_index=True, default=False)
 	fully_update=models.BooleanField(default=False)
 	time_created=models.DateTimeField(auto_now_add=True)
@@ -54,10 +54,10 @@ class Summoner(models.Model):
 		})
 
 	def get_runes(self):
-		return simplejson.loads(self.runes)
+		return json.loads(self.runes)
 
 	def get_masteries(self):
-		return simplejson.loads(self.masteries)
+		return json.loads(self.masteries)
 
 	def get_rating(self):
 		try:
@@ -285,40 +285,38 @@ def parse_games(games, summoner, full=False, current=None):
 			)
 			if ogame['game_type']=='PRACTICE_GAME':
 				game.game_mode=0
-			elif ogame['queue_type'] in ('RANKED_PREMADE_3x3', 'RANKED_PREMADE_5x5'):
-				game.game_mode=4
-			elif ogame['queue_type'] in ('RANKED_TEAM_3x3', 'RANKED_TEAM_5x5'):
-				game.game_mode=5
+			elif ogame['queue_type'] in ('BOT', 'BOT_3x3'):
+				game.game_mode=1
 			elif ogame['queue_type'] in ('NORMAL', 'NORMAL_3x3', 'ODIN_UNRANKED'):
 				game.game_mode=2
 			elif ogame['queue_type']=='RANKED_SOLO_5x5':
 				game.game_mode=3
-			elif ogame['queue_type'] in ('BOT', 'BOT_3x3'):
-				game.game_mode=1
-			elif ogame['queue_type']=='NONE' and ogame['game_type']=='CUSTOM_GAME':
-				game.game_mode=0
+			elif ogame['queue_type'] in ('RANKED_PREMADE_3x3', 'RANKED_PREMADE_5x5'):
+				game.game_mode=4
+			elif ogame['queue_type'] in ('RANKED_TEAM_3x3', 'RANKED_TEAM_5x5'):
+				game.game_mode=5
 			elif ogame['game_mode']=='ARAM' and ogame['game_type']=='CUSTOM_GAME':
 				game.game_mode=6
+			elif ogame['queue_type']=='NONE' and ogame['game_type']=='CUSTOM_GAME':
+				game.game_mode=0
 			elif ogame['game_type']=='TUTORIAL_GAME':
 				continue
 			else:
 				print 'couldn\'t figure out game mode for game #{}'.format(game.game_id)
-				print ogame['queue_type']
-				print ogame['game_mode']
-				print ogame['game_type']
+				print('queue_type:"{}", game_mode:"{}", game_type:"{}", game_map:"{}"'.format(ogame['queue_type'], ogame['game_mode'], ogame['game_type'], ogame['game_map']))
 			if ogame['game_map'] in (1, 2, 3, 6):
 				game.game_map=1
-			elif ogame['game_map']==4:
-				game.game_map=0
-			elif ogame['game_map']==7:
-				game.game_map=3
 			elif ogame['game_map']==8:
 				game.game_map=2
+			elif ogame['game_map']==7:
+				game.game_map=3
 			elif ogame['game_map']==10:
 				game.game_map=4
+			elif ogame['game_map']==4:
+				game.game_map=0
 			else:
 				print 'couldn\'t figure out game map for game #{}'.format(game.game_id)
-				print ogame['game_map']
+				print('queue_type:"{}", game_mode:"{}", game_type:"{}", game_map:"{}"'.format(ogame['queue_type'], ogame['game_mode'], ogame['game_type'], ogame['game_map']))
 			if (ogame['team']=='blue' and ogame['stats']['win']==1) or (ogame['team']=='purple' and ogame['stats']['win']==0):
 				game.blue_team_won=True
 			else:
@@ -451,10 +449,10 @@ def parse_ratings(ratings, summoner):
 
 
 def parse_masteries(masteries, summoner):
-	summoner.masteries=simplejson.dumps(masteries)
+	summoner.masteries=json.dumps(masteries)
 	return summoner
 
 
 def parse_runes(runes, summoner):
-	summoner.runes=simplejson.dumps(runes)
+	summoner.runes=json.dumps(runes)
 	return summoner

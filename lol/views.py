@@ -157,7 +157,7 @@ def view_summoner(request, region, account_id, slug):
 	games=Player.objects.filter(summoner=summoner).select_related()
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats==None:
-		stats=Stats(games, summoner_name=summoner.name, cached=True, index_elo=True, index_items=False)
+		stats=Stats(games, summoner_name=summoner.name, index_elo=True, index_items=False)
 		stats.generate_index()
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
 	#spectate=cache.get('summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id))
@@ -178,7 +178,7 @@ def view_summoner_games(request, region, account_id, slug):
 	games=Player.objects.filter(summoner=summoner).select_related()
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats==None:
-		stats=Stats(games, summoner_name=summoner.name, summoner_time_updated=summoner.time_updated, cached=True, elo=True)
+		stats=Stats(games, summoner_name=summoner.name, summoner_time_updated=summoner.time_updated, elo=True)
 		stats.generate_index()
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
 	return render_to_response('view_summoner_games.html.j2', {'games':Paginator(games, 10).page(1), 'summoner':summoner, 'rating':rating, 'stats':stats}, RequestContext(request))
@@ -195,7 +195,7 @@ def view_summoner_champions(request, region, account_id, slug):
 	games=Player.objects.filter(summoner=summoner).select_related()
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats==None:
-		stats=Stats(games, summoner_name=summoner.name, cached=True, elo=True)
+		stats=Stats(games, summoner_name=summoner.name, elo=True)
 		stats.generate_index(True)
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
 	# assert False
@@ -211,7 +211,7 @@ def view_summoner_inventory(request, region, account_id, slug):
 	games=Player.objects.filter(summoner=summoner).select_related()
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats==None:
-		stats=Stats(games, summoner_name=summoner.name, cached=True, elo=True)
+		stats=Stats(games, summoner_name=summoner.name, elo=True)
 		stats.generate_index()
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
 	return render_to_response('view_summoner_inventory.html.j2', {'summoner':summoner, 'rating':rating, 'stats':stats}, RequestContext(request))
