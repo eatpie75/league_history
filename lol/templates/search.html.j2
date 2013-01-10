@@ -1,7 +1,12 @@
 {% extends 'base.html.j2' %}
 
 {% block content %}
+			<div class='summoner-header row span12'>
+				<div class='name-block'>
+					<b>SEARCH</b>
+				</div>
+			</div>
 			<div class='row span12'>
-				{% for s in summoners %}<a href='{{s.get_absolute_url()}}'>{{s.name}}</a>{% endfor %}
+				{% for summoner in summoners %}<a href='{{summoner.get_absolute_url()}}'>{{summoner.name}}</a>{% endfor %}
 			</div>
 {%- endblock %}

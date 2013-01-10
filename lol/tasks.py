@@ -55,6 +55,7 @@ def summoner_auto_task(summoner_pk):
 	summoner.time_updated=datetime.now(timezone('UTC'))
 	summoner.save()
 	cache.delete('summoner/{}/{}/updating'.format(summoner.region, summoner.account_id))
+	cache.delete('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	print u'finished autoupdate for:{}'.format(summoner.name)
 	return summoner_pk
 
@@ -70,7 +71,7 @@ def fill_game(game_pk, auto=False):
 			query={query_type:u','.join(map(unicode, queue[0:5])), 'games':1, 'runes':1, 'masteries':1}
 			res=get_data('mass_update', query, region)
 			tmp.update(res['accounts'])
-			del queue[0:0+5]
+			del queue[0:5]
 		return tmp
 	game=Game.objects.get(pk=game_pk)
 	if not game.fetched and game.unfetched_players!='':
@@ -110,7 +111,7 @@ def fill_game(game_pk, auto=False):
 			if str(summoner.summoner_id) in tmp:
 				tmp.remove(str(summoner.summoner_id))
 				game.unfetched_players=','.join(tmp)
-			summoner.time_updated=datetime.utcnow().replace(tzinfo=timezone('UTC'))
+			summoner.time_updated=datetime.now(timezone('UTC'))
 			summoner.save(force_update=True)
 			fill_game.update_state(state='PROGRESS', meta={'current':i, 'total':num_to_fetch})
 		game.fetched=True

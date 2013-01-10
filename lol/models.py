@@ -241,7 +241,7 @@ def get_data(url, query, region='NA'):
 		print 'got timeout on:{} - with query:{}'.format(server, query)
 		sleep(5)
 		print 'retrying'
-		server=servers.check_servers([{'location':server, 'region':region},])
+		server=servers.check_servers([{'url':server, 'region':region},])
 		res=_attempt(server, url)
 		if type(res) in (requests.exceptions.Timeout, requests.packages.urllib3.exceptions.TimeoutError, requests.packages.urllib3.exceptions.MaxRetryError):
 			print 'second error'
@@ -252,7 +252,7 @@ def get_data(url, query, region='NA'):
 		print 'got 500 error on:{} - with query:{}'.format(server, query)
 		sleep(5)
 		print 'retrying'
-		server=servers.check_servers([{'location':server, 'region':region},])
+		server=servers.check_servers([{'url':server, 'region':region},])
 		res=_attempt(server, url)
 		if res in (requests.exceptions.Timeout, requests.packages.urllib3.exceptions.TimeoutError, requests.packages.urllib3.exceptions.MaxRetryError):
 			print 'second error'

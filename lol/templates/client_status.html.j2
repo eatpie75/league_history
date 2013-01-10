@@ -2,7 +2,13 @@
 
 {% block content %}
 		<div class='row span12'>
-				{{status}}<br>
+				{%- for region, servers in status.iteritems() %}
+<pre>{{region}}:{
+	{%- for server in servers %}
+	[{{server.url}}, {% if server.status == 1 %}UP{% else %}DOWN{% endif %}, {{server.last_updated|naturaltime}}]
+	{%- endfor %}
+}</pre>
+				{% endfor %}
 				queue length:{{queue_len}}<br>
 				needed games:{{unfetched_games}}
 		</div>
