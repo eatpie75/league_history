@@ -35,8 +35,8 @@ class Server_List:
 			except:
 				return 0
 		if server==None:
-			i=-1
 			for region, data in self.servers.iteritems():
+				i=-1
 				for server in data:
 					i+=1
 					if (kwargs.get('up', True)==False and server['status']==1) or (kwargs.get('down', True)==False and server['status']==0) or (kwargs.get('unknown', True)==False and server['status']==-1):
@@ -49,7 +49,7 @@ class Server_List:
 			for s in server:
 				region=s['region']
 				url=s['url']
-				index=[i for i,x in enumerate(self.servers[region]) if x['url']==url]
+				index=[i for i,x in enumerate(self.servers[region]) if x['url']==url][0]
 				self.servers[region][index]['status']=__check(url)
 				cache.set('servers', self, timeout=0)
 			return self.choose_server(region)
