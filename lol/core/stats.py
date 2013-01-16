@@ -3,26 +3,32 @@ from lol.models import Player
 import json
 
 
-class queryset_manager:
+class Queryset_Manager:
 	def __init__(self, queryset, chunksize=5000):
 		self.queryset=queryset.order_by('pk')
+		self.chunksize=chunksize
 		self.count=self.queryset.count()
 		if self.count!=0:
-			self.last_pk=self.queryset.order_by('-pk')[0].pk
-			self.pk=self.queryset[0].pk - 1
-		self.chunksize=chunksize
+			self.pk=self.queryset[0].pk-1
+			if self.count>self.chunksize:
+				self.last_pk=self.queryset.order_by('-pk')[0].pk
 
 	def __iter__(self):
-		while self.pk<self.last_pk:
+		if self.count<=self.chunksize:
 			for row in self.queryset.filter(pk__gt=self.pk)[:self.chunksize]:
 				self.pk=row.pk
 				yield row
+		else:
+			while self.pk<self.last_pk:
+				for row in self.queryset.filter(pk__gt=self.pk)[:self.chunksize]:
+					self.pk=row.pk
+					yield row
 
 
 class Stats:
 		def __init__(self, games, **kwargs):
 			self.qs=games
-			self.games=queryset_manager(self.qs)
+			self.games=Queryset_Manager(self.qs)
 			self.indexed=False
 			self.items_indexed=False
 			self.index={'champions':{}, 'elo':{}, 'global_stats':{}}
@@ -46,7 +52,7 @@ class Stats:
 			self.qs=Player.objects.all()
 			self.qs.query=state['qs']
 			if not self.indexed or (not self.items_indexed and self.index_items):
-				self.games=queryset_manager(self.qs)
+				self.games=Queryset_Manager(self.qs)
 
 		def __repr__(self):
 			if self.champion!=None:
@@ -141,7 +147,7 @@ class Stats:
 			self.index={'champions':champions, 'elo':sorted(elo.iteritems(), key=lambda x:x[0]), 'history':sorted(history.iteritems(), key=lambda x:x[0])[:-1], 'global_stats':global_stats}
 			self.indexed=True
 			self.__update_count()
-			self.games=queryset_manager(self.qs)
+			self.games=Queryset_Manager(self.qs)
 
 		def __index_items(self):
 			if not self.indexed: self.__index()
@@ -170,7 +176,7 @@ class Stats:
 					self.index['champions'][game.champion_id]['items'][item]['won' if game.won else 'lost']+=1
 			self.items_indexed=True
 			self.__update_count()
-			# self.games=queryset_manager(self.qs)
+			# self.games=Queryset_Manager(self.qs)
 
 		def __champions(self):
 			if not self.indexed: self.__index()

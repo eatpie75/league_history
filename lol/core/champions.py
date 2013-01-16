@@ -107,5 +107,6 @@ CHAMPIONS={
 	143:"Zyra",
 	238:"Zed",
 	254:"Vi",
-	267:"Nami"
+	267:"Nami",
+	412:"Thresh"
 }

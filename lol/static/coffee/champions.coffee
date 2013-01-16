@@ -108,3 +108,4 @@ champions=
 	238:"Zed"
 	254:"Vi"
 	267:"Nami"
+	412:"Thresh"

@@ -63,7 +63,7 @@ def game_list(request):
 def view_game(request, region, game_id):
 	region=__get_region(region)
 	game=Game.objects.get(game_id=game_id, region=region)
-	modes=('CUSTOM', 'BOT', 'UNRANKED', 'RANKED', 'RANKED TEAM', 'RANKED PREMADE')
+	modes=('CUSTOM', 'BOT', 'UNRANKED', 'RANKED', 'RANKED TEAM', 'RANKED PREMADE', 'ARAM')
 	metadata={'map':game.get_game_map_display(), 'mode':modes[game.game_mode], 'ranked':True if game.game_mode in (3,4,5) else False}
 	update_in_queue=False
 	if game.fetched==False:
