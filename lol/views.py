@@ -345,3 +345,9 @@ def client_status(request):
 	unfetched_games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.utcnow().replace(tzinfo=timezone('UTC'))-timedelta(days=2))).distinct('game').count()
 	queue_len=cache.get('queue_len')
 	return render_to_response('client_status.html.j2', {'status':server_list.servers, 'unfetched_games':unfetched_games, 'queue_len':queue_len}, RequestContext(request))
+
+
+@user_passes_test(lambda u:u.is_superuser)
+def test_items(request):
+	from core.items import ITEMS
+	return render_to_response('test_items.html.j2', {'items':ITEMS}, RequestContext(request))

@@ -79,7 +79,7 @@
 								<td>{{player.minion_kills+player.neutral_minions_killed}}</td>
 								<td>{{player.damage_dealt|to_k_format}}</td>
 								<td>{{player.damage_taken|to_k_format}}</td>
-								<td>{{sprites.summoner(player.summoner_spell1)}}{{sprites.summoner(player.summoner_spell2)}}</td>
+								<td>{{sprites.summoner(player.summoner_spell1, style='margin-right:4px;')}}{{sprites.summoner(player.summoner_spell2)}}</td>
 								<td>
 									{%- for item in player.get_items %}
 									{{sprites.item(item)}}

@@ -19,6 +19,7 @@ urlpatterns=patterns('lol.views',
 	url(r'^run_auto/$', 'run_auto'),
 
 	url(r'^admin/status/', 'client_status'),
+	url(r'^admin/test_items/', 'test_items'),
 
 	# Uncomment the admin/doc line below to enable admin documentation:
 	url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

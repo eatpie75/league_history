@@ -1,0 +1,23 @@
+{% extends 'base.html.j2' %}
+
+{% block post_scripts %}
+	{%- if debug %}
+		<script src='{{STATIC_URL}}debug/items.js' type='text/javascript'></script>
+		<script src='{{STATIC_URL}}debug/core.js' type='text/javascript'></script>
+		{% else %}
+		<script src="{{STATIC_URL}}js/main.js" type="text/javascript"></script>
+		{% endif -%}
+{% endblock %}
+
+{% block content %}
+			<div class='summoner-header row span12'>
+				<div class='name-block'>
+					<b>TEST ITEMS</b>
+				</div>
+			</div>
+			<div class='row span12'>
+				{%- for item, data in items.iteritems() %}
+				{{sprites.item(item)}}{% if loop.index%26==0 %}<br>{% endif %}
+				{%- endfor %}
+			</div>
+{%- endblock %}
