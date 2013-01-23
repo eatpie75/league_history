@@ -13,7 +13,7 @@ from django.template import RequestContext
 from django.template.defaultfilters import slugify
 from models import Summoner, Game, Player, get_data, create_summoner, REGIONS
 from pytz import timezone
-from tasks import summoner_auto_task, fill_game, generate_global_stats, test_fill  # , spectate_check
+from tasks import summoner_auto_task, fill_game, generate_global_stats, test_fill, check_servers  # , spectate_check
 
 
 def __get_region(region):
@@ -333,6 +333,8 @@ def run_auto(request):
 			fill_game.delay(player.game.pk)
 	elif 'test' in request.GET:
 		test_fill.delay()
+	elif 'servers' in request.GET:
+		check_servers.delay()
 	else:
 		for summoner in summoners:
 			summoner_auto_task.delay(summoner.pk)

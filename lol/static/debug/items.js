@@ -77,7 +77,7 @@
       description: "+45 Attack Damage"
     },
     1039: {
-      Name: "Hunter's Machete",
+      name: "Hunter's Machete",
       description: "UNIQUE Passive: Butcher: Damage dealt to monsters increased by 10%.<br>UNIQUE Passive: Rend: Basic attacks deal 10 bonus true damage to monsters on hit."
     },
     1042: {

@@ -33,6 +33,7 @@ def test_fill():
 
 @task(ignore_result=True, priority=1)
 def check_servers(**kwargs):
+	print(u'checking all servers')
 	server_list=cache.get('servers')
 	server_list.check_servers(up=kwargs.get('up', True), down=kwargs.get('down', True), unknown=kwargs.get('unknown', True))
 
