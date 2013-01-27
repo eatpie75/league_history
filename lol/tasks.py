@@ -133,13 +133,13 @@ def spectate_check(summoner):
 
 
 @task(ignore_result=True, priority=9)
-def generate_global_stats(key, qs, items=False, **kwargs):
+def generate_global_stats(key, qs, **kwargs):
 	print 'generating global stats with key:{}'.format(key)
 	print kwargs
 	new_qs=Player.objects.all()
 	new_qs.query=qs
 	stats=Stats(new_qs, **kwargs)
-	stats.generate_index(items)
+	stats.generate_index()
 	print 'generated, caching'
 	cache.set(key, stats, 60*60*24)
 	cache.delete(key+'/generating')

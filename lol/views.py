@@ -154,7 +154,7 @@ def view_summoner(request, region, account_id, slug):
 	else: update_in_queue=False
 	if summoner.slug!=slug: return HttpResponseRedirect(summoner.get_absolute_url())
 	rating=summoner.get_rating()
-	games=Player.objects.filter(summoner=summoner).select_related()
+	games=Player.objects.filter(summoner=summoner).select_related('game')
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats==None:
 		stats=Stats(games, summoner_name=summoner.name, index_elo=True, index_items=False)
@@ -175,7 +175,7 @@ def view_summoner_games(request, region, account_id, slug):
 	summoner=Summoner.objects.get(account_id=account_id, region=region)
 	if summoner.slug!=slug: return HttpResponseRedirect(summoner.get_games_url())
 	rating=summoner.get_rating()
-	games=Player.objects.filter(summoner=summoner).select_related()
+	games=Player.objects.filter(summoner=summoner).select_related('game')
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats==None:
 		stats=Stats(games, summoner_name=summoner.name, summoner_time_updated=summoner.time_updated, elo=True)
@@ -192,11 +192,11 @@ def view_summoner_champions(request, region, account_id, slug):
 	summoner=Summoner.objects.get(account_id=account_id, region=region)
 	if summoner.slug!=slug: return HttpResponseRedirect(summoner.get_champions_url())
 	rating=summoner.get_rating()
-	games=Player.objects.filter(summoner=summoner).select_related()
+	games=Player.objects.filter(summoner=summoner).select_related('game')
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats==None:
 		stats=Stats(games, summoner_name=summoner.name, elo=True)
-		stats.generate_index(True)
+		stats.generate_index()
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
 	# assert False
 	return render_to_response('view_summoner_champions.html.j2', {'games':games, 'summoner':summoner, 'rating':rating, 'stats':stats, 'champions':CHAMPIONS}, RequestContext(request))
@@ -208,7 +208,7 @@ def view_summoner_inventory(request, region, account_id, slug):
 	summoner=Summoner.objects.get(account_id=account_id, region=region)
 	if summoner.slug!=slug: return HttpResponseRedirect(summoner.get_absolute_url())
 	rating=summoner.get_rating()
-	games=Player.objects.filter(summoner=summoner).select_related()
+	games=Player.objects.filter(summoner=summoner).select_related('game')
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats==None:
 		stats=Stats(games, summoner_name=summoner.name, elo=True)
@@ -253,7 +253,7 @@ def view_all_champions(request):
 		generating=True
 		if cache.get(key+'/generating')==None:
 			cache.set(key+'/generating', True, 60*10)
-			generate_global_stats.delay(key, games.query, False, display_count=count.count(), champion_history=True, global_stats=True, index_items=False)
+			generate_global_stats.delay(key, games.query, display_count=count.count(), champion_history=True, global_stats=True, index_items=False)
 	else:
 		generating=False
 	return render_to_response('view_all_champions.html.j2', {'stats':stats, 'champions':CHAMPIONS, 'form':form, 'generating':generating}, RequestContext(request))
@@ -283,7 +283,7 @@ def view_champion(request, champion_id, champion_slug):
 		generating=True
 		if cache.get(key+'/generating')==None:
 			cache.set(key+'/generating', True, 60*10)
-			generate_global_stats.delay(key, games.query, True, champion=champion_id, champion_history=True)
+			generate_global_stats.delay(key, games.query, champion=champion_id, champion_history=True, index_items=True)
 	else:
 		generating=False
 	return render_to_response('view_champion.html.j2', {'stats':stats, 'champion_id':champion_id, 'champion':CHAMPIONS[champion_id], 'items':ITEMS, 'form':form, 'generating':generating}, RequestContext(request))
@@ -313,7 +313,7 @@ def view_champion_items(request, champion_id, champion_slug):
 		generating=True
 		if cache.get(key+'/generating')==None:
 			cache.set(key+'/generating', True, 60*10)
-			generate_global_stats.delay(key, games.query, True, champion=champion_id, champion_history=True)
+			generate_global_stats.delay(key, games.query, champion=champion_id, champion_history=True, index_items=True)
 	else:
 		generating=False
 	return render_to_response('view_champion_items.html.j2', {'stats':stats, 'champion_id':champion_id, 'champion':CHAMPIONS[champion_id], 'items':ITEMS, 'form':form, 'generating':generating}, RequestContext(request))
