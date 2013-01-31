@@ -227,7 +227,8 @@ class ClientEmuError(Exception):
 
 def get_data(url, query, region='NA'):
 	servers=cache.get('servers')
-	server=servers.choose_server(region)
+	server_data=servers.choose_server(region)
+	server=server_data['url']
 	# print 'using server:{}'.format(server)
 
 	def _attempt(server, url):
@@ -241,7 +242,8 @@ def get_data(url, query, region='NA'):
 		print 'got timeout on:{} - with query:{}'.format(server, query)
 		sleep(5)
 		print 'retrying'
-		server=servers.check_servers([{'url':server, 'region':region},])
+		server_data=servers.check_servers([{'url':server, 'region':region},])
+		server=server_data['url']
 		res=_attempt(server, url)
 		if type(res) in (requests.exceptions.Timeout, requests.packages.urllib3.exceptions.TimeoutError, requests.packages.urllib3.exceptions.MaxRetryError):
 			print 'second error'
@@ -252,14 +254,20 @@ def get_data(url, query, region='NA'):
 		print 'got 500 error on:{} - with query:{}'.format(server, query)
 		sleep(5)
 		print 'retrying'
-		server=servers.check_servers([{'url':server, 'region':region},])
+		server_data=servers.check_servers([{'url':server, 'region':region},])
+		server=server_data['url']
 		res=_attempt(server, url)
 		if res in (requests.exceptions.Timeout, requests.packages.urllib3.exceptions.TimeoutError, requests.packages.urllib3.exceptions.MaxRetryError):
 			print 'second error'
 			raise ClientEmuError()
 		elif res.status_code==500:
 			raise ClientEmuError()
-	return res.json()
+	res=res.json()
+	ids=server_data['metadata'].get('ids', [])
+	if res['server'] not in ids:
+		ids.append(res['server'])
+		servers.set_metadata(region, server, {'ids':ids})
+	return res['data']
 
 
 @transaction.commit_on_success

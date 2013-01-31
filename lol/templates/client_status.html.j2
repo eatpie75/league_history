@@ -5,7 +5,7 @@
 				{%- for region, servers in status.iteritems() %}
 <pre>{{region}}:{
 	{%- for server in servers %}
-	[{{server.url}}, {% if server.status == 1 %}UP{% else %}DOWN{% endif %}, {{server.last_updated|naturaltime}}]
+	[{{server.url}}, {% if server.status == 1 %}UP{% else %}DOWN{% endif %}, {{server.last_updated|naturaltime}}, {{server.metadata}}]
 	{%- endfor %}
 }</pre>
 				{% endfor %}
