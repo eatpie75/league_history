@@ -44,7 +44,7 @@ def summoner_auto_task(summoner_pk):
 	summoner=Summoner.objects.get(pk=summoner_pk)
 	print u'running autoupdate for:{}'.format(summoner.name)
 	query={'accounts':summoner.account_id, 'games':1, 'runes':1, 'masteries':1}
-	data=get_data('mass_update', query, summoner.get_region_display())['accounts'][str(summoner.account_id)]
+	data=get_data('mass_update', query, summoner.get_region_display())['accounts'][0]
 	summoner=parse_summoner(data['profile'], summoner)
 	summoner=parse_runes(data['runes'], summoner)
 	summoner=parse_masteries(data['masteries'], summoner)
@@ -65,13 +65,13 @@ def summoner_auto_task(summoner_pk):
 @transaction.commit_on_success
 def fill_game(game_pk, auto=False):
 	def __parse_queue(queue, query_type, region):
-		tmp={}
+		tmp=[]
 		if len(queue)==0:
 			return tmp
 		while len(queue)>0:
 			query={query_type:u','.join(map(unicode, queue[0:5])), 'games':1, 'runes':1, 'masteries':1}
 			res=get_data('mass_update', query, region)
-			tmp.update(res['accounts'])
+			tmp.extend(res['accounts'])
 			del queue[0:5]
 		return tmp
 	game=Game.objects.get(pk=game_pk)
@@ -88,11 +88,11 @@ def fill_game(game_pk, auto=False):
 		else:
 			accounts=[]
 		accounts.extend(summoners.values_list('account_id', flat=True))
-		res={}
-		res.update(__parse_queue(filter(lambda v:True if type(v)==int else False, accounts), 'accounts', game.get_region_display()))
-		res.update(__parse_queue(filter(lambda v:True if type(v)==unicode else False, accounts), 'names', game.get_region_display()))
+		res=[]
+		res.extend(__parse_queue(filter(lambda v:True if type(v)==int else False, accounts), 'accounts', game.get_region_display()))
+		res.extend(__parse_queue(filter(lambda v:True if type(v)==unicode else False, accounts), 'names', game.get_region_display()))
 		i=0
-		for account, data in res.iteritems():
+		for data in res:
 			i+=1
 			try:
 				summoner=Summoner.objects.get(account_id=data['profile']['account_id'], region=game.region)
