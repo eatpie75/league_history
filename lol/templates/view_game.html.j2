@@ -63,7 +63,7 @@
 					{% if loop.first %}<tr class='interlude win'><td colspan=10>WINNING TEAM</td></tr>{% else %}<tr class='interlude lose'><td colspan=10>LOSING TEAM</td></tr>{% endif %}{% for player in team.list %}
 					<tr class='player{% if player.blue_team %} team_blue{% else %} team_purple{% endif %}{% if player.won %} won{% else %} lose{% endif %}{% if player.afk or player.leaver %} leaver {% endif %}'>
 						<td class='champion'>{{sprites.champion(player.champion_id)}}<small>{{player.champion_level}}</small></td>
-						<td><a href='{{player.summoner.get_absolute_url()}}'{% if metadata.ranked %} title='Rating: {{player.rating}}'{% endif %}>{{player.summoner.name}}</a></td>
+						<td><a href='{{player.summoner.get_absolute_url()}}'{% if metadata.ranked %} title='Rating: {{player.get_tier_display()}} {{player.get_division_display()}}'{% endif %}>{{player.summoner.name}}</a></td>
 						<td>{{player.kills}}/{{player.deaths}}/{{player.assists}}</td>
 						<td>{{player.gold|to_k_format}}</td>
 						<td>{{player.minion_kills+player.neutral_minions_killed}}</td>

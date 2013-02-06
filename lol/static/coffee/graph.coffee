@@ -1,4 +1,6 @@
 draw_chart=(data, kwargs={})->
+	_chistorywr_hover=(index, options)->
+		return "<b>#{options.data[index]['x']}</b><br>#{options.data[index]['y']}% Winrate<br>Played #{options.data[index]['count']} times"
 	# console.log data
 	chart_defaults={
 		element:'elo-graph'
@@ -33,12 +35,13 @@ draw_chart=(data, kwargs={})->
 				continue
 			parsed.push({'x':day[0], 'y':day[1][data_options.y]})
 	else if data_options.data_parse=='chistorywr'
+		chart_options.hoverCallback=_chistorywr_hover
 		for day in data
 			date=new Date(day[0])
 			now=new Date()
-			if day[1]['champions'][data_options.y]['count']<10# or (date.getUTCMonth()!=now.getUTCMonth()|date.getUTCFullYear()!=now.getUTCFullYear())
+			if day[1]['champions'][data_options.y]['count']<20# or (date.getUTCMonth()!=now.getUTCMonth()|date.getUTCFullYear()!=now.getUTCFullYear())
 				continue
-			parsed.push({'x':day[0], 'y':Math.round((day[1]['champions'][data_options.y]['won']/day[1]['champions'][data_options.y]['count'])*100)})
+			parsed.push({'x':day[0], 'y':Math.round((day[1]['champions'][data_options.y]['won']/day[1]['champions'][data_options.y]['count'])*100), 'count':day[1]['champions'][data_options.y]['count']})
 	else if data_options.data_parse=='chistorypop'
 		for day in data
 			if day[1]['champions'][data_options.y]['count']<10
@@ -47,7 +50,8 @@ draw_chart=(data, kwargs={})->
 
 	chart_options['data']=parsed
 
-	Morris.Line(chart_options)
+	window.drawn_chart=Morris.Line(chart_options)
+	return [data_options, chart_options]
 
 $(document).ready(->
 	window.draw_chart=draw_chart

@@ -37,7 +37,7 @@ items=
 		description:"+15 Health Regen per 5 seconds"
 	1011:
 		name:"Giant's Belt"
-		description:"+400 Health"
+		description:"+380 Health"
 	1018:
 		name:"Cloak of Agility"
 		description:"+15% Critical Strike Chance"
@@ -88,7 +88,7 @@ items=
 		description:"+10 Attack Damage<br>+10% Life Steal"
 	1054:
 		name:"Doran's Shield"
-		description:"+100 Health<br>+5 Armor<br>+5 Health Regen per 5 seconds<br>UNIQUE Passive: Blocks 6 damage from champion basic attacks."
+		description:"+100 Health<br>+5 Armor<br>+8 Health Regen per 5 seconds<br>UNIQUE Passive: Blocks 6 damage from champion basic attacks."
 	1055:
 		name:"Doran's Blade"
 		description:"+80 Health<br>+10 Attack Damage<br>Passive: Basic attacks restore 5 Health on hit."
@@ -145,7 +145,7 @@ items=
 		description:"Places an invisible ward with 1100 range. Lasts 3 minutes."
 	2045:
 		name:"Ruby Sightstone"
-		description:"+300 Health<br>UNIQUE Passive: Ward Refresh: Holds 5 charges and refills upon visiting the shop.<br>UNIQUE Active: Ghost Ward: Consumes a charge to place an invisible ward that reveals the surrounding area for 3 minutes (maximum 3 wards placed from this item at once)."
+		description:"+360 Health<br>UNIQUE Passive: Ward Refresh: Holds 5 charges and refills upon visiting the shop.<br>UNIQUE Active: Ghost Ward: Consumes a charge to place an invisible ward that reveals the surrounding area for 3 minutes (maximum 3 wards placed from this item at once)."
 	2047:
 		name:"Oracle's Extract"
 		description:"Grants 750 radius stealth detection for up to 5 minutes or until death."
@@ -154,7 +154,7 @@ items=
 		description:"On use, grants +30-64 Ability Power based on champion level, +15% Cooldown Reduction and increased Mana and Energy Rengeneration for 4 minutes."
 	2049:
 		name:"Sightstone"
-		description:"+100 Health<br>UNIQUE Passive: Ward Refresh: Holds 4 charges and refills upon visiting the shop.<br>UNIQUE Active: Ghost Ward: Consumes a charge to place an invisible ward that reveals the surrounding area for 3 minutes (maximum 2 wards placed from this item at once)."
+		description:"+180 Health<br>UNIQUE Passive: Ward Refresh: Holds 4 charges and refills upon visiting the shop.<br>UNIQUE Active: Ghost Ward: Consumes a charge to place an invisible ward that reveals the surrounding area for 3 minutes (maximum 2 wards placed from this item at once)."
 	2050:
 		name:"Explorer's Ward"
 		description:"Places an invisible ward with 1100 range. Lasts 1 minute."
@@ -259,7 +259,7 @@ items=
 		description:"+250 Mana<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Mana Charge: Grants +4 maximum Mana (max +750 Mana) for each spell cast and Mana expenditure (3 second cooldown)."
 	3071:
 		name:"The Black Cleaver"
-		description:"+250 Health<br>+50 Attack Damage<br>+10% Cooldown Reduction<br>UNIQUE Passive: +10 Armor Penetration<br>Passive: Dealing physical damage to an enemy champion reduces their Armor by 6.25% for 4 seconds (stacks up to 4 times, up to 25%)."
+		description:"+200 Health<br>+50 Attack Damage<br>+10% Cooldown Reduction<br>UNIQUE Passive: +10 Armor Penetration<br>Passive: Dealing physical damage to an enemy champion reduces their Armor by 5% for 4 seconds (stacks up to 5 times, up to 25%)."
 	3072:
 		name:"The Bloodthirster"
 		description:"+70 Attack Damage<br>+12% Life Steal<br>Passive: Grants +1 Attack Damage and +0.2% Life Steal per stack (max +30 Attack Damage and +6% Life Steal). Grants 1 stack per unit kill (max 30 stacks). Half of the stacks are lost upon death."
@@ -343,7 +343,7 @@ items=
 		description:"+400 Health<br>+20 Armor<br>+30 Magic Resist<br>UNIQUE Aura: Legion: Grants nearby allies +10 Armor, +30 Magic Resist, and +10 Health Regen per 5 seconds."
 	3108:
 		name:"Fiendish Codex"
-		description:"+30 Ability Power<br>+6 Mana Regen per 5 seconds<br>UNIQUE Passive: +10% Cooldown Reduction."
+		description:"+30 Ability Power<br>UNIQUE Passive: +10% Cooldown Reduction."
 	3109:
 		name:"Force of Nature"
 		description:"+76 Magic Resist<br>+20 Health Regen per 5 seconds<br>+8% Movement Speed<br>UNIQUE Passive: Restores 1.75% of maximum Health every 5 seconds."
@@ -358,7 +358,7 @@ items=
 		description:"+25 Ability Power<br>+45% Attack Speed<br>UNIQUE Passive: Basic attacks deal 15 (+10% of Ability Power) bonus magic damage on hit.<br>UNIQUE Passive: Basic attacks reduce the target's Magic Resist by 4 for 8 seconds on hit (stacks up to 7 times)."
 	3115:
 		name:"Nashor's Tooth"
-		description:"+50% Attack Speed<br>+65 Ability Power<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: +20% Cooldown Reduction."
+		description:"+50% Attack Speed<br>+65 Ability Power<br>UNIQUE Passive: +20% Cooldown Reduction."
 	3116:
 		name:"Rylai's Crystal Scepter"
 		description:"+500 Health<br>+80 Ability Power<br>UNIQUE Passive: Dealing ability damage slows the target's Movement Speed by 35% for 1.5 seconds (15% for multi-target and damage-over-time spells)."
@@ -379,7 +379,7 @@ items=
 		description:"+40 Attack Damage<br>+30% Attack Speed<br>+25 Armor<br>UNIQUE Passive: Basic attacks deal bonus magic damage equal to 4% of the target's maximum Health on hit."
 	3128:
 		name:"Deathfire Grasp"
-		description:"+100 Ability Power<br>+15% Cooldown Reduction<br>UNIQUE Active: Deals 15% of target champion's maximum Health in magic damage and increases all subsequent magic damage taken by the target by 20% for 4 seconds (60 second cooldown)."
+		description:"+120 Ability Power<br>+15% Cooldown Reduction<br>UNIQUE Active: Deals 15% of target champion's maximum Health in magic damage and increases all subsequent magic damage taken by the target by 20% for 4 seconds (60 second cooldown)."
 	3131:
 		name:"Sword of the Divine"
 		description:"+45% Attack Speed<br>Passive: This item does not grant any Attack Speed while on cooldown. Champion kills reduce the current cooldown by 50%.<br>UNIQUE Active: Grants +100% Attack Speed and 100% Critical Strike Chance for 3 seconds or 3 critical strikes (60 second cooldown)."
@@ -442,7 +442,7 @@ items=
 		description:"+55 Attack Damage<br>+36 Magic Resist<br>UNIQUE Passive: Grants +1 Attack Damage for every 2.5% of missing Health.<br>UNIQUE Passive: Lifeline: Upon taking magic damage that would reduce Health below 30%, grants a shield that absorbs 400 magic damage for 5 seconds (90 second cooldown)."
 	3157:
 		name:"Zhonya's Hourglass"
-		description:"+100 Ability Power<br>+50 Armor<br>UNIQUE Active: Champion becomes invulnerable and untargetable for 2.5 seconds, but is unable to move, attack, cast spells, or use items during this time (90 second cooldown)."
+		description:"+120 Ability Power<br>+50 Armor<br>UNIQUE Active: Champion becomes invulnerable and untargetable for 2.5 seconds, but is unable to move, attack, cast spells, or use items during this time (90 second cooldown)."
 	3158:
 		name:"Ionian Boots of Lucidity"
 		description:"UNIQUE Passive: +15% Cooldown Reduction.<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed"
@@ -505,6 +505,9 @@ items=
 	3190:
 		name:"Locket of the Iron Solari"
 		description:"+425 Health<br>+35 Armor<br>+15% Cooldown Reduction<br>+10 Health Regen per 5 seconds<br>UNIQUE Active: Grants a shield to nearby allies for 5 seconds that absorbs up to 50 damage plus 10 damage per level (60 second cooldown)."
+	3191:
+		name:"Seeker's Armguard"
+		description:"+30 Armor<br>+25 Ability Power<br>UNIQUE Passive: Killing a unit grants 0.5 bonus Armor and Ability Power. This bonus stacks up to 30 times."
 	3196:
 		name:"Augment: Power"
 		description:"+3 Ability Power per level<br>+220 Health<br>+6 Health Regen per 5 seconds<br>Ability Augment: Power Transfer increases Viktor's Movement Speed by 30% for 3 seconds."

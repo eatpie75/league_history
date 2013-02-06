@@ -24,7 +24,7 @@
 						<small>LEVEL</small>
 					</div>
 					<div>
-						<b>{% if rating.current_rating>1200 %}{{rating.current_rating}}{% else %}?{% endif %}</b>
+						<b>{% if rating.rank %}#{{rating.rank}} {{rating.get_tier_display()}}-{{rating.get_division_display()}}{% else %}?{% endif %}</b>
 						<small>ELO</small>
 					</div>
 					<div>

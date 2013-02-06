@@ -73,7 +73,7 @@ class SummonerRatingForm(forms.ModelForm):
 
 
 class SummonerRatingAdmin(admin.ModelAdmin):
-	list_display=('summoner', 'game_map', 'game_mode', 'current_rating', 'wins', 'losses')
+	list_display=('summoner', 'game_map', 'game_mode', 'wins', 'losses')
 	list_filter=('summoner__region', 'game_map', 'game_mode')
 	search_fields=('summoner__name',)
 	form=SummonerRatingForm

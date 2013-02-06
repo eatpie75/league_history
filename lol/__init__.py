@@ -7,6 +7,9 @@ import requests
 import random
 
 
+SUPPORTED_REGIONS=('NA', 'EUW', 'EUNE')
+
+
 class NoServersAvailable(Exception):
 	pass
 
@@ -18,8 +21,9 @@ class Server_List:
 	def __init__(self, server_list):
 		self.updated=None
 		self.servers={}
-		for region, data in server_list.iteritems():
+		for region in SUPPORTED_REGIONS:
 			self.servers[region]=[]
+		for region, data in server_list.iteritems():
 			for server in data:
 				self.servers[region].append({'url':server, 'status':-1, 'last_updated':None, 'metadata':{}})
 		self.check_servers()

@@ -34,7 +34,7 @@
     },
     1011: {
       name: "Giant's Belt",
-      description: "+400 Health"
+      description: "+380 Health"
     },
     1018: {
       name: "Cloak of Agility",
@@ -102,7 +102,7 @@
     },
     1054: {
       name: "Doran's Shield",
-      description: "+100 Health<br>+5 Armor<br>+5 Health Regen per 5 seconds<br>UNIQUE Passive: Blocks 6 damage from champion basic attacks."
+      description: "+100 Health<br>+5 Armor<br>+8 Health Regen per 5 seconds<br>UNIQUE Passive: Blocks 6 damage from champion basic attacks."
     },
     1055: {
       name: "Doran's Blade",
@@ -178,7 +178,7 @@
     },
     2045: {
       name: "Ruby Sightstone",
-      description: "+300 Health<br>UNIQUE Passive: Ward Refresh: Holds 5 charges and refills upon visiting the shop.<br>UNIQUE Active: Ghost Ward: Consumes a charge to place an invisible ward that reveals the surrounding area for 3 minutes (maximum 3 wards placed from this item at once)."
+      description: "+360 Health<br>UNIQUE Passive: Ward Refresh: Holds 5 charges and refills upon visiting the shop.<br>UNIQUE Active: Ghost Ward: Consumes a charge to place an invisible ward that reveals the surrounding area for 3 minutes (maximum 3 wards placed from this item at once)."
     },
     2047: {
       name: "Oracle's Extract",
@@ -190,7 +190,7 @@
     },
     2049: {
       name: "Sightstone",
-      description: "+100 Health<br>UNIQUE Passive: Ward Refresh: Holds 4 charges and refills upon visiting the shop.<br>UNIQUE Active: Ghost Ward: Consumes a charge to place an invisible ward that reveals the surrounding area for 3 minutes (maximum 2 wards placed from this item at once)."
+      description: "+180 Health<br>UNIQUE Passive: Ward Refresh: Holds 4 charges and refills upon visiting the shop.<br>UNIQUE Active: Ghost Ward: Consumes a charge to place an invisible ward that reveals the surrounding area for 3 minutes (maximum 2 wards placed from this item at once)."
     },
     2050: {
       name: "Explorer's Ward",
@@ -330,7 +330,7 @@
     },
     3071: {
       name: "The Black Cleaver",
-      description: "+250 Health<br>+50 Attack Damage<br>+10% Cooldown Reduction<br>UNIQUE Passive: +10 Armor Penetration<br>Passive: Dealing physical damage to an enemy champion reduces their Armor by 6.25% for 4 seconds (stacks up to 4 times, up to 25%)."
+      description: "+200 Health<br>+50 Attack Damage<br>+10% Cooldown Reduction<br>UNIQUE Passive: +10 Armor Penetration<br>Passive: Dealing physical damage to an enemy champion reduces their Armor by 5% for 4 seconds (stacks up to 5 times, up to 25%)."
     },
     3072: {
       name: "The Bloodthirster",
@@ -442,7 +442,7 @@
     },
     3108: {
       name: "Fiendish Codex",
-      description: "+30 Ability Power<br>+6 Mana Regen per 5 seconds<br>UNIQUE Passive: +10% Cooldown Reduction."
+      description: "+30 Ability Power<br>UNIQUE Passive: +10% Cooldown Reduction."
     },
     3109: {
       name: "Force of Nature",
@@ -462,7 +462,7 @@
     },
     3115: {
       name: "Nashor's Tooth",
-      description: "+50% Attack Speed<br>+65 Ability Power<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: +20% Cooldown Reduction."
+      description: "+50% Attack Speed<br>+65 Ability Power<br>UNIQUE Passive: +20% Cooldown Reduction."
     },
     3116: {
       name: "Rylai's Crystal Scepter",
@@ -490,7 +490,7 @@
     },
     3128: {
       name: "Deathfire Grasp",
-      description: "+100 Ability Power<br>+15% Cooldown Reduction<br>UNIQUE Active: Deals 15% of target champion's maximum Health in magic damage and increases all subsequent magic damage taken by the target by 20% for 4 seconds (60 second cooldown)."
+      description: "+120 Ability Power<br>+15% Cooldown Reduction<br>UNIQUE Active: Deals 15% of target champion's maximum Health in magic damage and increases all subsequent magic damage taken by the target by 20% for 4 seconds (60 second cooldown)."
     },
     3131: {
       name: "Sword of the Divine",
@@ -574,7 +574,7 @@
     },
     3157: {
       name: "Zhonya's Hourglass",
-      description: "+100 Ability Power<br>+50 Armor<br>UNIQUE Active: Champion becomes invulnerable and untargetable for 2.5 seconds, but is unable to move, attack, cast spells, or use items during this time (90 second cooldown)."
+      description: "+120 Ability Power<br>+50 Armor<br>UNIQUE Active: Champion becomes invulnerable and untargetable for 2.5 seconds, but is unable to move, attack, cast spells, or use items during this time (90 second cooldown)."
     },
     3158: {
       name: "Ionian Boots of Lucidity",
@@ -656,6 +656,10 @@
     3190: {
       name: "Locket of the Iron Solari",
       description: "+425 Health<br>+35 Armor<br>+15% Cooldown Reduction<br>+10 Health Regen per 5 seconds<br>UNIQUE Active: Grants a shield to nearby allies for 5 seconds that absorbs up to 50 damage plus 10 damage per level (60 second cooldown)."
+    },
+    3191: {
+      name: "Seeker's Armguard",
+      description: "+30 Armor<br>+25 Ability Power<br>UNIQUE Passive: Killing a unit grants 0.5 bonus Armor and Ability Power. This bonus stacks up to 30 times."
     },
     3196: {
       name: "Augment: Power",

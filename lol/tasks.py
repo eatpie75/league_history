@@ -48,7 +48,7 @@ def summoner_auto_task(summoner_pk):
 	summoner=parse_summoner(data['profile'], summoner)
 	summoner=parse_runes(data['runes'], summoner)
 	summoner=parse_masteries(data['masteries'], summoner)
-	parse_ratings(data['stats'], summoner)
+	parse_ratings(data['leagues'], summoner)
 	if summoner.fully_update:
 		parse_games(data['games'], summoner, True)
 	else:
@@ -103,7 +103,7 @@ def fill_game(game_pk, auto=False):
 				summoner=create_summoner(data['profile'], game.region)
 				summoner=parse_runes(data['runes'], summoner)
 				summoner=parse_masteries(data['masteries'], summoner)
-			parse_ratings(data['stats'], summoner)
+			parse_ratings(data['leagues'], summoner)
 			if summoner.fully_update and not auto:
 				parse_games(data['games'], summoner, True, game)
 			else:

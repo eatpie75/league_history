@@ -3,10 +3,13 @@
   var draw_chart;
 
   draw_chart = function(data, kwargs) {
-    var chart_defaults, chart_options, data_defaults, data_options, date, day, now, parsed, _i, _j, _k, _l, _len, _len1, _len2, _len3;
+    var chart_defaults, chart_options, data_defaults, data_options, date, day, now, parsed, _chistorywr_hover, _i, _j, _k, _l, _len, _len1, _len2, _len3;
     if (kwargs == null) {
       kwargs = {};
     }
+    _chistorywr_hover = function(index, options) {
+      return "<b>" + options.data[index]['x'] + "</b><br>" + options.data[index]['y'] + "% Winrate<br>Played " + options.data[index]['count'] + " times";
+    };
     chart_defaults = {
       element: 'elo-graph',
       xkey: 'x',
@@ -48,16 +51,18 @@
         });
       }
     } else if (data_options.data_parse === 'chistorywr') {
+      chart_options.hoverCallback = _chistorywr_hover;
       for (_k = 0, _len2 = data.length; _k < _len2; _k++) {
         day = data[_k];
         date = new Date(day[0]);
         now = new Date();
-        if (day[1]['champions'][data_options.y]['count'] < 10) {
+        if (day[1]['champions'][data_options.y]['count'] < 20) {
           continue;
         }
         parsed.push({
           'x': day[0],
-          'y': Math.round((day[1]['champions'][data_options.y]['won'] / day[1]['champions'][data_options.y]['count']) * 100)
+          'y': Math.round((day[1]['champions'][data_options.y]['won'] / day[1]['champions'][data_options.y]['count']) * 100),
+          'count': day[1]['champions'][data_options.y]['count']
         });
       }
     } else if (data_options.data_parse === 'chistorypop') {
@@ -73,7 +78,8 @@
       }
     }
     chart_options['data'] = parsed;
-    return Morris.Line(chart_options);
+    window.drawn_chart = Morris.Line(chart_options);
+    return [data_options, chart_options];
   };
 
   $(document).ready(function() {

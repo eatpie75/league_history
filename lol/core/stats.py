@@ -27,7 +27,7 @@ class Queryset_Manager:
 
 class Stats:
 		def __init__(self, games, **kwargs):
-			self.qs=games.only('game', 'rating', 'champion_id', 'won', 'items', 'kills', 'deaths', 'assists', 'minion_kills', 'neutral_minions_killed', 'gold')
+			self.qs=games.only('game', 'champion_id', 'won', 'items', 'kills', 'deaths', 'assists', 'minion_kills', 'neutral_minions_killed', 'gold', 'summoner_spell1', 'summoner_spell2')
 			#.defer(
 			# 	'afk', 'leaver', 'blue_team', 'ping', 'queue_length', 'premade_size',
 			# 	'ip_earned', 'experience_earned', 'boosted_experience_earned', 'boosted_ip_earned',
@@ -39,13 +39,13 @@ class Stats:
 			self.games=Queryset_Manager(self.qs)
 			self.indexed=False
 			self.items_indexed=False
-			self.index={'champions':{}, 'elo':{}, 'global_stats':{}}
+			self.index={'champions':{}, 'global_stats':{}}
 			self.count=0
 			self.champion=kwargs.get('champion', None)
 			self.summoner_name=kwargs.get('summoner_name', None)
-			self.index_elo=kwargs.get('index_elo', False)
 			self.index_items=kwargs.get('index_items', True)
 			self.champion_history=kwargs.get('champion_history', False)
+			self.index_summoner_spells=kwargs.get('index_summoner_spells', False)
 			self.global_stats=kwargs.get('global_stats', False)
 			self.display_count=kwargs.get('display_count', self.count)
 
@@ -82,21 +82,16 @@ class Stats:
 			if self.display_count==0:
 				self.display_count=self.count
 
-		def __index_elo(self, stats, game):
-			itime=game.game.time.strftime('%Y-%m-%d')
-			if itime not in stats['elo']:
-				stats['elo'][itime]={
-					'count':	0,
-					'total':	0,
-					'rating':	0
-				}
-			stats['elo'][itime]['count']+=1
-			#  use avg elo for day
-			stats['elo'][itime]['total']+=float(game.rating)
-			stats['elo'][itime]['rating']=int(stats['elo'][itime]['total']/stats['elo'][itime]['count'])
-			#  use max elo for day
-			# if game.rating>stats['elo'][itime]['rating']:
-			# 	stats['elo'][itime]['rating']=game.rating
+		def __index_summoner_spells(self, stats, game):
+			for summoner_spell in [game.summoner_spell1, game.summoner_spell2]:
+				if summoner_spell not in stats['champions'][game.champion_id]['summoners']:
+					stats['champions'][game.champion_id]['summoners'][summoner_spell]={
+						'count':	0,
+						'won':		0,
+						'lost':		0
+					}
+				stats['champions'][game.champion_id]['summoners'][summoner_spell]['count']+=1
+				stats['champions'][game.champion_id]['summoners'][summoner_spell]['won' if game.won else 'lost']+=1
 			return stats
 
 		def __index_champion_history(self, stats, game):
@@ -146,7 +141,6 @@ class Stats:
 			stats={
 				'champions':{},
 				'history':{},
-				'elo':{},
 				'global_stats':{'blue_side':{'won':0, 'lost':0}}
 			}
 			for game in self.games:
@@ -166,7 +160,8 @@ class Stats:
 						'avg_cs':		0,
 						'gold':			0,
 						'avg_gold':		0,
-						'items':		{}
+						'items':		{},
+						'summoners':	{}
 					}
 				stats['champions'][game.champion_id]['count']+=1
 				for key, mapping in {'kills':'kills', 'deaths':'deaths', 'assists':'assists', 'minion_kills':'cs', 'neutral_minions_killed':'cs', 'gold':'gold'}.iteritems():
@@ -180,8 +175,6 @@ class Stats:
 
 				if self.index_items:
 					stats=self.__index_items(stats, game)
-				if self.index_elo and self.summoner_name!=None and game.game.game_map==1 and game.game.game_mode==3 and game.rating!=0:
-					stats=self.__index_elo(stats, game)
 				if self.champion_history:
 					itime=game.game.time.strftime('%Y-%m-%d')
 					if itime not in stats['history']:
@@ -191,10 +184,11 @@ class Stats:
 						}
 					stats['history'][itime]['count']+=1
 					stats=self.__index_champion_history(stats, game)
+				if self.index_summoner_spells:
+					stats=self.__index_summoner_spells(stats, game)
 				if self.global_stats:
 					stats=self.__index_global_stats(stats, game)
 			# self.index={'champions':champions, 'elo':sorted(elo.iteritems(), key=lambda x:x[0]), 'history':sorted(history.iteritems(), key=lambda x:x[0])[:-1], 'global_stats':global_stats}
-			stats['elo']=sorted(stats['elo'].iteritems(), key=lambda x:x[0])
 			stats['history']=sorted(stats['history'].iteritems(), key=lambda x:x[0])[:-1]
 			self.index=stats
 			self.indexed=True

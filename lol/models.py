@@ -9,7 +9,10 @@ import json
 
 MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Aram'), (4, 'Twisted Treeline'), (9, '?'))
 MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (9, '?'))
-GAME_TYPES={'RankedPremade5x5':(4,1), 'RankedTeam5x5':(5,1), 'RankedPremade3x3':(4,4), 'RankedTeam3x3':(5,4), 'Unranked':(2,1), 'OdinUnranked':(2,2), 'RankedSolo5x5':(3,1), 'CoopVsAi':(1,1), 'OldRankedPremade3x3':(4,0), 'OldRankedTeam3x3':(5,0)}
+GAME_TYPES={'rankedpremade5x5':(4,1), 'rankedteam5x5':(5,1), 'rankedpremade3x3':(4,4), 'rankedteam3x3':(5,4), 'unranked':(2,1), 'odinunranked':(2,2), 'rankedsolo5x5':(3,1), 'coopvsai':(1,1), 'oldrankedpremade3x3':(4,0), 'oldrankedteam3x3':(5,0)}
+RANKED_GAME_TYPES={'rankedpremade5x5':(4,1), 'rankedpremade3x3':(4,4), 'rankedsolo5x5':(3,1)}
+TIERS=((1, 'BRONZE'), (2, 'SILVER'), (3, 'GOLD'), (4, 'PLATINUM'), (5, 'DIAMOND'), (6, 'CHALLENGER'))
+DIVISIONS=((1, 'I'), (2, 'II'), (3, 'III'), (4, 'IV'), (5, 'V'))
 REGIONS=((0, 'NA'), (1, 'EUW'), (2, 'EUNE'), (3, 'BR'))
 
 
@@ -63,7 +66,7 @@ class Summoner(models.Model):
 		try:
 			rating=SummonerRating.objects.get(summoner=self, game_map=1, game_mode=3)
 		except SummonerRating.DoesNotExist:
-			rating=SummonerRating(summoner=self, game_map=1, game_mode=3, wins=0, losses=0, leaves=0, current_rating=0, top_rating=0)
+			rating=SummonerRating(summoner=self, game_map=1, game_mode=3, wins=0, losses=0)
 			rating.save()
 		return rating
 
@@ -120,9 +123,13 @@ class SummonerRating(models.Model):
 	game_mode=models.IntegerField(choices=MODES, db_index=True, null=False)
 	wins=models.IntegerField()
 	losses=models.IntegerField()
-	leaves=models.IntegerField()
-	current_rating=models.IntegerField(null=True, blank=True)
-	top_rating=models.IntegerField(null=True, blank=True)
+	league=models.CharField(max_length=127, null=True, blank=True)
+	tier=models.IntegerField(choices=TIERS, null=True, blank=True)
+	division=models.IntegerField(choices=DIVISIONS, null=True, blank=True)
+	rank=models.IntegerField(null=True, blank=True)
+	miniseries_target=models.IntegerField(default=0)
+	miniseries_wins=models.IntegerField(default=0)
+	miniseries_losses=models.IntegerField(default=0)
 
 	class Meta:
 		unique_together=(("summoner", "game_map", "game_mode"))
@@ -158,7 +165,9 @@ class Player(models.Model):
 	game=models.ForeignKey(Game, db_index=True)
 	summoner=models.ForeignKey('Summoner', db_index=True)
 	won=models.BooleanField()
-	rating=models.IntegerField()
+	tier=models.IntegerField(choices=TIERS, null=True, blank=True)
+	division=models.IntegerField(choices=DIVISIONS, null=True, blank=True)
+	rank=models.IntegerField(null=True, blank=True)
 	afk=models.BooleanField()
 	leaver=models.BooleanField()
 	blue_team=models.BooleanField()
@@ -337,12 +346,17 @@ def parse_games(games, summoner, full=False, current=None):
 			game.save(force_insert=True)
 		if not Player.objects.filter(game=game, summoner=summoner).exists():
 			try:
-				sr=SummonerRating.objects.get(summoner=summoner, game_map=game.game_map, game_mode=game.game_mode).current_rating
+				sr=SummonerRating.objects.get(summoner=summoner, game_map=game.game_map, game_mode=game.game_mode)
+				tier=sr.tier
+				division=sr.division
+				rank=sr.rank
 			except SummonerRating.DoesNotExist:
-				sr=0
+				tier=0
+				division=0
+				rank=0
 			player=Player(
 				game=game,
-				summoner=summoner, rating=sr,
+				summoner=summoner, tier=tier, division=division, rank=rank,
 				afk=ogame['afk'], leaver=ogame['leaver'],
 				ping=ogame['ping'],	queue_length=ogame['queue_length'],	premade_size=ogame['premade_size'],
 				experience_earned=ogame['xp_earned'], boosted_experience_earned=ogame['boost_xp'],
@@ -404,17 +418,14 @@ def create_summoner(summoner, region=0):
 	)
 	tmp.save(force_insert=True)
 	ratings=[]
-	for game_type, values in GAME_TYPES.iteritems():
+	for game_type, values in RANKED_GAME_TYPES.iteritems():
 		ratings.append(
 			SummonerRating(
 				summoner=tmp,
 				game_mode=values[0],
 				game_map=values[1],
 				wins=0,
-				losses=0,
-				leaves=0,
-				current_rating=0,
-				top_rating=0
+				losses=0
 			)
 		)
 	SummonerRating.objects.bulk_create(ratings)
@@ -437,22 +448,32 @@ def parse_summoner(data, summoner):
 def parse_ratings(ratings, summoner):
 	# MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Aram'), (4, 'Twisted Treeline'), (9, '?'))
 	# MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (9, '?'))
+	# RANKED_GAME_TYPES={'rankedpremade5x5':(4,1), 'rankedteam5x5':(5,1), 'rankedpremade3x3':(4,4), 'rankedteam3x3':(5,4), 'rankedsolo5x5':(3,1)}
 	pre_ratings=SummonerRating.objects.filter(summoner=summoner)
 	for rating in ratings:
-		if rating['game_type'] in GAME_TYPES:
-			game_mode, game_map=GAME_TYPES[rating['game_type']]
+		if rating['queue'].replace('_', '').lower() in RANKED_GAME_TYPES:
+			game_mode, game_map=RANKED_GAME_TYPES[rating['queue'].replace('_', '').lower()]
 		else:
 			continue
-		# print game_mode, game_map
-		tmp=pre_ratings.get_or_create(game_mode=game_mode, game_map=game_map, defaults={'summoner':summoner, 'wins':rating['wins'], 'losses':rating['losses'], 'leaves':rating['leaves'], 'current_rating':rating['rating'], 'top_rating':rating['rating_max']})
+		# print(rating)
+		tmp=pre_ratings.get_or_create(game_mode=game_mode, game_map=game_map, defaults={'summoner':summoner, 'wins':rating['wins'], 'losses':rating['losses']})
 		if tmp[1]==0:
 			r=tmp[0]
-			if r.wins!=int(rating['wins']) or r.losses!=int(rating['losses']) or r.leaves!=int(rating['leaves']) or r.current_rating!=int(rating['rating']) or r.top_rating!=int(rating['rating_max']):
+			if r.wins!=int(rating['wins']) or r.losses!=int(rating['losses']) or r.rank!=int(rating['league_rank']) or r.league!=rating['name'] or r.tier!=rating['tier'] or r.division!=int(rating['rank']):
 				r.wins=rating['wins']
 				r.losses=rating['losses']
-				r.leaves=rating['leaves']
-				r.current_rating=rating['rating']
-				r.top_rating=rating['rating_max']
+				r.rank=rating['league_rank']
+				r.league=rating['name']
+				r.tier=rating['tier']
+				r.division=rating['rank']
+				if rating['mini_series']==None:
+					r.miniseries_target=0
+					r.miniseries_wins=0
+					r.miniseries_losses=0
+				else:
+					r.miniseries_target=rating['mini_series']['target']
+					r.miniseries_wins=rating['mini_series']['wins']
+					r.miniseries_losses=rating['mini_series']['losses']
 				r.save(force_update=True)
 
 

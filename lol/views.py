@@ -25,10 +25,10 @@ def __get_region_str(region):
 
 
 def search(request, name):
-	summoners=Summoner.objects.filter(name__iexact=name)
+	summoners=Summoner.objects.filter(name__iexact=name).defer('masteries', 'runes')
 	local=summoners.values()
 	for region in range(0, 2):
-		if len(filter(lambda row:row['name']==name and row['region']==region, local))==0:
+		if len(filter(lambda row:row['name'].lower()==name.lower() and row['region']==region, local))==0:
 			try:
 				res=get_data('search', {'name':name}, __get_region_str(region))
 				print res
@@ -37,9 +37,11 @@ def search(request, name):
 						summoner=create_summoner(res, region)
 						summoner_auto_task.delay(summoner.pk)
 					else:
-						print Summoner.objects.filter(account_id=res['account_id'], region=region)
+						summoner=Summoner.objects.get(account_id=res['account_id'], region=region)
+						summoner_auto_task.delay(summoner.pk)
 			except:
 				print 'something broke'
+	summoners=Summoner.objects.filter(name__iexact=name).defer('masteries', 'runes')
 	return render_to_response('search.html.j2', {'summoners':summoners}, RequestContext(request))
 
 
@@ -124,11 +126,11 @@ def view_game(request, region, game_id):
 		metadata['stats'][team]['sw_bought']+=player.sight_wards_bought_in_game
 		metadata['stats'][team]['vw_bought']+=player.vision_wards_bought_in_game
 		metadata['stats'][team]['tw_bought']+=player.sight_wards_bought_in_game+player.vision_wards_bought_in_game
-		if game.game_mode in (3, 4, 5) and player.rating>0:
-			metadata['stats'][team]['total_elo']+=player.rating
-			metadata['stats'][team]['avg_elo']=round(metadata['stats'][team]['total_elo']/metadata['stats'][team]['num_players'], 1)
-	if game.game_mode in (3, 4, 5):
-		metadata['avg_elo']=players.filter(rating__gt=0).aggregate(Avg('rating'))['rating__avg']
+	# 	if game.game_mode in (3, 4, 5) and player.rating>0:
+	# 		metadata['stats'][team]['total_elo']+=player.rating
+	# 		metadata['stats'][team]['avg_elo']=round(metadata['stats'][team]['total_elo']/metadata['stats'][team]['num_players'], 1)
+	# if game.game_mode in (3, 4, 5):
+	# 	metadata['avg_elo']=players.filter(rating__gt=0).aggregate(Avg('rating'))['rating__avg']
 	return render_to_response('view_game.html.j2', {'game':game, 'players':players, 'metadata':metadata, 'update_in_queue':update_in_queue}, RequestContext(request))
 
 
@@ -157,7 +159,7 @@ def view_summoner(request, region, account_id, slug):
 	games=Player.objects.filter(summoner=summoner).select_related('game')
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats==None:
-		stats=Stats(games, summoner_name=summoner.name, index_elo=True, index_items=False)
+		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
 	#spectate=cache.get('summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id))
@@ -178,7 +180,7 @@ def view_summoner_games(request, region, account_id, slug):
 	games=Player.objects.filter(summoner=summoner).select_related('game')
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats==None:
-		stats=Stats(games, summoner_name=summoner.name, summoner_time_updated=summoner.time_updated, elo=True)
+		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
 	return render_to_response('view_summoner_games.html.j2', {'games':Paginator(games, 10).page(1), 'summoner':summoner, 'rating':rating, 'stats':stats}, RequestContext(request))
@@ -195,7 +197,7 @@ def view_summoner_champions(request, region, account_id, slug):
 	games=Player.objects.filter(summoner=summoner).select_related('game')
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats==None:
-		stats=Stats(games, summoner_name=summoner.name, elo=True)
+		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
 	# assert False
@@ -211,7 +213,7 @@ def view_summoner_inventory(request, region, account_id, slug):
 	games=Player.objects.filter(summoner=summoner).select_related('game')
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats==None:
-		stats=Stats(games, summoner_name=summoner.name, elo=True)
+		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
 	return render_to_response('view_summoner_inventory.html.j2', {'summoner':summoner, 'rating':rating, 'stats':stats}, RequestContext(request))
@@ -343,6 +345,9 @@ def run_auto(request):
 
 @user_passes_test(lambda u:u.is_superuser)
 def client_status(request):
+	if 'reset_queue_len' in request.GET:
+		cache.set('queue_len', 0)
+		return HttpResponseRedirect('/admin/status/')
 	server_list=cache.get('servers')
 	unfetched_games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.utcnow().replace(tzinfo=timezone('UTC'))-timedelta(days=2))).distinct('game').count()
 	queue_len=cache.get('queue_len')
