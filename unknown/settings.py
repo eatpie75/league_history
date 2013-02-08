@@ -152,7 +152,8 @@ TEMPLATE_CONTEXT_PROCESSORS=(
 	"django.core.context_processors.static",
 	"django.core.context_processors.tz",
 	"django.contrib.messages.context_processors.messages",
-	"lol.context_processors.ajax_base"
+	"lol.context_processors.ajax_base",
+	"lol.context_processors.game_types"
 )
 
 ROOT_URLCONF = 'unknown.urls'

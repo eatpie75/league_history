@@ -73,8 +73,17 @@ class SummonerRatingForm(forms.ModelForm):
 
 
 class SummonerRatingAdmin(admin.ModelAdmin):
-	list_display=('summoner', 'game_map', 'game_mode', 'wins', 'losses')
-	list_filter=('summoner__region', 'game_map', 'game_mode')
+	def update_automatically(self, obj):
+		return obj.summoner.update_automatically
+	update_automatically.short_description='Auto Update'
+
+	def fully_update(self, obj):
+		return obj.summoner.fully_update
+	fully_update.short_description='Auto Fill'
+
+	list_display=('summoner', 'game_map', 'game_mode', 'tier', 'division', 'wins', 'losses', 'update_automatically', 'fully_update')
+	# list_editable=('summoner__update_automatically', 'summoner__fully_update')
+	list_filter=('summoner__region', 'game_map', 'game_mode', 'tier')
 	search_fields=('summoner__name',)
 	form=SummonerRatingForm
 

@@ -87,6 +87,11 @@
 					// text-align:right;
 				}
 			}
+			i {
+				.scale(0.75);
+				position: absolute;
+				margin:-12px 0 0 -4px;
+			}
 		}
 	}
 	& > tbody > tr:hover {
@@ -235,6 +240,15 @@ img.sprite {
 			line-height:65px;
 			.red {color:@bad;}
 			.green {color:@good;}
+		}
+	}
+	& > .league-block {
+		display:inline-block;
+		& > b {
+			position: relative;
+			left: -25px;
+			vertical-align: bottom;
+			color:#FFF;
 		}
 	}
 	.mynav {

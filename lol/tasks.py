@@ -127,7 +127,7 @@ def fill_game(game_pk, auto=False):
 
 @task(priority=1)
 def spectate_check(summoner):
-	query={'name':summoner.name}
+	query={'name':summoner.name, 'full':True}
 	res=get_data('spectate', query, summoner.get_region_display())
 	return res
 

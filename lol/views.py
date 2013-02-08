@@ -6,7 +6,7 @@ from django.core.cache import cache
 # from django.views.decorators.cache import cache_page
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
-from django.db.models import Avg
+# from django.db.models import Avg
 from django.http import HttpResponseRedirect
 from coffin.shortcuts import render_to_response
 from django.template import RequestContext
@@ -162,10 +162,11 @@ def view_summoner(request, region, account_id, slug):
 		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
-	#spectate=cache.get('summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id))
+	# spectate=cache.get('summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id))
 	# if spectate==None:
-	# 	result=spectate_check.delay(summoner)
-	# 	spectate=Spectate(result, 'summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id))
+	# 	result=spectate_check(summoner)
+	# 	spectate=Spectate('summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id))
+	# 	spectate.parse(result)
 	# 	cache.set('summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id), spectate, 60*5)
 	return render_to_response('view_summoner.html.j2', {'games':games, 'summoner':summoner, 'rating':rating, 'stats':stats, 'update_in_queue':update_in_queue, 'spectate':None}, RequestContext(request))
 
@@ -200,7 +201,6 @@ def view_summoner_champions(request, region, account_id, slug):
 		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
-	# assert False
 	return render_to_response('view_summoner_champions.html.j2', {'games':games, 'summoner':summoner, 'rating':rating, 'stats':stats, 'champions':CHAMPIONS}, RequestContext(request))
 
 

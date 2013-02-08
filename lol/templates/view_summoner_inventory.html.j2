@@ -18,17 +18,21 @@
 						<small>LEVEL</small>
 					</div>
 					<div>
-						<b>{% if rating.rank %}#{{rating.rank}} {{rating.get_tier_display()}}-{{rating.get_division_display()}}{% else %}?{% endif %}</b>
-						<small>ELO</small>
-					</div>
-					<div>
 						<b>{{stats.display_count}}</b>
 						<small>GAMES</small>
 					</div>
 				</div>
 				<div class='name-block'>
 					<b>{{summoner.name}}</b>
-					{#- <span id='spectate-info'>{{spectate|safe}}</span> #}
+					{#- <span id='spectate-info'><a href='{{spectate.url}}'>{{spectate.player_info(summoner.region, summoner.account_id)}}</a></span> #}
+				</div>
+				<div class='league-block'>
+					{%- if rating.tier %}
+					<img src='{{STATIC_URL}}img/leagues/{{rating.tier}}-{{rating.division}}.png' title='Division {{rating.division}} {{rating.get_tier_display()}}'>
+					<b>{{rating.get_division_display()}}</b>
+					{%- else %}
+					<img src='{{STATIC_URL}}img/leagues/0.png' title='Unranked'>
+					{%- endif %}
 				</div>
 				<div class='bottom-right' id='last-updated-block'>
 					{%- if not update_in_queue and summoner.time_updated|timediff > 60*30 %}

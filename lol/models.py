@@ -7,10 +7,12 @@ from time import sleep
 import requests
 import json
 
-MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Aram'), (4, 'Twisted Treeline'), (9, '?'))
 MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (9, '?'))
+MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Aram'), (4, 'Twisted Treeline'), (9, '?'))
+#{'queue', 'mode', 'map'}
 GAME_TYPES={'rankedpremade5x5':(4,1), 'rankedteam5x5':(5,1), 'rankedpremade3x3':(4,4), 'rankedteam3x3':(5,4), 'unranked':(2,1), 'odinunranked':(2,2), 'rankedsolo5x5':(3,1), 'coopvsai':(1,1), 'oldrankedpremade3x3':(4,0), 'oldrankedteam3x3':(5,0)}
-RANKED_GAME_TYPES={'rankedpremade5x5':(4,1), 'rankedpremade3x3':(4,4), 'rankedsolo5x5':(3,1)}
+RANKED_SOLO_QUEUE_TYPES={'rankedpremade5x5':(4,1), 'rankedpremade3x3':(4,4), 'rankedsolo5x5':(3,1)}
+RANKED_GAME_TYPES=((4,1), (5,1), (4,4), (5,4), (3,1))
 TIERS=((1, 'BRONZE'), (2, 'SILVER'), (3, 'GOLD'), (4, 'PLATINUM'), (5, 'DIAMOND'), (6, 'CHALLENGER'))
 DIVISIONS=((1, 'I'), (2, 'II'), (3, 'III'), (4, 'IV'), (5, 'V'))
 REGIONS=((0, 'NA'), (1, 'EUW'), (2, 'EUNE'), (3, 'BR'))
@@ -418,7 +420,7 @@ def create_summoner(summoner, region=0):
 	)
 	tmp.save(force_insert=True)
 	ratings=[]
-	for game_type, values in RANKED_GAME_TYPES.iteritems():
+	for game_type, values in RANKED_SOLO_QUEUE_TYPES.iteritems():
 		ratings.append(
 			SummonerRating(
 				summoner=tmp,
@@ -448,11 +450,11 @@ def parse_summoner(data, summoner):
 def parse_ratings(ratings, summoner):
 	# MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Aram'), (4, 'Twisted Treeline'), (9, '?'))
 	# MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (9, '?'))
-	# RANKED_GAME_TYPES={'rankedpremade5x5':(4,1), 'rankedteam5x5':(5,1), 'rankedpremade3x3':(4,4), 'rankedteam3x3':(5,4), 'rankedsolo5x5':(3,1)}
+	# RANKED_SOLO_QUEUE_TYPES={'rankedpremade5x5':(4,1), 'rankedteam5x5':(5,1), 'rankedpremade3x3':(4,4), 'rankedteam3x3':(5,4), 'rankedsolo5x5':(3,1)}
 	pre_ratings=SummonerRating.objects.filter(summoner=summoner)
 	for rating in ratings:
-		if rating['queue'].replace('_', '').lower() in RANKED_GAME_TYPES:
-			game_mode, game_map=RANKED_GAME_TYPES[rating['queue'].replace('_', '').lower()]
+		if rating['queue'].replace('_', '').lower() in RANKED_SOLO_QUEUE_TYPES:
+			game_mode, game_map=RANKED_SOLO_QUEUE_TYPES[rating['queue'].replace('_', '').lower()]
 		else:
 			continue
 		# print(rating)
