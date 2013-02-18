@@ -2,7 +2,6 @@ fs			= require('fs')
 path		= require('path')
 {exec}		= require('child_process')
 async		= require('./clientemu/node_modules/async')
-colors		= require('./clientemu/node_modules/colors')
 uglifyjs	= require('./clientemu/node_modules/uglify-js')
 uglifycss	= require('./clientemu/node_modules/uglifycss')
 
@@ -34,7 +33,7 @@ TMPDIR			= 'tmp'
 
 compile_coffee=(cb)->
 	fs.mkdirSync(TMPDIR)
-	console.log(">coffee -o #{COFFEEOUTDIR}/ -c #{COFFEEINDIR}/".yellow)
+	console.log(">coffee -o #{COFFEEOUTDIR}/ -c #{COFFEEINDIR}/")
 	# exec("coffee -o #{COFFEEOUTDIR}/ -c #{COFFEEINDIR}/", (err, stdout, stderr)->
 	exec("coffee -o #{COFFEEOUTDIR}/ -c #{COFFEEINDIR}/", (err, stdout, stderr)->
 		if stderr or err then console.log(err, stderr)
@@ -49,20 +48,20 @@ compress_js=(cb)->
 		size+=tmp.length
 		# fs.unlinkSync("#{TMPDIR}/#{file}")
 		js.push("#{COFFEEOUTDIR}/#{file}")
-	# console.log("Compressing #{file}".yellow)
+	# console.log("Compressing #{file}")
 	# ast=uglifyjs.parser.parse(js)
 	# ast=uglifyjs.uglify.ast_mangle(ast)
 	# ast=uglifyjs.uglify.ast_squeeze(ast)
 	# result=uglifyjs.uglify.gen_code(ast)
 	result=uglifyjs.minify(js)
 	fs.writeFileSync("#{JSOUTDIR}/main.js", result.code)
-	console.log("main.js >> Before:"+"#{size}".cyan+" After:"+"#{result.code.length}".green+" Diff:"+"#{result.code.length-size}".magenta)
+	console.log("main.js >> Before:#{size} After:#{result.code.length} Diff:#{result.code.length-size}")
 	cb(null)
 compile_less=(cb)->
 	OPENCHILDREN=0
 	for file in LESSINFILES
 		OPENCHILDREN+=1
-		console.log(">lessc #{LESSINDIR}/#{file[0]} #{LESSOUTDIR}/#{file[1]}".yellow)
+		console.log(">lessc #{LESSINDIR}/#{file[0]} #{LESSOUTDIR}/#{file[1]}")
 		exec("lessc #{LESSINDIR}/#{file[0]} #{LESSOUTDIR}/#{file[1]}", (err, stdout, stderr)->
 			if stderr or err then console.log(err, stderr)
 			OPENCHILDREN-=1
@@ -71,18 +70,18 @@ compile_less=(cb)->
 		)
 compress_css=(cb)->
 	for file in LESSINFILES
-		# console.log("Compressing #{file[1]}".yellow)
+		# console.log("Compressing #{file[1]}")
 		tmp=fs.readFileSync("#{LESSOUTDIR}/#{file[1]}", 'utf8')
 		plength=tmp.length
 		tmp=uglifycss.processString(tmp, {uglyComments:true})
 		fs.writeFileSync("#{LESSOUTDIR}/#{file[1]}", tmp)
-		console.log("#{file[1]} >> Before:"+"#{plength}".cyan+" After:"+"#{tmp.length}".green+" Diff:"+"#{tmp.length-plength}".magenta)
+		console.log("#{file[1]} >> Before:#{plength} After:#{tmp.length} Diff:#{tmp.length-plength}")
 	cb(null)
 compile_sprites=(cb)->
 	OPENCHILDREN=0
 	for dir in fs.readdirSync(SPRITEINDIR)
 		OPENCHILDREN+=1
-		console.log(">glue #{SPRITEINDIR}/#{dir}/ --css=#{TMPDIR}/ --img=#{SPRITEIMGOUTDIR}/ --url=../img/sprites/ --ignore-filename-paddings".yellow)
+		console.log(">glue #{SPRITEINDIR}/#{dir}/ --css=#{TMPDIR}/ --img=#{SPRITEIMGOUTDIR}/ --url=../img/sprites/ --ignore-filename-paddings")
 		exec("glue #{SPRITEINDIR}/#{dir}/ --css=#{TMPDIR}/ --img=#{SPRITEIMGOUTDIR}/ --url=../img/sprites/ --ignore-filename-paddings", (err, stdout, stderr)->
 			if stderr or err then console.log(err, stderr)
 			OPENCHILDREN-=1
@@ -97,7 +96,7 @@ compress_sprites=(cb)->
 		fs.unlinkSync("#{TMPDIR}/#{file}")
 	ptmp=tmp.length
 	tmp=uglifycss.processString(tmp)
-	console.log("#{SPRITEOUTFILE} >> Before:"+"#{ptmp}".cyan+" After:"+"#{tmp.length}".green+" Diff:"+"#{tmp.length-ptmp}".magenta)
+	console.log("#{SPRITEOUTFILE} >> Before:#{ptmp} After:#{tmp.length} Diff:#{tmp.length-ptmp}")
 	fs.writeFileSync("#{SPRITECSSOUTDIR}/#{SPRITEOUTFILE}", tmp)
 	cb(null)
 clean_build=(cb)->
@@ -114,7 +113,7 @@ task('build', ->
 		compress_css
 		clean_build
 	], (err, results)->
-		console.log('Build Complete.'.green)
+		console.log('Build Complete.')
 	)
 )
 
@@ -130,15 +129,15 @@ task('all', ->
 		compress_sprites
 		clean_build
 	], (err, results)->
-		console.log('Build Complete.'.green)
+		console.log('Build Complete.')
 	)
 )
 
 task('clean', ->
 	for file in fs.readdirSync(LESSOUTDIR)
-		console.log("Deleting #{LESSOUTDIR}/#{file}".red)
+		console.log("Deleting #{LESSOUTDIR}/#{file}")
 		fs.unlinkSync("#{LESSOUTDIR}/#{file}")
 	for file in fs.readdirSync(SPRITEIMGOUTDIR)
-		console.log("Deleting #{SPRITEIMGOUTDIR}/#{file}".red)
+		console.log("Deleting #{SPRITEIMGOUTDIR}/#{file}")
 		fs.unlinkSync("#{SPRITEIMGOUTDIR}/#{file}")
 )

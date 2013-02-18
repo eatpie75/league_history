@@ -114,7 +114,7 @@
     },
     1057: {
       name: "Negatron Cloak",
-      description: "+45 Magic Resist"
+      description: "+40 Magic Resist"
     },
     1058: {
       name: "Needlessly Large Rod",
@@ -238,11 +238,11 @@
     },
     3024: {
       name: "Glacial Shroud",
-      description: "+300 Mana<br>+40 Armor<br>UNIQUE Passive: +15% Cooldown Reduction."
+      description: "+300 Mana<br>+45 Armor<br>UNIQUE Passive: +10% Cooldown Reduction."
     },
     3025: {
       name: "Iceborn Gauntlet",
-      description: "+40 Ability Power<br>+500 Mana<br>+60 Armor<br>+15% Cooldown Reduction<br>UNIQUE Passive: Spellblade: After using an ability, the next basic attack (on hit) deals bonus physical damage equal to 125% of base Attack Damage to enemies near the target, and creates a field around the target for 2 seconds that slows enemy Movement Speed by 30% (2 second cooldown)."
+      description: "+40 Ability Power<br>+500 Mana<br>+60 Armor<br>+10% Cooldown Reduction<br>UNIQUE Passive: Spellblade: After using an ability, the next basic attack (on hit) deals bonus physical damage equal to 125% of base Attack Damage to enemies near the target, and creates a field around the target for 2 seconds that slows enemy Movement Speed by 30% (2 second cooldown,  half-sized field if ranged)."
     },
     3026: {
       name: "Guardian Angel",
@@ -294,11 +294,11 @@
     },
     3050: {
       name: "Zeke's Herald",
-      description: "+250 Health<br>+15% Cooldown Reduction<br>UNIQUE Aura: Grants allied champions +10% Life Steal and +20 Attack Damage."
+      description: "+250 Health<br>+20% Cooldown Reduction<br>UNIQUE Aura: Grants allied champions +10% Life Steal and +20 Attack Damage."
     },
     3056: {
       name: "Ohmwrecker",
-      description: "+350 Health<br>+300 Mana<br>+55 Armor<br>UNIQUE Active: Prevents the closest enemy turret from attacking for 2.5 seconds (120 second cooldown). This effect cannot be used against the same turret more than once every 7.5 seconds."
+      description: "+350 Health<br>+50 Ability Power<br>+15 Health Regen per 5 seconds<br>+15 Mana Regen per 5 seconds<br>UNIQUE Active: Prevents nearby enemy turrets from attacking for 2.5 seconds (120 second cooldown). This effect cannot be used against the same turret more than once every 7.5 seconds."
     },
     3057: {
       name: "Sheen",
@@ -310,7 +310,7 @@
     },
     3065: {
       name: "Spirit Visage",
-      description: "+50 Magic Resist<br>+200 Health<br>+15% Cooldown Reduction<br>UNIQUE Passive: Increases self-healing, Health Regen, Lifesteal, and Spell Vamp effects by 20%."
+      description: "+50 Magic Resist<br>+200 Health<br>+10% Cooldown Reduction<br>UNIQUE Passive: Increases self-healing, Health Regen, Lifesteal, and Spell Vamp effects by 20%."
     },
     3067: {
       name: "Kindlegem",
@@ -322,7 +322,7 @@
     },
     3069: {
       name: "Shurelya's Reverie",
-      description: "+250 Health<br>+10 Health Regen per 5 seconds<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Active: Grants nearby allies +40% Movement Speed for 3 seconds (60 second cooldown)."
+      description: "+250 Health<br>+10 Health Regen per 5 seconds<br>+10 Mana Regen per 5 seconds<br>+10% Cooldown Reduction<br>UNIQUE Active: Grants nearby allies +40% Movement Speed for 3 seconds (60 second cooldown)."
     },
     3070: {
       name: "Tear of the Goddess",
@@ -378,7 +378,7 @@
     },
     3089: {
       name: "Rabadon's Deathcap",
-      description: "+120 Ability Power<br>UNIQUE Passive: Increases Ability Power by 25%."
+      description: "+120 Ability Power<br>UNIQUE Passive: Increases Ability Power by 30%."
     },
     3090: {
       name: "Wooglet's Witchcap",
@@ -386,7 +386,7 @@
     },
     3091: {
       name: "Wit's End",
-      description: "+40% Attack Speed<br>+20 Magic Resist<br>UNIQUE Passive: Basic attacks deal 42 bonus magic damage on hit.<br>UNIQUE Passive: Basic attacks grant +5 Magic Resist for 5 seconds on hit (stacks up to 4 times)."
+      description: "+40% Attack Speed<br>+25 Magic Resist<br>UNIQUE Passive: Basic attacks deal 42 bonus magic damage on hit.<br>UNIQUE Passive: Basic attacks grant +5 Magic Resist for 5 seconds on hit (stacks up to 4 times)."
     },
     3092: {
       name: "Shard of True Ice",
@@ -394,7 +394,7 @@
     },
     3093: {
       name: "Avarice Blade",
-      description: "+10% Critical Strike Chance<br>UNIQUE Passive: Avarice: +2 Gold per 10 seconds.<br>UNIQUE Passive: Greed: Grants 2 Gold upon killing a unit."
+      description: "+10% Critical Strike Chance<br>UNIQUE Passive: Avarice: +3 Gold per 10 seconds.<br>UNIQUE Passive: Greed: Grants 2 Gold upon killing a unit."
     },
     3096: {
       name: "Philosopher's Stone",
@@ -450,7 +450,7 @@
     },
     3110: {
       name: "Frozen Heart",
-      description: "+90 Armor<br>+400 Mana<br>+20% Cooldown Reduction<br>UNIQUE Aura: Reduces the Attack Speed of nearby enemies by 20%."
+      description: "+95 Armor<br>+400 Mana<br>+20% Cooldown Reduction<br>UNIQUE Aura: Reduces the Attack Speed of nearby enemies by 20%."
     },
     3111: {
       name: "Mercury's Treads",
@@ -478,7 +478,7 @@
     },
     3123: {
       name: "Executioner's Calling",
-      description: "+25 Attack Damage<br>+15% Critical Strike Chance<br>UNIQUE Passive: Basic attacks inflict Grievous Wounds on enemy champions for 1.5 seconds on hit."
+      description: "+25 Attack Damage<br>+20% Critical Strike Chance<br>UNIQUE Passive: Basic attacks inflict Grievous Wounds on enemy champions for 1.5 seconds on hit."
     },
     3124: {
       name: "Guinsoo's Rageblade",
@@ -490,7 +490,7 @@
     },
     3128: {
       name: "Deathfire Grasp",
-      description: "+120 Ability Power<br>+15% Cooldown Reduction<br>UNIQUE Active: Deals 15% of target champion's maximum Health in magic damage and increases all subsequent magic damage taken by the target by 20% for 4 seconds (60 second cooldown)."
+      description: "+120 Ability Power<br>+10% Cooldown Reduction<br>UNIQUE Active: Deals 15% of target champion's maximum Health in magic damage and increases all subsequent magic damage taken by the target by 20% for 4 seconds (60 second cooldown)."
     },
     3131: {
       name: "Sword of the Divine",
@@ -550,7 +550,7 @@
     },
     3151: {
       name: "Liandry's Torment",
-      description: "+60 Ability Power<br>+300 Health<br>UNIQUE Passive: Eyes of Pain: +15 Magic Penetration<br>UNIQUE Passive: Dealing spell damage deals bonus magic damage over 3 seconds (1.5 seconds for multi-target or damage-over-time effects) equal to 5% of the target's current Health (max 300 damage to monsters). If the target is slowed, stunned, taunted, feared, or immobilized, bonus damage is doubled."
+      description: "+50 Ability Power<br>+300 Health<br>UNIQUE Passive: Eyes of Pain: +15 Magic Penetration<br>UNIQUE Passive: Dealing spell damage applies a damage-over-time effect for 3 seconds that deals bonus magic damage equal to 2% of the target's current Health per second. This bonus damage is doubled against movement-impaired units and capped at 100 damage per second vs. monsters."
     },
     3152: {
       name: "Will of the Ancients",
@@ -558,7 +558,7 @@
     },
     3153: {
       name: "Blade of the Ruined King",
-      description: "+40 Attack Damage<br>+10% Life Steal<br>UNIQUE Passive: Basic attacks deal 4% of the target's current Health in bonus physical damage (max 120 vs. minions) and heals for half that amount on hit.<br>UNIQUE Active: Deals 150 (+50% of Attack Damage) physical damage to target champion, heals for the same amount, and steals 30% of the target's Movement Speed for 2 seconds (60 second cooldown)."
+      description: "+45 Attack Damage<br>+10% Life Steal<br>UNIQUE Passive: Basic attacks deal 5% of the target's current Health in bonus physical damage (max 120 vs. minions) and heals for half that amount on hit.<br>UNIQUE Active: Deals 150 (+50% of Attack Damage) physical damage to target champion, heals for the same amount, and steals 30% of the target's Movement Speed for 2 seconds (60 second cooldown)."
     },
     3154: {
       name: "Wriggle's Lantern",
@@ -603,11 +603,11 @@
     },
     3173: {
       name: "Eleisa's Miracle",
-      description: "+10 Health Regen per 5 seconds<br>+15 Mana Regen per 5 seconds<br>UNIQUE Passive: Aid: Heal, Revive, and Clairvoyance summoner spell cooldowns are reduced by 20%.<br>UNIQUE Passive - Eleisa's Blessing: Upon gaining 3 levels with this item, all effects of this item become permanent, and this item is consumed."
+      description: "+10 Health Regen per 5 seconds<br>+15 Mana Regen per 5 seconds<br>UNIQUE Passive: Aid: Heal, Clairvoyance and Clarity summoner spell cooldowns are reduced by 30%.<br>UNIQUE Passive: Eleisa's Blessing: Upon gaining 3 levels with this item, all effects of this item become permanent, and this item is consumed."
     },
     3174: {
       name: "Athene's Unholy Grail",
-      description: "+60 Ability Power<br>+40 Magic Resist<br>+15 Mana Regen per 5 seconds<br>UNIQUE Passive: 15% Cooldown Reduction.<br>UNIQUE Passive: Restores 12% of maximum Mana on kill or assist.<br>UNIQUE Passive: Mana Font: Increases Mana Regen by 1% for every 1% of missing Mana."
+      description: "+60 Ability Power<br>+40 Magic Resist<br>+15 Mana Regen per 5 seconds<br>UNIQUE Passive: 20% Cooldown Reduction.<br>UNIQUE Passive: Restores 12% of maximum Mana on kill or assist.<br>UNIQUE Passive: Mana Font: Increases Mana Regen by 1% for every 1% of missing Mana."
     },
     3175: {
       name: "Head of Kha'Zix",
@@ -679,7 +679,7 @@
     },
     3206: {
       name: "Spirit of the Spectral Wraith",
-      description: "+50 Ability Power<br>+10% Cooldown Reduction<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: +20% Spell Vamp.<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 25%."
+      description: "+50 Ability Power<br>+10% Cooldown Reduction<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: +20% Spell Vamp.<br>UNIQUE Passive: Reduces the cooldown of Smite by 20%.<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 25%."
     },
     3207: {
       name: "Spirit of the Ancient Golem",
