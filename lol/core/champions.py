@@ -103,6 +103,7 @@ CHAMPIONS={
 	122:"Darius",
 	126:"Jayce",
 	131:"Diana",
+	133:"Quinn",
 	134:"Syndra",
 	143:"Zyra",
 	238:"Zed",

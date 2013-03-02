@@ -280,7 +280,7 @@ items=
 		description:"+50 Armor<br>UNIQUE Passive: Cold Steel: When hit by basic attacks, reduces the attacker's Attack Speed by 20% for 2 seconds."
 	3083:
 		name:"Warmog's Armor"
-		description:"+1000 Health<br>UNIQUE Passive: Restores 1.5% of maxmium Health every 5 seconds."
+		description:"+1000 Health<br>UNIQUE Passive: Restores 1% of maxmium Health every 5 seconds."
 	3084:
 		name:"Overlord's Bloodmail"
 		description:"+850 Health<br>UNIQUE Passive: Upon champion kill or assist, restores 200 HP over 5 seconds."
@@ -415,13 +415,13 @@ items=
 		description:"+500 Health<br>+70 Armor<br>UNIQUE Passive: Cold Steel: When hit by basic attacks, reduces the attacker's Attack Speed by 20% and Movement Speed by 10% for 1.5 seconds.<br>UNIQUE Active: Slows the Movement Speed of nearby enemy units by 35% for 2 seconds (+1 second per 200 Armor and +1 second per 200 Magic Resist)(60 second cooldown)."
 	3144:
 		name:"Bilgewater Cutlass"
-		description:"+40 Attack Damage<br>+10% Life Steal<br>UNIQUE Active: Deals 150 magic damage and slows the target champion's Movement Speed by 30% for 2 seconds (60 second cooldown)."
+		description:"+25 Attack Damage<br>+12% Life Steal<br>UNIQUE Active: Deals 100 magic damage and slows the target champion's Movement Speed by 25% for 2 seconds (90 second cooldown)."
 	3145:
 		name:"Hextech Revolver"
 		description:"+40 Ability Power<br>UNIQUE Passive: +12% Spell Vamp."
 	3146:
 		name:"Hextech Gunblade"
-		description:"+45 Attack Damage<br>+65 Ability Power<br>+10% Life Steal<br>UNIQUE Passive: +20% Spell Vamp.<br>UNIQUE Passive: Basic attacks (on hit) and single-target spells against champions reduce the cooldown of this item by 3 seconds.<br>UNIQUE Active: Deals 150 (+40% of Ability Power) magic damage and slows the target champion's Movement Speed by 40% for 2 seconds (60 second cooldown)."
+		description:"+45 Attack Damage<br>+65 Ability Power<br>+12% Life Steal<br>UNIQUE Passive: +20% Spell Vamp.<br>UNIQUE Passive: Basic attacks (on hit) and single-target spells against champions reduce the cooldown of this item by 3 seconds.<br>UNIQUE Active: Deals 150 (+40% of Ability Power) magic damage and slows the target champion's Movement Speed by 40% for 2 seconds (60 second cooldown)."
 	3151:
 		name:"Liandry's Torment"
 		description:"+50 Ability Power<br>+300 Health<br>UNIQUE Passive: Eyes of Pain: +15 Magic Penetration<br>UNIQUE Passive: Dealing spell damage applies a damage-over-time effect for 3 seconds that deals bonus magic damage equal to 2% of the target's current Health per second. This bonus damage is doubled against movement-impaired units and capped at 100 damage per second vs. monsters."
@@ -430,7 +430,7 @@ items=
 		description:"+50 Ability Power<br>UNIQUE Aura: Grants nearby allied champions +30 Ability Power and +20% Spell Vamp."
 	3153:
 		name:"Blade of the Ruined King"
-		description:"+45 Attack Damage<br>+10% Life Steal<br>UNIQUE Passive: Basic attacks deal 5% of the target's current Health in bonus physical damage (max 120 vs. minions) and heals for half that amount on hit.<br>UNIQUE Active: Deals 150 (+50% of Attack Damage) physical damage to target champion, heals for the same amount, and steals 30% of the target's Movement Speed for 2 seconds (60 second cooldown)."
+		description:"+30 Attack Damage<br>+40% Attack Speed<br>+15% Life Steal<br>UNIQUE Passive: Basic attacks deal 5% of the target's current Health in bonus physical damage (max 90 vs. monsters and minions) on hit.<br>UNIQUE Active: Deals 15% of target champion's maximum Health (min. 100) as physical damage, heals for the same amount, and steals 30% of the target's Movement Speed for 4 seconds (60 second cooldown)."
 	3154:
 		name:"Wriggle's Lantern"
 		description:"+15 Attack Damage<br>+30 Armor<br>+10% Life Steal<br>UNIQUE Passive: Maim: Basic attacks against minions and monsters have a 25% chance to deal 500 additional magic damage on hit.<br>UNIQUE Active: Places an invisible Sight Ward that reveals the surrounding area for 3 minutes (3 minute cooldown)."
@@ -528,7 +528,7 @@ items=
 		description:"+500 Health<br>+30 Armor<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 25%.<br>UNIQUE Passive: Tenacity: Reduces the duration of stuns, slows, taunts, fears, silences, blinds, and immobilizes by 35%."
 	3209:
 		name:"Spirit of the Elder Lizard"
-		description:"+50 Attack Damage<br>+10% Cooldown Reduction<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 25%.<br>UNIQUE Passive: Basic attacks and spells that do not inflict damage-over-time deal 15-66 (based on level) bonus true damage over 3 seconds on hit."
+		description:"+50 Attack Damage<br>+10% Cooldown Reduction<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 25%.<br>UNIQUE Passive: Basic attacks and spells that do not inflict damage-over-time deal 14-50 (based on level) bonus true damage over 3 seconds on hit."
 	3222:
 		name:"Mikael's Crucible"
 		description:"+300 Mana<br>+40 Magic Resist<br>+9 Mana Regen per 5 seconds<br>UNIQUE Passive: Mana Font: Increases Mana Regen by 1% for every 1% of missing Mana.<br>UNIQUE Active: Removes all stuns, roots, taunts, fears, silences, and slows on an allied champion and heals that champion for 150 (+15% of missing Health)(180 second cooldown)."
