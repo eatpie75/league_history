@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta
 from django.core.cache import cache
 from django.db import models, transaction
-from django.template.defaultfilters import slugify
+from django.utils.text import slugify
+from lol.core.servers import prepare_servers, REGIONS
 from pytz import timezone
 from time import sleep
 import requests
@@ -11,11 +12,12 @@ MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5
 MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Aram'), (4, 'Twisted Treeline'), (9, '?'))
 #{'queue', 'mode', 'map'}
 GAME_TYPES={'rankedpremade5x5':(4,1), 'rankedteam5x5':(5,1), 'rankedpremade3x3':(4,4), 'rankedteam3x3':(5,4), 'unranked':(2,1), 'odinunranked':(2,2), 'rankedsolo5x5':(3,1), 'coopvsai':(1,1), 'oldrankedpremade3x3':(4,0), 'oldrankedteam3x3':(5,0)}
-RANKED_SOLO_QUEUE_TYPES={'rankedpremade5x5':(4,1), 'rankedpremade3x3':(4,4), 'rankedsolo5x5':(3,1)}
+RANKED_SOLO_QUEUE_TYPES={'rankedpremade5x5':(5,1), 'rankedpremade3x3':(5,4), 'rankedsolo5x5':(3,1)}
 RANKED_GAME_TYPES=((4,1), (5,1), (4,4), (5,4), (3,1))
 TIERS=((1, 'BRONZE'), (2, 'SILVER'), (3, 'GOLD'), (4, 'PLATINUM'), (5, 'DIAMOND'), (6, 'CHALLENGER'))
 DIVISIONS=((1, 'I'), (2, 'II'), (3, 'III'), (4, 'IV'), (5, 'V'))
-REGIONS=((0, 'NA'), (1, 'EUW'), (2, 'EUNE'), (3, 'BR'))
+
+prepare_servers()
 
 
 class Summoner(models.Model):
@@ -72,25 +74,28 @@ class Summoner(models.Model):
 			rating.save()
 		return rating
 
-	def _needs_update(self):
+	@property
+	def needs_update(self):
 		if self.time_updated<(datetime.now(timezone('UTC'))-timedelta(hours=1)):
 			updating=cache.get('summoner/{}/{}/updating'.format(self.region, self.account_id))
-			if updating!=None:
+			if updating is not None:
 				return updating
 			else:
 				return True
 		else:
 			return False
-	needs_update=property(_needs_update)
 
-	def _slug(self):
+	@property
+	def slug(self):
 		return slugify(self.name) if len(slugify(self.name))>0 else '-'
-	slug=property(_slug)
 
 	def __unicode__(self):
 		return self.name
 
 	class Meta:
+		index_together=[
+			("region", "account_id"),
+		]
 		unique_together=(("region", "account_id"))
 
 
@@ -134,6 +139,9 @@ class SummonerRating(models.Model):
 	miniseries_losses=models.IntegerField(default=0)
 
 	class Meta:
+		index_together=[
+			("summoner", "game_map", "game_mode")
+		]
 		unique_together=(("summoner", "game_map", "game_mode"))
 
 
@@ -142,7 +150,7 @@ class Game(models.Model):
 	game_id=models.IntegerField()
 	game_map=models.IntegerField(choices=MAPS, db_index=True)
 	game_mode=models.IntegerField(choices=MODES, db_index=True)
-	time=models.DateTimeField()
+	time=models.DateTimeField(db_index=True)
 	blue_team_won=models.BooleanField()
 	invalid=models.BooleanField(default=False)
 	unfetched_players=models.CharField(max_length=128, blank=True)
@@ -160,6 +168,10 @@ class Game(models.Model):
 
 	class Meta:
 		ordering=['-time',]
+		index_together=[
+			("game_map", "game_mode"),
+			("game_id", "region")
+		]
 		unique_together=(("region", "game_id"))
 
 
@@ -220,9 +232,31 @@ class Player(models.Model):
 	combat_player_score=models.IntegerField(null=True, blank=True)
 	total_score_rank=models.IntegerField(null=True, blank=True)
 
-	def _get_items(self):
+	@property
+	def get_items(self):
 		return self.items.split('|')[1:-1]
-	get_items=property(_get_items)
+
+	@property
+	def length(self):
+		ip=self.ip_earned if self.ip_earned<145 else self.ip_earned-150
+		if self.game.game_mode not in (2, 3, 4, 5): return 0
+		if self.game.game_map in (1,4):
+			base=18.193 if self.won else 15.401
+			mingain=2.312 if self.won else 1.43
+			max_length=55
+		elif self.game.game_map==2:
+			base=20 if self.won else 12
+			mingain=2 if self.won else 1
+			max_length=55
+		result=round((ip-base)/mingain)
+		return result if result<=max_length else max_length
+
+	@models.permalink
+	def get_absolute_url(self):
+		return ('view_game', (), {
+			'region':self.game.get_region_display(),
+			'game_id':self.game.game_id,
+		})
 
 	def __unicode__(self):
 		return unicode(self.summoner.name)

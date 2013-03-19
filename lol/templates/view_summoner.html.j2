@@ -84,7 +84,7 @@
 									{%- endfor %}
 								</td>
 								<td>{{player.game.time|date('M d')}}
-								<td><a href='{{player.game.get_absolute_url()}}'>&raquo;</a>{% if (player.game.game_mode, player.game.game_map) in GAME_TYPES.RANKED_GAME_TYPES %}<i class='icon-ok'></i>{% endif %}</td>
+								<td><a href='{{player.game.get_absolute_url()}}'>&raquo;</a>{% if (player.game.game_mode, player.game.game_map) in GAME_TYPES.RANKED_GAME_TYPES %}<i class='icon-ok' title='Ranked'></i>{% endif %}</td>
 							</tr>{% endfor %}
 						</tbody>
 					</table>

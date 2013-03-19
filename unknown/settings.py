@@ -1,7 +1,6 @@
-# Django settings for unknown project.
+from datetime import timedelta
 import os.path
 import djcelery
-from datetime import timedelta
 
 djcelery.setup_loader()
 
@@ -18,12 +17,16 @@ MANAGERS = ADMINS
 
 DATABASES = {
 	'default': {
-		'ENGINE':	'django.db.backends.postgresql_psycopg2',
+		'ENGINE':	'django_postgrespool',
 		'HOST':		'localhost',
 		'NAME':		'lol',
 		'USER':		'django',
 		'PASSWORD':	'ohsocool'
 	}
+}
+
+SOUTH_DATABASE_ADAPTERS = {
+	'default': 'south.db.postgresql_psycopg2'
 }
 
 CACHES = {
@@ -55,6 +58,10 @@ CELERYBEAT_SCHEDULE = {
 		"schedule": timedelta(minutes=2),
 	},
 }
+
+# Hosts/domain names that are valid for this site; required if DEBUG is False
+# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
+ALLOWED_HOSTS = []
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -113,7 +120,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
 	'django.contrib.staticfiles.finders.FileSystemFinder',
 	'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+	# 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.

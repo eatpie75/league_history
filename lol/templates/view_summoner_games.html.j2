@@ -58,44 +58,7 @@
 			</div>
 			<div class='row span12' id='games'>
 				<div style='height:406px;'>
-					<table class='game-list table table-condensed' style='min-height:406px;'>
-						<thead>
-							<tr>
-								<th style='width:40px;'></th>
-								<th style='width:50px'>K/D/A</th>
-								<th style='width:50px'>Gold</th>
-								<th style='width:50px'>CS</th>
-								<th style='width:50px'>Dealt</th>
-								<th style='width:50px'>Taken</th>
-								<th style='width:85px;'>Spells</th>
-								<th style='width:215px;'>Items</th>
-								<th style='width:60px;'>Map</th>
-								<th style='width:50px;'>Date</th>
-								<th style='width:130px;'></th>
-							</tr>
-						</thead>
-						<tbody>
-							{%- for player in games %}
-							<tr class='{% if player.won %}good{% else %}bad{% endif %}'>
-								<td class='champion'>{{sprites.champion(player.champion_id)}}<small>{{player.champion_level}}</small></td>
-								<td>{{player.kills}}/{{player.deaths}}/{{player.assists}}</td>
-								<td>{{player.gold|to_k_format}}</td>
-								<td>{{player.minion_kills+player.neutral_minions_killed}}</td>
-								<td>{{player.damage_dealt|to_k_format}}</td>
-								<td>{{player.damage_taken|to_k_format}}</td>
-								<td>{{sprites.summoner(player.summoner_spell1, style='margin-right:4px;')}}{{sprites.summoner(player.summoner_spell2)}}</td>
-								<td>
-									{%- for item in player.get_items %}
-									{{sprites.item(item)}}
-									{%- endfor %}
-								</td>
-								<td><img src='{{STATIC_URL}}img/maps/{{player.game.game_map}}.png'></td>
-								<td>{{player.game.time|date('M d')}}</td>
-								<td><a href='{{player.game.get_absolute_url()}}'>View</a>{% if (player.game.game_mode, player.game.game_map) in GAME_TYPES.RANKED_GAME_TYPES %}<i class='icon-ok'></i>{% endif %}</td>
-							</tr>
-							{%- endfor %}
-						</tbody>
-					</table>
+					{% include 'macros/game_list_extended.html.j2' with context %}
 				</div>
 				{% from 'macros/paginator.html.j2' import summoner_games %}{{summoner_games(games)}}
 			</div>

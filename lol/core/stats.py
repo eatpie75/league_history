@@ -63,17 +63,17 @@ class Stats:
 				self.games=Queryset_Manager(self.qs)
 
 		def __repr__(self):
-			if self.champion!=None:
+			if self.champion is not None:
 				return '<Stats for champion {}>'.format(self.champion)
-			elif self.summoner_name!=None:
+			elif self.summoner_name is not None:
 				return '<Stats for {}>'.format(self.summoner_name.encode('utf8', 'replace'))
 			else:
 				return '<Stats class>'
 
 		def __str__(self):
-			if self.champion!=None:
+			if self.champion is not None:
 				return '<Stats for champion {}>'.format(self.champion)
-			elif self.summoner_name!=None:
+			elif self.summoner_name is not None:
 				return '<Stats for {}>'.format(self.summoner_name.encode('utf8', 'replace'))
 			else:
 				return '<Stats class>'
@@ -222,13 +222,13 @@ class Stats:
 				else:
 					return -100
 			if not self.indexed: self.__index()
-			if minimum==None:
+			if minimum is None:
 				minimum=round(self.count*0.04)
 			return sorted(self.index['champions'].iteritems(), key=bsort, reverse=True)
 
 		def items_most_used(self, champion_id=None):
 			if not self.items_indexed: self.__index()
-			if champion_id==None: champion_id=self.champion
+			if champion_id is None: champion_id=self.champion
 			return sorted(self.index['champions'][champion_id]['items'].iteritems(), key=lambda g:g[1]['count'], reverse=True)
 
 		def items_best_ratio(self, champion_id=None, minimum=None):
@@ -238,8 +238,8 @@ class Stats:
 				else:
 					return -100
 			if not self.items_indexed: self.__index()
-			if champion_id==None: champion_id=self.champion
-			if minimum==None:
+			if champion_id is None: champion_id=self.champion
+			if minimum is None:
 				minimum=round(self.index['champions'][champion_id]['count']*0.05)
 			return sorted(self.index['champions'][champion_id]['items'].iteritems(), key=bsort, reverse=True)
 

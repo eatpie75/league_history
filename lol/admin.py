@@ -18,14 +18,20 @@ class PlayerForm(forms.ModelForm):
 
 class PlayerAdmin(admin.ModelAdmin):
 	#list_filter=('summoner',)
-	list_display=('summoner',)
+	list_display=('summoner', 'game_link')
 	list_filter=('summoner__update_automatically', 'game__fetched', 'game__game_map', 'game__game_mode')
+	list_per_page=25
 	search_fields=('game__game_id',)
 	form=PlayerForm
 
+	def game_link(self, obj):
+		return "<a href='{}'>Link</a>".format(obj.get_absolute_url())
+	game_link.short_description='Link'
+	game_link.allow_tags=True
+
 
 class SummonerAdmin(admin.ModelAdmin):
-	list_display=('name', 'level', 'time_updated', 'profile_icon', 'update_automatically', 'fully_update')
+	list_display=('name', 'level', 'time_updated', 'profile_icon', 'update_automatically', 'fully_update', 'summoner_link')
 	list_editable=('update_automatically', 'fully_update')
 	list_filter=('region', 'update_automatically')
 	search_fields=('summoner_id', 'account_id', 'name')
@@ -42,9 +48,14 @@ class SummonerAdmin(admin.ModelAdmin):
 		self.message_user(request, '{} added to the update queue.'.format(message))
 	force_update.short_description='Add selected summoners to update queue'
 
+	def summoner_link(self, obj):
+		return "<a href='{}'>Link</a>".format(obj.get_absolute_url())
+	summoner_link.short_description='Link'
+	summoner_link.allow_tags=True
+
 
 class GameAdmin(admin.ModelAdmin):
-	list_display=('time', 'game_id', 'game_map', 'game_mode', 'fetched')
+	list_display=('time', 'game_id', 'game_map', 'game_mode', 'fetched', 'game_link')
 	list_editable=('fetched',)
 	list_filter=('region', 'game_map', 'game_mode', 'fetched')
 	search_fields=('game_id', 'unfetched_players')
@@ -61,6 +72,11 @@ class GameAdmin(admin.ModelAdmin):
 		self.message_user(request, '{} added to the fill queue.'.format(message))
 	force_fill.short_description='Add selected games to fill queue'
 
+	def game_link(self, obj):
+		return "<a href='{}'>Link</a>".format(obj.get_absolute_url())
+	game_link.short_description='Link'
+	game_link.allow_tags=True
+
 
 class SummonerRatingForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
@@ -73,6 +89,12 @@ class SummonerRatingForm(forms.ModelForm):
 
 
 class SummonerRatingAdmin(admin.ModelAdmin):
+	list_display=('summoner', 'game_map', 'game_mode', 'tier', 'division', 'wins', 'losses', 'update_automatically', 'fully_update')
+	# list_editable=('summoner__update_automatically', 'summoner__fully_update')
+	list_filter=('summoner__region', 'game_map', 'game_mode', 'tier')
+	search_fields=('summoner__name',)
+	form=SummonerRatingForm
+
 	def update_automatically(self, obj):
 		return obj.summoner.update_automatically
 	update_automatically.short_description='Auto Update'
@@ -81,11 +103,10 @@ class SummonerRatingAdmin(admin.ModelAdmin):
 		return obj.summoner.fully_update
 	fully_update.short_description='Auto Fill'
 
-	list_display=('summoner', 'game_map', 'game_mode', 'tier', 'division', 'wins', 'losses', 'update_automatically', 'fully_update')
-	# list_editable=('summoner__update_automatically', 'summoner__fully_update')
-	list_filter=('summoner__region', 'game_map', 'game_mode', 'tier')
-	search_fields=('summoner__name',)
-	form=SummonerRatingForm
+	def summoner_link(self, obj):
+		return "<a href='{}'>Link</a>".format(obj.get_absolute_url())
+	summoner_link.short_description='Link'
+	summoner_link.allow_tags=True
 
 
 admin.site.register(Player, PlayerAdmin)

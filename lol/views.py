@@ -6,12 +6,12 @@ from django.core.cache import cache
 # from django.views.decorators.cache import cache_page
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
-# from django.db.models import Avg
 from django.http import HttpResponseRedirect
 from coffin.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.defaultfilters import slugify
-from models import Summoner, Game, Player, get_data, create_summoner, REGIONS
+from lol.core.servers import REGIONS
+from lol.models import Summoner, Game, Player, get_data, create_summoner
 from pytz import timezone
 from tasks import summoner_auto_task, fill_game, generate_global_stats, test_fill, check_servers  # , spectate_check
 
@@ -50,14 +50,14 @@ def game_list(request):
 	if 'auto' in request.GET:
 		a=Summoner.objects.filter(update_automatically=True)
 		b=Player.objects.filter(summoner__in=a, game__fetched=False)
-		games=Game.objects.filter(id__in=b.values('game_id'))[:50]
-		players=Player.objects.filter(game__in=games).select_related('summoner__name', 'summoner__account_id', 'summoner__region', 'summoner__update_automatically')
+		games=Game.objects.filter(id__in=b.only('game_id').values('game_id'))[:50]
+		players=Player.objects.filter(game__in=games).only('game', 'summoner').select_related('summoner__name', 'summoner__account_id', 'summoner__region', 'summoner__update_automatically', 'game__pk')
 	else:
 		games=Game.objects.all()
 		if 'game_map' in request.GET:
 			games=games.filter(game_map=request.GET['game_map'])
 		games=games[:150]
-		players=Player.objects.filter(game__in=games).select_related('summoner__name', 'summoner__account_id', 'summoner__region', 'summoner__update_automatically')
+		players=Player.objects.filter(game__in=games).only('game', 'summoner').select_related('summoner__name', 'summoner__account_id', 'summoner__region', 'summoner__update_automatically', 'game__pk')
 	return render_to_response('game_list.html.j2', {'games':games, 'players':players}, RequestContext(request))
 
 
@@ -65,12 +65,12 @@ def game_list(request):
 def view_game(request, region, game_id):
 	region=__get_region(region)
 	game=Game.objects.get(game_id=game_id, region=region)
-	modes=('CUSTOM', 'BOT', 'UNRANKED', 'RANKED', 'RANKED TEAM', 'RANKED PREMADE', 'ARAM')
-	metadata={'map':game.get_game_map_display(), 'mode':modes[game.game_mode], 'ranked':True if game.game_mode in (3,4,5) else False, 'invalid':game.invalid}
+	modes=('CUSTOM', 'BOT', 'UNRANKED', 'RANKED', 'RANKED TEAM', 'RANKED TEAM', 'ARAM')
+	metadata={'map':game.get_game_map_display(), 'mode':modes[game.game_mode], 'ranked':True if game.game_mode in (3,4,5) else False, 'invalid':game.invalid, 'length':-1}
 	update_in_queue=False
-	if game.fetched==False:
+	if game.fetched is False:
 		updating=cache.get('game/{}/{}/filling'.format(game.region, game.game_id))
-		if updating!=None:
+		if updating is not None:
 			updating=fill_game.AsyncResult(updating)
 			if updating.state=='PROGRESS':
 				update_in_queue='{:.0%} DONE'.format(float(updating.result['current'])/float(updating.result['total']))
@@ -126,6 +126,8 @@ def view_game(request, region, game_id):
 		metadata['stats'][team]['sw_bought']+=player.sight_wards_bought_in_game
 		metadata['stats'][team]['vw_bought']+=player.vision_wards_bought_in_game
 		metadata['stats'][team]['tw_bought']+=player.sight_wards_bought_in_game+player.vision_wards_bought_in_game
+		if player.won and metadata['length']==-1:
+			metadata['length']=player.length
 	# 	if game.game_mode in (3, 4, 5) and player.rating>0:
 	# 		metadata['stats'][team]['total_elo']+=player.rating
 	# 		metadata['stats'][team]['avg_elo']=round(metadata['stats'][team]['total_elo']/metadata['stats'][team]['num_players'], 1)
@@ -140,10 +142,10 @@ def view_summoner(request, region, account_id, slug):
 	region=__get_region(sregion)
 	summoner=Summoner.objects.get(account_id=account_id, region=region)
 	needs_update=summoner.needs_update
-	if needs_update==True:
+	if needs_update is True:
 		summoner_auto_task.apply_async(args=[summoner.pk,], ignore_result=True, priority=0)
 		update_in_queue='UPDATE IN QUEUE.'
-	elif needs_update!=False:
+	elif needs_update is not False:
 		task=summoner_auto_task.AsyncResult(needs_update)
 		if task.state=='PENDING':
 			return 'UPDATE IN QUEUE.'
@@ -158,7 +160,7 @@ def view_summoner(request, region, account_id, slug):
 	rating=summoner.get_rating()
 	games=Player.objects.filter(summoner=summoner).select_related('game')
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
-	if stats==None:
+	if stats is None:
 		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
@@ -180,7 +182,7 @@ def view_summoner_games(request, region, account_id, slug):
 	rating=summoner.get_rating()
 	games=Player.objects.filter(summoner=summoner).select_related('game')
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
-	if stats==None:
+	if stats is None:
 		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
@@ -311,9 +313,9 @@ def view_champion_items(request, champion_id, champion_slug):
 		games=games.filter(game__game_mode=form.cleaned_data['game_mode'])
 	else: key+='/-1'
 	stats=cache.get(key)
-	if stats==None:
+	if stats is None:
 		generating=True
-		if cache.get(key+'/generating')==None:
+		if cache.get(key+'/generating') is None:
 			cache.set(key+'/generating', True, 60*10)
 			generate_global_stats.delay(key, games.query, champion=champion_id, champion_history=True, index_items=True)
 	else:
@@ -349,7 +351,7 @@ def client_status(request):
 		cache.set('queue_len', 0)
 		return HttpResponseRedirect('/admin/status/')
 	server_list=cache.get('servers')
-	unfetched_games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.utcnow().replace(tzinfo=timezone('UTC'))-timedelta(days=2))).distinct('game').count()
+	unfetched_games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.utcnow().replace(tzinfo=timezone('UTC'))-timedelta(days=2))).distinct('game').only('pk').count()
 	queue_len=cache.get('queue_len')
 	return render_to_response('client_status.html.j2', {'status':server_list.servers, 'unfetched_games':unfetched_games, 'queue_len':queue_len}, RequestContext(request))
 

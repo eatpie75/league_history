@@ -106,6 +106,7 @@ champions=
 	133:"Quinn"
 	134:"Syndra"
 	143:"Zyra"
+	154:"Zac"
 	238:"Zed"
 	254:"Vi"
 	267:"Nami"

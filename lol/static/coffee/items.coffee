@@ -193,7 +193,7 @@ items=
 		description:"+300 Mana<br>+45 Armor<br>UNIQUE Passive: +10% Cooldown Reduction."
 	3025:
 		name:"Iceborn Gauntlet"
-		description:"+40 Ability Power<br>+500 Mana<br>+60 Armor<br>+10% Cooldown Reduction<br>UNIQUE Passive: Spellblade: After using an ability, the next basic attack (on hit) deals bonus physical damage equal to 125% of base Attack Damage to enemies near the target, and creates a field around the target for 2 seconds that slows enemy Movement Speed by 30% (2 second cooldown,  half-sized field if ranged)."
+		description:"+30 Ability Power<br>+500 Mana<br>+70 Armor<br>+10% Cooldown Reduction<br>UNIQUE Passive: Spellblade: After using an ability, the next basic attack (on hit) deals bonus physical damage equal to 125% of base Attack Damage to enemies near the target, and creates a field around the target for 2 seconds that slows enemy Movement Speed by 30% (2 second cooldown,  half-sized field if ranged)."
 	3026:
 		name:"Guardian Angel"
 		description:"+50 Armor<br>+30 Magic Resist<br>UNIQUE Passive: Revives champion upon death, restoring 30% of maximum Health and Mana (5 minute cooldown)."
@@ -265,7 +265,7 @@ items=
 		description:"+70 Attack Damage<br>+12% Life Steal<br>Passive: Grants +1 Attack Damage and +0.2% Life Steal per stack (max +30 Attack Damage and +6% Life Steal). Grants 1 stack per unit kill (max 30 stacks). Half of the stacks are lost upon death."
 	3074:
 		name:"Ravenous Hydra"
-		description:"+75 Attack Damage<br>+15 Health Regen per 5 seconds<br>+10% Life Steal<br>Passive: Life Steal applies to damage dealt by this item.<br>UNIQUE Passive: Cleave: Basic attacks deal 20% to 60% of total Attack Damage as bonus physical damage to enemies near the target on hit (enemies closest to the target take the most damage).<br>UNIQUE Active: Crescent: Deals 60% to 100% of total Attack Damage as physical damage to nearby enemy units (closest enemies take the most damage)(10 second cooldown)."
+		description:"+75 Attack Damage<br>+15 Health Regen per 5 seconds<br>+12% Life Steal<br>Passive: Life Steal applies to damage dealt by this item.<br>UNIQUE Passive: Cleave: Basic attacks deal 20% to 60% of total Attack Damage as bonus physical damage to enemies near the target on hit (enemies closest to the target take the most damage).<br>UNIQUE Active: Crescent: Deals 60% to 100% of total Attack Damage as physical damage to nearby enemy units (closest enemies take the most damage)(10 second cooldown)."
 	3075:
 		name:"Thornmail"
 		description:"+100 Armor<br>UNIQUE Passive: Upon being hit by a basic attack, returns 30% of the incoming damage (before being reduced by defenses) to the attacker as magic damage."
@@ -277,7 +277,7 @@ items=
 		description:"+30 Attack Damage<br>+30 Ability Power<br>+30% Attack Speed<br>+10% Critical Strike Chance<br>+8% Movement Speed<br>+250 Health<br>+200 Mana<br>UNIQUE Passive: Icy: Basic attacks have a 25% chance to slow target's Movement Speed for 2 seconds on hit (30% slow for melee attacks, 20% slow for ranged attacks).<br>UNIQUE Passive: Spellblade: After using an ability, the next basic attack deals bonus physical damage equal to 150% of base Attack Damage on hit (2 second cooldown)."
 	3082:
 		name:"Warden's Mail"
-		description:"+50 Armor<br>UNIQUE Passive: Cold Steel: When hit by basic attacks, reduces the attacker's Attack Speed by 20% for 2 seconds."
+		description:"+50 Armor<br>UNIQUE Passive: Cold Steel: When hit by basic attacks, reduces the attacker's Attack Speed by 15% for 2 seconds."
 	3083:
 		name:"Warmog's Armor"
 		description:"+1000 Health<br>UNIQUE Passive: Restores 1% of maxmium Health every 5 seconds."
@@ -340,7 +340,7 @@ items=
 		description:"+25 Armor<br>UNIQUE Passive: Maim: Basic attacks against minions and monsters have a 25% chance to deal 300 bonus magic damage on hit.<br>UNIQUE Passive: Rend: Basic attacks deal 10 bonus true damage to monsters on hit."
 	3107:
 		name:"Runic Bulwark"
-		description:"+400 Health<br>+20 Armor<br>+30 Magic Resist<br>UNIQUE Aura: Legion: Grants nearby allies +10 Armor, +30 Magic Resist, and +10 Health Regen per 5 seconds."
+		description:"+300 Health<br>+20 Armor<br>+30 Magic Resist<br>UNIQUE Aura: Legion: Grants nearby allies +10 Armor, +25 Magic Resist, and +10 Health Regen per 5 seconds."
 	3108:
 		name:"Fiendish Codex"
 		description:"+30 Ability Power<br>UNIQUE Passive: +10% Cooldown Reduction."
@@ -412,7 +412,7 @@ items=
 		description:"+30 Attack Damage<br>+15% Critical Strike Chance<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +20 Armor Penetration.<br>UNIQUE Active: Grants +20% Movement Speed and +40% Attack Speed (lasts 6 seconds for melee champions, 4 seconds for ranged champions)(45 second cooldown)."
 	3143:
 		name:"Randuin's Omen"
-		description:"+500 Health<br>+70 Armor<br>UNIQUE Passive: Cold Steel: When hit by basic attacks, reduces the attacker's Attack Speed by 20% and Movement Speed by 10% for 1.5 seconds.<br>UNIQUE Active: Slows the Movement Speed of nearby enemy units by 35% for 2 seconds (+1 second per 200 Armor and +1 second per 200 Magic Resist)(60 second cooldown)."
+		description:"+500 Health<br>+70 Armor<br>UNIQUE Passive: Cold Steel: When hit by basic attacks, reduces the attacker's Attack Speed by 15% and Movement Speed by 10% for 1.5 seconds.<br>UNIQUE Active: Slows the Movement Speed of nearby enemy units by 35% for 2 seconds (+1 second per 200 Armor and +1 second per 200 Magic Resist)(60 second cooldown)."
 	3144:
 		name:"Bilgewater Cutlass"
 		description:"+25 Attack Damage<br>+12% Life Steal<br>UNIQUE Active: Deals 100 magic damage and slows the target champion's Movement Speed by 25% for 2 seconds (90 second cooldown)."
@@ -430,7 +430,7 @@ items=
 		description:"+50 Ability Power<br>UNIQUE Aura: Grants nearby allied champions +30 Ability Power and +20% Spell Vamp."
 	3153:
 		name:"Blade of the Ruined King"
-		description:"+30 Attack Damage<br>+40% Attack Speed<br>+15% Life Steal<br>UNIQUE Passive: Basic attacks deal 5% of the target's current Health in bonus physical damage (max 90 vs. monsters and minions) on hit.<br>UNIQUE Active: Deals 15% of target champion's maximum Health (min. 100) as physical damage, heals for the same amount, and steals 30% of the target's Movement Speed for 4 seconds (60 second cooldown)."
+		description:"+25 Attack Damage<br>+40% Attack Speed<br>+15% Life Steal<br>UNIQUE Passive: Basic attacks deal 5% of the target's current Health in bonus physical damage (max 60 vs. monsters and minions) on hit.<br>UNIQUE Active: Deals 15% of target champion's maximum Health (min. 100) as physical damage, heals for the same amount, and steals 30% of the target's Movement Speed for 4 seconds (60 second cooldown)."
 	3154:
 		name:"Wriggle's Lantern"
 		description:"+15 Attack Damage<br>+30 Armor<br>+10% Life Steal<br>UNIQUE Passive: Maim: Basic attacks against minions and monsters have a 25% chance to deal 500 additional magic damage on hit.<br>UNIQUE Active: Places an invisible Sight Ward that reveals the surrounding area for 3 minutes (3 minute cooldown)."
@@ -462,7 +462,7 @@ items=
 	3171:__rengar_trophy
 	3172:
 		name:"Zephyr"
-		description:"+20 Attack Damage<br>+50% Attack Speed<br>+10% Movement Speed<br>+10% Cooldown Reduction<br>UNIQUE Passive: Tenacity: Reduces the duration of stuns, slows, taunts, fears, silences, blinds, and immobilizes by 35%."
+		description:"+25 Attack Damage<br>+50% Attack Speed<br>+10% Movement Speed<br>+10% Cooldown Reduction<br>UNIQUE Passive: Tenacity: Reduces the duration of stuns, slows, taunts, fears, silences, blinds, and immobilizes by 35%."
 	3173:
 		name:"Eleisa's Miracle"
 		description:"+10 Health Regen per 5 seconds<br>+15 Mana Regen per 5 seconds<br>UNIQUE Passive: Aid: Heal, Clairvoyance and Clarity summoner spell cooldowns are reduced by 30%.<br>UNIQUE Passive: Eleisa's Blessing: Upon gaining 3 levels with this item, all effects of this item become permanent, and this item is consumed."
@@ -504,10 +504,10 @@ items=
 		description:"+80 Ability Power<br>+250 Health<br>+10 Mana Regeneration<br>UNIQUE Passive: +20% Cooldown Reduction.<br>UNIQUE Passive: Eyes of Pain: +15 Magic Penetration.<br>UNIQUE Passive: Dealing spell damage deals bonus magic damage over 2 seconds equal to 3.5% of the target's maximum Health. Each second burned consumes a charge. Up to 18 charges are generated when not in use."
 	3190:
 		name:"Locket of the Iron Solari"
-		description:"+425 Health<br>+35 Armor<br>+15% Cooldown Reduction<br>+10 Health Regen per 5 seconds<br>UNIQUE Active: Grants a shield to nearby allies for 5 seconds that absorbs up to 50 damage plus 10 damage per level (60 second cooldown)."
+		description:"+300 Health<br>+35 Armor<br>+15% Cooldown Reduction<br>+10 Health Regen per 5 seconds<br>UNIQUE Active: Grants a shield to nearby allies for 5 seconds that absorbs up to 50 (+10 per level) damage (60 second cooldown)."
 	3191:
 		name:"Seeker's Armguard"
-		description:"+30 Armor<br>+25 Ability Power<br>UNIQUE Passive: Killing a unit grants 0.5 bonus Armor and Ability Power. This bonus stacks up to 30 times."
+		description:"+30 Armor<br>+20 Ability Power<br>UNIQUE Passive: Killing a unit grants 0.5 bonus Armor and Ability Power. This bonus stacks up to 30 times."
 	3196:
 		name:"Augment: Power"
 		description:"+3 Ability Power per level<br>+220 Health<br>+6 Health Regen per 5 seconds<br>Ability Augment: Power Transfer increases Viktor's Movement Speed by 30% for 3 seconds."

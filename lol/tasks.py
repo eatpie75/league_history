@@ -3,6 +3,7 @@ from celery.task import task
 from datetime import datetime, timedelta
 from django.core.cache import cache
 from django.db import transaction
+from lol.core.servers import REGIONS
 from lol.core.stats import Stats
 from lol.models import Summoner, Player, Game, get_data, parse_games, parse_ratings, parse_summoner, parse_runes, parse_masteries, create_summoner
 from pytz import timezone
@@ -10,7 +11,9 @@ from pytz import timezone
 
 @task(ignore_result=True, priority=3)
 def auto_update():
-	summoners=Summoner.objects.filter(update_automatically=True, time_updated__lt=(datetime.now(timezone('UTC'))-timedelta(hours=3))).only('pk', 'region', 'account_id')
+	server_list=cache.get('servers')
+	available_regions=[next(value for value, name in REGIONS if name==region.upper()) for region in server_list.available_regions]
+	summoners=Summoner.objects.filter(update_automatically=True, time_updated__lt=(datetime.now(timezone('UTC'))-timedelta(hours=3)), region__in=available_regions).only('pk', 'region', 'account_id')
 	for summoner in summoners:
 		if cache.get('summoner/{}/{}/updating'.format(summoner.region, summoner.account_id)) is None:
 			summoner_auto_task.apply_async(args=[summoner.pk,], priority=5)
@@ -18,7 +21,9 @@ def auto_update():
 
 @task(ignore_result=True, priority=3)
 def auto_fill():
-	games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.now(timezone('UTC'))-timedelta(days=2))).distinct('game').order_by().only('game')
+	server_list=cache.get('servers')
+	available_regions=[next(value for value, name in REGIONS if name==region.upper()) for region in server_list.available_regions]
+	games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.now(timezone('UTC'))-timedelta(days=2)), game__region__in=available_regions).distinct('game').order_by().only('game')
 	for player in games:
 		if cache.get('game/{}/{}/filling'.format(player.game.region, player.game.game_id)) is None:
 			fill_game.apply_async(args=[player.game.pk,], priority=5)
