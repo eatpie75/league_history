@@ -135,6 +135,7 @@ task('all', ->
 
 task('clean', ->
 	for file in fs.readdirSync(LESSOUTDIR)
+		if file='morris.css' then continue
 		console.log("Deleting #{LESSOUTDIR}/#{file}")
 		fs.unlinkSync("#{LESSOUTDIR}/#{file}")
 	for file in fs.readdirSync(SPRITEIMGOUTDIR)
