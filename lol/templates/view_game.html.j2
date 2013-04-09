@@ -20,8 +20,8 @@
 				<div class='info-block pull-right'>
 					{%- if metadata.avg_elo %}
 					<div>
-						<b>{{metadata.avg_elo|floatformat('0')}}</b>
-						<small>AVG ELO</small>
+						<b>{{metadata.avg_elo|number_to_rank|display_rank}}</b>
+						<small>AVG LEAGUE</small>
 					</div>
 					{% endif -%}
 					<div>
@@ -37,9 +37,9 @@
 						<small>{{game.time|naturaltime|upper}}</small>
 					</div>
 				</div>
-				<div class='name-block'>
+				{# <div class='name-block'>
 					<b>SUMMARY</b>
-				</div>
+				</div> #}
 				<div class='bottom-right large'>
 					<span class='green'>{{metadata.stats.winner.kills}}</span>/<span class='red'>{{metadata.stats.loser.kills}}</span>
 				</div>
@@ -59,8 +59,14 @@
 							<th style='width:215px;'>Items</th>
 							<th style='width:150px;'></th>
 						</tr>
-					</thead>{% for team in players|groupby('won')|reverse %}
-					{% if loop.first %}<tr class='interlude win'><td colspan=10>WINNING TEAM</td></tr>{% else %}<tr class='interlude lose'><td colspan=10>LOSING TEAM</td></tr>{% endif %}{% for player in team.list %}
+					</thead>
+					{%- for team in players|groupby('won')|reverse %}
+					{%- if loop.first %}
+					<tr class='interlude win'><td colspan=10>WINNING TEAM</td></tr>
+					{%- else %}
+					<tr class='interlude lose'><td colspan=10>LOSING TEAM</td></tr>
+					{%- endif %}
+					{%- for player in team.list %}
 					<tr class='player{% if player.blue_team %} team_blue{% else %} team_purple{% endif %}{% if player.won %} won{% else %} lose{% endif %}{% if player.afk or player.leaver %} leaver {% endif %}'>
 						<td class='champion'>{{sprites.champion(player.champion_id)}}<small>{{player.champion_level}}</small></td>
 						<td><a href='{{player.summoner.get_absolute_url()}}'{% if metadata.ranked %} title='Rating: {{player.get_tier_display()}} {{player.get_division_display()}}'{% endif %}>{{player.summoner.name}}</a></td>
@@ -76,7 +82,9 @@
 							{%- endfor %}
 						</td>
 						<td><i class='icon-chevron-down player_expand' data-player='{{player.pk}}'></i></td>
-					</tr>{% endfor %}{% endfor %}
+					</tr>
+					{%- endfor %}
+					{%- endfor %}
 				</table>
 			</div>
 			{%- else %}

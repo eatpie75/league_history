@@ -134,11 +134,11 @@ def view_game(request, region, game_id):
 		if player.won and metadata['length']==-1:
 			metadata['length']=player.length
 		# print(u'{}:{}'.format(player.summoner.name, player.length))
-	# 	if game.game_mode in (3, 4, 5) and player.rating>0:
-	# 		metadata['stats'][team]['total_elo']+=player.rating
-	# 		metadata['stats'][team]['avg_elo']=round(metadata['stats'][team]['total_elo']/metadata['stats'][team]['num_players'], 1)
-	# if game.game_mode in (3, 4, 5):
-	# 	metadata['avg_elo']=players.filter(rating__gt=0).aggregate(Avg('rating'))['rating__avg']
+		if game.game_mode in (3, 4, 5) and player.tier>0:
+			metadata['stats'][team]['total_elo']+=player.rank_to_number
+			metadata['stats'][team]['avg_elo']=round(metadata['stats'][team]['total_elo']/metadata['stats'][team]['num_players'])
+	if game.game_mode in (3, 4, 5):
+		metadata['avg_elo']=round((metadata['stats']['winner']['avg_elo']+metadata['stats']['loser']['avg_elo'])/2)
 	return render_to_response('view_game.html.j2', {'game':game, 'players':players, 'metadata':metadata, 'update_in_queue':update_in_queue}, RequestContext(request))
 
 
