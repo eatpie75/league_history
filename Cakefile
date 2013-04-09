@@ -1,9 +1,9 @@
 fs			= require('fs')
 path		= require('path')
 {exec}		= require('child_process')
-async		= require('./clientemu/node_modules/async')
-uglifyjs	= require('./clientemu/node_modules/uglify-js')
-uglifycss	= require('./clientemu/node_modules/uglifycss')
+async		= require('../clientemu/node_modules/async')
+uglifyjs	= require('../clientemu/node_modules/uglify-js')
+uglifycss	= require('../clientemu/node_modules/uglifycss')
 
 Cakefile		= 'Cakefile'
 BASE			= 'lol'

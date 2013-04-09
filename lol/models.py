@@ -138,6 +138,10 @@ class SummonerRating(models.Model):
 	miniseries_wins=models.IntegerField(default=0)
 	miniseries_losses=models.IntegerField(default=0)
 
+	@property
+	def rank_to_number(self):
+		return rank_to_number(self.tier, self.division, self.rank)
+
 	class Meta:
 		index_together=[
 			("summoner", "game_map", "game_mode")
@@ -204,6 +208,7 @@ class Player(models.Model):
 	deaths=models.IntegerField()
 	assists=models.IntegerField()
 	minion_kills=models.IntegerField()
+	neutral_minions_killed=models.IntegerField()
 	gold=models.IntegerField()
 	damage_dealt=models.IntegerField()
 	physical_damage_dealt=models.IntegerField()
@@ -216,7 +221,6 @@ class Player(models.Model):
 	largest_multikill=models.IntegerField()
 	largest_killing_spree=models.IntegerField()
 	largest_critical_strike=models.IntegerField()
-	neutral_minions_killed=models.IntegerField()
 	turrets_destroyed=models.IntegerField()
 	inhibitors_destroyed=models.IntegerField()
 	sight_wards_bought_in_game=models.IntegerField()
@@ -238,18 +242,36 @@ class Player(models.Model):
 
 	@property
 	def length(self):
-		ip=self.ip_earned if self.ip_earned<145 else self.ip_earned-150
+		ip=self.ip_earned-self.boosted_ip_earned if self.ip_earned-self.boosted_ip_earned<145 else (self.ip_earned-self.boosted_ip_earned)-150
 		if self.game.game_mode not in (2, 3, 4, 5): return 0
-		if self.game.game_map in (1,4):
-			base=18.193 if self.won else 15.401
-			mingain=2.312 if self.won else 1.43
+		if self.game.game_map in (1,4):  # classic, twisted treeline
+			base=18 if self.won else 16
+			mingain=2.26975458333333 if self.won else 1.38803291666667
 			max_length=55
-		elif self.game.game_map==2:
+			if (self.won and ip==76) or (not self.won and ip==51):
+				result=25
+			elif (self.won and ip>=145) or (not self.won and ip>=94):
+				result=55
+			else:
+				# result=round((ip-base)/mingain, 1)
+				result=(ip-base)/mingain
+		elif self.game.game_map==2:  # dominion
 			base=20 if self.won else 12
 			mingain=2 if self.won else 1
 			max_length=55
-		result=round((ip-base)/mingain)
+			result=(ip-base)/mingain
 		return result if result<=max_length else max_length
+
+	@property
+	def gpm(self):
+		if self.length>0:
+			return round(self.gold/self.length)
+		else:
+			return 0
+
+	@property
+	def rank_to_number(self):
+		return rank_to_number(self.tier, self.division, self.rank)
 
 	@models.permalink
 	def get_absolute_url(self):
@@ -502,7 +524,7 @@ def parse_ratings(ratings, summoner):
 				r.league=rating['name']
 				r.tier=rating['tier']
 				r.division=rating['rank']
-				if rating['mini_series']==None:
+				if rating['mini_series'] is None:
 					r.miniseries_target=0
 					r.miniseries_wins=0
 					r.miniseries_losses=0
@@ -521,3 +543,10 @@ def parse_masteries(masteries, summoner):
 def parse_runes(runes, summoner):
 	summoner.runes=json.dumps(runes)
 	return summoner
+
+
+def rank_to_number(tier, division, rank):
+	num=(500*(tier-1))+(100*(5-division))+(100-rank)
+	if tier==6:
+		num-=400
+	return num

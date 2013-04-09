@@ -18,11 +18,17 @@ class PlayerForm(forms.ModelForm):
 
 class PlayerAdmin(admin.ModelAdmin):
 	#list_filter=('summoner',)
-	list_display=('summoner', 'game_link')
-	list_filter=('summoner__update_automatically', 'game__fetched', 'game__game_map', 'game__game_mode')
+	list_display=('summoner', 'game_time', 'tier', 'division', 'rank', 'rank_to_number', 'game_link')
+	list_filter=('summoner__update_automatically', 'game__fetched', 'game__game_map', 'game__game_mode', 'leaver', 'won')
 	list_per_page=25
-	search_fields=('game__game_id',)
+	search_fields=('game__game_id', 'summoner__name')
 	form=PlayerForm
+
+	def game_time(self, obj):
+		return obj.game.time
+
+	def rank_to_number(self, obj):
+		return obj.rank_to_number
 
 	def game_link(self, obj):
 		return "<a href='{}'>Link</a>".format(obj.get_absolute_url())

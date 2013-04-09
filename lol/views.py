@@ -98,6 +98,8 @@ def view_game(request, region, game_id):
 		'avg_assists':	0,
 		'gold':			0,
 		'avg_gold':		0,
+		'gpm':			0,
+		'avg_gpm':		0,
 		'cs':			0,
 		'avg_cs':		0,
 		'pd_dealt':		0,
@@ -114,20 +116,24 @@ def view_game(request, region, game_id):
 	for player in players:
 		team='winner' if player.won else 'loser'
 		metadata['stats'][team]['num_players']+=1
-		for key, mapping in {'kills':'kills', 'deaths':'deaths', 'assists':'assists', 'minion_kills':'cs', 'neutral_minions_killed':'cs', 'gold':'gold'}.iteritems():
+		#Begin avg/total stats
+		for key, mapping in {'kills':'kills', 'deaths':'deaths', 'assists':'assists', 'minion_kills':'cs', 'neutral_minions_killed':'cs', 'gold':'gold', 'gpm':'gpm'}.iteritems():
 			metadata['stats'][team][mapping]+=getattr(player, key)
 			metadata['stats'][team]['avg_{}'.format(mapping)]=round(float(metadata['stats'][team][mapping])/metadata['stats'][team]['num_players'], 1)
+		#Begin damage dealt/taken
 		metadata['stats'][team]['pd_dealt']+=player.physical_damage_dealt
 		metadata['stats'][team]['pd_taken']+=player.physical_damage_taken
 		metadata['stats'][team]['md_dealt']+=player.magic_damage_dealt
 		metadata['stats'][team]['md_taken']+=player.magic_damage_taken
 		metadata['stats'][team]['td_dealt']+=player.damage_dealt
 		metadata['stats'][team]['td_taken']+=player.damage_taken
+		#Begin wards
 		metadata['stats'][team]['sw_bought']+=player.sight_wards_bought_in_game
 		metadata['stats'][team]['vw_bought']+=player.vision_wards_bought_in_game
 		metadata['stats'][team]['tw_bought']+=player.sight_wards_bought_in_game+player.vision_wards_bought_in_game
 		if player.won and metadata['length']==-1:
 			metadata['length']=player.length
+		# print(u'{}:{}'.format(player.summoner.name, player.length))
 	# 	if game.game_mode in (3, 4, 5) and player.rating>0:
 	# 		metadata['stats'][team]['total_elo']+=player.rating
 	# 		metadata['stats'][team]['avg_elo']=round(metadata['stats'][team]['total_elo']/metadata['stats'][team]['num_players'], 1)
@@ -161,7 +167,7 @@ def view_summoner(request, region, account_id, slug):
 	games=Player.objects.filter(summoner=summoner).select_related('game')
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats is None:
-		stats=Stats(games, summoner_name=summoner.name, index_items=False)
+		stats=Stats(games, summoner_name=summoner.name, index_league=True, index_items=False)
 		stats.generate_index()
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
 	# spectate=cache.get('summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id))
@@ -199,7 +205,7 @@ def view_summoner_champions(request, region, account_id, slug):
 	rating=summoner.get_rating()
 	games=Player.objects.filter(summoner=summoner).select_related('game')
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
-	if stats==None:
+	if stats is None:
 		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
@@ -214,7 +220,7 @@ def view_summoner_inventory(request, region, account_id, slug):
 	rating=summoner.get_rating()
 	games=Player.objects.filter(summoner=summoner).select_related('game')
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
-	if stats==None:
+	if stats is None:
 		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
@@ -253,9 +259,9 @@ def view_all_champions(request):
 		count=count.filter(game_mode=form.cleaned_data['game_mode'])
 	else: key+='/-1'
 	stats=cache.get(key)
-	if stats==None:
+	if stats is None:
 		generating=True
-		if cache.get(key+'/generating')==None:
+		if cache.get(key+'/generating') is None:
 			cache.set(key+'/generating', True, 60*10)
 			generate_global_stats.delay(key, games.query, display_count=count.count(), champion_history=True, global_stats=True, index_items=False)
 	else:
@@ -283,9 +289,9 @@ def view_champion(request, champion_id, champion_slug):
 		games=games.filter(game__game_mode=form.cleaned_data['game_mode'])
 	else: key+='/-1'
 	stats=cache.get(key)
-	if stats==None:
+	if stats is None:
 		generating=True
-		if cache.get(key+'/generating')==None:
+		if cache.get(key+'/generating') is None:
 			cache.set(key+'/generating', True, 60*10)
 			generate_global_stats.delay(key, games.query, champion=champion_id, champion_history=True, index_items=True)
 	else:

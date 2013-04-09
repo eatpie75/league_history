@@ -1,5 +1,7 @@
 from champions import CHAMPIONS
-from lol.models import Player
+from datetime import datetime, timedelta
+from lol.models import Player, SummonerRating
+from pytz import timezone
 import json
 
 
@@ -27,7 +29,7 @@ class Queryset_Manager:
 
 class Stats:
 		def __init__(self, games, **kwargs):
-			self.qs=games.only('game', 'champion_id', 'won', 'items', 'kills', 'deaths', 'assists', 'minion_kills', 'neutral_minions_killed', 'gold', 'summoner_spell1', 'summoner_spell2')
+			self.qs=games.only('game', 'champion_id', 'won', 'items', 'kills', 'deaths', 'assists', 'minion_kills', 'neutral_minions_killed', 'gold', 'summoner_spell1', 'summoner_spell2', 'tier', 'division', 'rank')
 			#.defer(
 			# 	'afk', 'leaver', 'blue_team', 'ping', 'queue_length', 'premade_size',
 			# 	'ip_earned', 'experience_earned', 'boosted_experience_earned', 'boosted_ip_earned',
@@ -44,6 +46,7 @@ class Stats:
 			self.champion=kwargs.get('champion', None)
 			self.summoner_name=kwargs.get('summoner_name', None)
 			self.index_items=kwargs.get('index_items', True)
+			self.index_league=kwargs.get('index_league', False)
 			self.champion_history=kwargs.get('champion_history', False)
 			self.index_summoner_spells=kwargs.get('index_summoner_spells', False)
 			self.global_stats=kwargs.get('global_stats', False)
@@ -106,6 +109,25 @@ class Stats:
 			stats['history'][itime]['champions'][game.champion_id]['won' if game.won else 'lost']+=1
 			return stats
 
+		def __index_league(self, stats, game):
+			itime=game.game.time.strftime('%Y-%m-%d')
+			if itime not in stats['elo']:
+				stats['elo'][itime]={
+					'count':	0,
+					'total':	0,
+					'avg':		0
+				}
+			if itime!=datetime.now(timezone('utc')).strftime('%Y-%m-%d'):
+				stats['elo'][itime]['count']+=1
+				stats['elo'][itime]['total']+=game.rank_to_number
+				stats['elo'][itime]['avg']=stats['elo'][itime]['total']/stats['elo'][itime]['count']
+			else:
+				sr=SummonerRating.objects.get(summoner=game.summoner.pk, game_map=1, game_mode=3)
+				stats['elo'][itime]['count']=1
+				stats['elo'][itime]['total']=sr.rank_to_number
+				stats['elo'][itime]['avg']=stats['elo'][itime]['total']
+			return stats
+
 		def __index_global_stats(self, stats, game):
 			if game.game.game_map==1 and game.game.game_mode!=1:
 				stats['global_stats']['blue_side']['won' if game.game.blue_team_won else 'lost']+=1
@@ -141,8 +163,10 @@ class Stats:
 			stats={
 				'champions':{},
 				'history':{},
+				'elo':{},
 				'global_stats':{'blue_side':{'won':0, 'lost':0}}
 			}
+			date=datetime.now(timezone('utc'))
 			for game in self.games:
 				if game.champion_id not in stats['champions']:
 					stats['champions'][game.champion_id]={
@@ -175,6 +199,8 @@ class Stats:
 
 				if self.index_items:
 					stats=self.__index_items(stats, game)
+				if self.index_league and self.summoner_name is not None and game.game.game_map==1 and game.game.game_mode==3 and game.tier!=0 and game.game.time>=date-timedelta(days=30):
+					stats=self.__index_league(stats, game)
 				if self.champion_history:
 					itime=game.game.time.strftime('%Y-%m-%d')
 					if itime not in stats['history']:
@@ -190,6 +216,7 @@ class Stats:
 					stats=self.__index_global_stats(stats, game)
 			# self.index={'champions':champions, 'elo':sorted(elo.iteritems(), key=lambda x:x[0]), 'history':sorted(history.iteritems(), key=lambda x:x[0])[:-1], 'global_stats':global_stats}
 			stats['history']=sorted(stats['history'].iteritems(), key=lambda x:x[0])[:-1]
+			stats['elo']=sorted(stats['elo'].iteritems(), key=lambda x:x[0])[:-1]
 			self.index=stats
 			self.indexed=True
 			if self.index_items: self.items_indexed=True

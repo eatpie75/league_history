@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.core.cache import cache
 from pytz import timezone
-from redis.exceptions import ConnectionError
+from redis_cache.exceptions import ConnectionInterrumped
 import requests
 import random
 
@@ -105,6 +105,6 @@ def prepare_servers():
 				servers.check_servers()
 		if cache.get('queue_len') is None:
 			cache.set('queue_len', 0, timeout=0)
-	except ConnectionError:
+	except ConnectionInterrumped:
 		print 'Couldn\'t connect to redis, lots of things will be broken'
 	return True
