@@ -44,9 +44,12 @@ class Stats:
 			self.index={'champions':{}, 'global_stats':{}}
 			self.count=0
 			self.champion=kwargs.get('champion', None)
+			###
 			self.summoner_name=kwargs.get('summoner_name', None)
-			self.index_items=kwargs.get('index_items', True)
+			self.summoner_pk=kwargs.get('summoner_pk', None)
 			self.index_league=kwargs.get('index_league', False)
+			##
+			self.index_items=kwargs.get('index_items', True)
 			self.champion_history=kwargs.get('champion_history', False)
 			self.index_summoner_spells=kwargs.get('index_summoner_spells', False)
 			self.global_stats=kwargs.get('global_stats', False)
@@ -117,15 +120,9 @@ class Stats:
 					'total':	0,
 					'avg':		0
 				}
-			if itime!=datetime.now(timezone('utc')).strftime('%Y-%m-%d'):
-				stats['elo'][itime]['count']+=1
-				stats['elo'][itime]['total']+=game.rank_to_number
-				stats['elo'][itime]['avg']=stats['elo'][itime]['total']/stats['elo'][itime]['count']
-			else:
-				sr=SummonerRating.objects.get(summoner=game.summoner.pk, game_map=1, game_mode=3)
-				stats['elo'][itime]['count']=1
-				stats['elo'][itime]['total']=sr.rank_to_number
-				stats['elo'][itime]['avg']=stats['elo'][itime]['total']
+			stats['elo'][itime]['count']+=1
+			stats['elo'][itime]['total']+=game.rank_to_number
+			stats['elo'][itime]['avg']=stats['elo'][itime]['total']/stats['elo'][itime]['count']
 			return stats
 
 		def __index_global_stats(self, stats, game):
@@ -199,7 +196,7 @@ class Stats:
 
 				if self.index_items:
 					stats=self.__index_items(stats, game)
-				if self.index_league and self.summoner_name is not None and game.game.game_map==1 and game.game.game_mode==3 and game.tier!=0 and game.game.time>=date-timedelta(days=30):
+				if self.index_league and self.summoner_pk is not None and game.game.game_map==1 and game.game.game_mode==3 and game.tier!=0 and game.game.time>=date-timedelta(days=30):
 					stats=self.__index_league(stats, game)
 				if self.champion_history:
 					itime=game.game.time.strftime('%Y-%m-%d')
@@ -214,9 +211,13 @@ class Stats:
 					stats=self.__index_summoner_spells(stats, game)
 				if self.global_stats:
 					stats=self.__index_global_stats(stats, game)
+			if self.index_league and self.summoner_pk:
+				sr=SummonerRating.objects.get(summoner=self.summoner_pk, game_map=1, game_mode=3)
+				if sr.tier is not None:
+					stats['elo'][date.strftime('%Y-%m-%d')]={'count':1, 'total':sr.rank_to_number, 'avg':sr.rank_to_number}
 			# self.index={'champions':champions, 'elo':sorted(elo.iteritems(), key=lambda x:x[0]), 'history':sorted(history.iteritems(), key=lambda x:x[0])[:-1], 'global_stats':global_stats}
 			stats['history']=sorted(stats['history'].iteritems(), key=lambda x:x[0])[:-1]
-			stats['elo']=sorted(stats['elo'].iteritems(), key=lambda x:x[0])[:-1]
+			stats['elo']=sorted(stats['elo'].iteritems(), key=lambda x:x[0])
 			self.index=stats
 			self.indexed=True
 			if self.index_items: self.items_indexed=True

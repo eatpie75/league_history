@@ -167,7 +167,7 @@ def view_summoner(request, region, account_id, slug):
 	games=Player.objects.filter(summoner=summoner).select_related('game')
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats is None:
-		stats=Stats(games, summoner_name=summoner.name, index_league=True, index_items=False)
+		stats=Stats(games, summoner_name=summoner.name, summoner_pk=summoner.pk, index_league=True, index_items=False)
 		stats.generate_index()
 		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
 	# spectate=cache.get('summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id))
