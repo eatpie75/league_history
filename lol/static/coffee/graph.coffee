@@ -4,10 +4,10 @@ tier_goals={
 	3:[1000, 1100, 1200, 1300, 1400]
 	4:[1500, 1600, 1700, 1800, 1900]
 	5:[2000, 2100, 2200, 2300, 2400]
-	6:[2500, 2600]
+	6:[2500, 2551]
 }
 tier_colors={
-	1:['#866500','#866500','#866500','#866500','#866500']
+	1:['#866500','#866500','#866500','#866500']
 	2:['#9a9a9a','#9a9a9a','#9a9a9a','#9a9a9a','#9a9a9a']
 	3:['#ffca2a','#ffca2a','#ffca2a','#ffca2a','#ffca2a']
 	4:['#52a2ab','#52a2ab','#52a2ab','#52a2ab','#52a2ab']
@@ -21,7 +21,9 @@ draw_chart=(data, kwargs={})->
 		tier=Math.floor(lcs/500)+1
 		division=Math.floor((lcs-(tier-1)*500)/100)
 		rank=100-Math.floor((lcs-(tier-1)*500-division*100))
-		if tier==6 then division=4
+		if tier==6
+			division=4
+			rank-=50
 		return {'tier':tier, 'division':5-division, 'rank':rank}
 	_lcs_hover=(index, options)->
 		data=options.data[index]
@@ -54,11 +56,6 @@ draw_chart=(data, kwargs={})->
 			if day[1][data_options.y]<10
 				continue
 			parsed.push({'x':day[0], 'y':day[1][data_options.y]})
-	else if data_options.data_parse=='elo'
-		for day in data
-			if day[1][data_options.y]<10 or new Date(day[0])<data_options.graph_begin_date
-				continue
-			parsed.push({'x':day[0], 'y':day[1][data_options.y]})
 	else if data_options.data_parse=='chistorywr'
 		chart_options.hoverCallback=_chistorywr_hover
 		for day in data
@@ -83,8 +80,10 @@ draw_chart=(data, kwargs={})->
 			if day[1]['avg']>high then high=day[1]['avg']
 			if day[1]['avg']<low then low=day[1]['avg']
 			parsed.push('x':day[0], 'y':day[1]['avg'])
-		low_tier=_lcs_num_reverser(low)['tier']
-		high_tier=_lcs_num_reverser(high)['tier']
+		low_rank=_lcs_num_reverser(low)
+		high_rank=_lcs_num_reverser(high)
+		low_tier=low_rank['tier']
+		high_tier=high_rank['tier']
 		goals=[]
 		colors=[]
 		prefix_goals=[]
@@ -92,15 +91,30 @@ draw_chart=(data, kwargs={})->
 		prefix_colors=[]
 		append_colors=[]
 		for x in [low_tier..high_tier]
-			goals=goals.concat(tier_goals[x])
-			colors=colors.concat(tier_colors[x])
+			if x==low_tier and low_rank['division']!=5
+				s=low_rank['division']-1
+				e=50
+			else if x==high_tier and high_rank['division']!=1
+				s=0
+				e=high_rank['division']+1
+			else
+				s=0
+				e=50
+			goals=goals.concat(tier_goals[x].slice(s, e))
+			colors=colors.concat(tier_colors[x].slice(s, e))
 		if low_tier==high_tier
-			prefix_goals=prefix_goals.concat(tier_goals[low_tier-1].slice(-1))
-			append_goals=append_goals.concat(tier_goals[low_tier+1][0])
-			prefix_colors=prefix_colors.concat(tier_colors[low_tier-1].slice(-1))
-			append_colors=append_colors.concat(tier_colors[low_tier+1][0])
-		chart_options.goals=prefix_goals.concat(goals, append_goals)
-		chart_options.goalLineColors=prefix_colors.concat(colors, append_colors)
+			if low_tier!=1
+				prefix_goals=prefix_goals.concat(tier_goals[low_tier-1].slice(-1))
+				prefix_colors=prefix_colors.concat(tier_colors[low_tier-1].slice(-1))
+			if low_tier!=6
+				append_goals=append_goals.concat(tier_goals[low_tier+1][0])
+				append_colors=append_colors.concat(tier_colors[low_tier+1][0])
+		else
+			if high_tier!=6
+				append_goals=append_goals.concat(tier_goals[high_tier+1][0])
+				append_colors=append_colors.concat(tier_colors[high_tier+1][0])
+		chart_options.goals=[].concat(prefix_goals, goals, append_goals)
+		chart_options.goalLineColors=[].concat(prefix_colors, colors, append_colors)
 		chart_options.goalStrokeWidth=2
 
 	chart_options['data']=parsed

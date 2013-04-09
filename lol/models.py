@@ -548,5 +548,15 @@ def parse_runes(runes, summoner):
 def rank_to_number(tier, division, rank):
 	num=(500*(tier-1))+(100*(5-division))+(100-rank)
 	if tier==6:
-		num-=400
+		num-=450
 	return num
+
+
+def number_to_rank(number):
+	tier=number//500+1
+	division=(number-(tier-1)*500)//100
+	rank=100-(number-(tier-1)*500-division*100)
+	if tier==6:
+		division=4
+		rank-=50
+	return {'tier':tier, 'division':5-division, 'rank':rank}

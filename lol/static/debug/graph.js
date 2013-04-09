@@ -8,11 +8,11 @@
     3: [1000, 1100, 1200, 1300, 1400],
     4: [1500, 1600, 1700, 1800, 1900],
     5: [2000, 2100, 2200, 2300, 2400],
-    6: [2500, 2600]
+    6: [2500, 2551]
   };
 
   tier_colors = {
-    1: ['#866500', '#866500', '#866500', '#866500', '#866500'],
+    1: ['#866500', '#866500', '#866500', '#866500'],
     2: ['#9a9a9a', '#9a9a9a', '#9a9a9a', '#9a9a9a', '#9a9a9a'],
     3: ['#ffca2a', '#ffca2a', '#ffca2a', '#ffca2a', '#ffca2a'],
     4: ['#52a2ab', '#52a2ab', '#52a2ab', '#52a2ab', '#52a2ab'],
@@ -21,7 +21,7 @@
   };
 
   draw_chart = function(data, kwargs) {
-    var append_colors, append_goals, chart_defaults, chart_options, colors, data_defaults, data_options, date, day, goals, high, high_tier, low, low_tier, now, parsed, prefix_colors, prefix_goals, x, _chistorywr_hover, _i, _j, _k, _l, _lcs_hover, _lcs_num_reverser, _len, _len1, _len2, _len3, _len4, _m, _n;
+    var append_colors, append_goals, chart_defaults, chart_options, colors, data_defaults, data_options, date, day, e, goals, high, high_rank, high_tier, low, low_rank, low_tier, now, parsed, prefix_colors, prefix_goals, s, x, _chistorywr_hover, _i, _j, _k, _l, _lcs_hover, _lcs_num_reverser, _len, _len1, _len2, _len3, _m;
 
     if (kwargs == null) {
       kwargs = {};
@@ -37,6 +37,7 @@
       rank = 100 - Math.floor(lcs - (tier - 1) * 500 - division * 100);
       if (tier === 6) {
         division = 4;
+        rank -= 50;
       }
       return {
         'tier': tier,
@@ -77,21 +78,10 @@
           'y': day[1][data_options.y]
         });
       }
-    } else if (data_options.data_parse === 'elo') {
-      for (_j = 0, _len1 = data.length; _j < _len1; _j++) {
-        day = data[_j];
-        if (day[1][data_options.y] < 10 || new Date(day[0]) < data_options.graph_begin_date) {
-          continue;
-        }
-        parsed.push({
-          'x': day[0],
-          'y': day[1][data_options.y]
-        });
-      }
     } else if (data_options.data_parse === 'chistorywr') {
       chart_options.hoverCallback = _chistorywr_hover;
-      for (_k = 0, _len2 = data.length; _k < _len2; _k++) {
-        day = data[_k];
+      for (_j = 0, _len1 = data.length; _j < _len1; _j++) {
+        day = data[_j];
         date = new Date(day[0]);
         now = new Date();
         if (day[1]['champions'][data_options.y]['count'] < 20) {
@@ -104,8 +94,8 @@
         });
       }
     } else if (data_options.data_parse === 'chistorypop') {
-      for (_l = 0, _len3 = data.length; _l < _len3; _l++) {
-        day = data[_l];
+      for (_k = 0, _len2 = data.length; _k < _len2; _k++) {
+        day = data[_k];
         if (day[1]['champions'][data_options.y]['count'] < 10) {
           continue;
         }
@@ -122,8 +112,8 @@
       chart_options.grid = false;
       low = 2600;
       high = 0;
-      for (_m = 0, _len4 = data.length; _m < _len4; _m++) {
-        day = data[_m];
+      for (_l = 0, _len3 = data.length; _l < _len3; _l++) {
+        day = data[_l];
         if (day[1]['avg'] > high) {
           high = day[1]['avg'];
         }
@@ -135,26 +125,47 @@
           'y': day[1]['avg']
         });
       }
-      low_tier = _lcs_num_reverser(low)['tier'];
-      high_tier = _lcs_num_reverser(high)['tier'];
+      low_rank = _lcs_num_reverser(low);
+      high_rank = _lcs_num_reverser(high);
+      low_tier = low_rank['tier'];
+      high_tier = high_rank['tier'];
       goals = [];
       colors = [];
       prefix_goals = [];
       append_goals = [];
       prefix_colors = [];
       append_colors = [];
-      for (x = _n = low_tier; low_tier <= high_tier ? _n <= high_tier : _n >= high_tier; x = low_tier <= high_tier ? ++_n : --_n) {
-        goals = goals.concat(tier_goals[x]);
-        colors = colors.concat(tier_colors[x]);
+      for (x = _m = low_tier; low_tier <= high_tier ? _m <= high_tier : _m >= high_tier; x = low_tier <= high_tier ? ++_m : --_m) {
+        if (x === low_tier && low_rank['division'] !== 5) {
+          s = low_rank['division'] - 1;
+          e = 50;
+        } else if (x === high_tier && high_rank['division'] !== 1) {
+          s = 0;
+          e = high_rank['division'] + 1;
+        } else {
+          s = 0;
+          e = 50;
+        }
+        goals = goals.concat(tier_goals[x].slice(s, e));
+        colors = colors.concat(tier_colors[x].slice(s, e));
       }
       if (low_tier === high_tier) {
-        prefix_goals = prefix_goals.concat(tier_goals[low_tier - 1].slice(-1));
-        append_goals = append_goals.concat(tier_goals[low_tier + 1][0]);
-        prefix_colors = prefix_colors.concat(tier_colors[low_tier - 1].slice(-1));
-        append_colors = append_colors.concat(tier_colors[low_tier + 1][0]);
+        if (low_tier !== 1) {
+          prefix_goals = prefix_goals.concat(tier_goals[low_tier - 1].slice(-1));
+          prefix_colors = prefix_colors.concat(tier_colors[low_tier - 1].slice(-1));
+        }
+        if (low_tier !== 6) {
+          append_goals = append_goals.concat(tier_goals[low_tier + 1][0]);
+          append_colors = append_colors.concat(tier_colors[low_tier + 1][0]);
+        }
+      } else {
+        if (high_tier !== 6) {
+          append_goals = append_goals.concat(tier_goals[high_tier + 1][0]);
+          append_colors = append_colors.concat(tier_colors[high_tier + 1][0]);
+        }
       }
-      chart_options.goals = prefix_goals.concat(goals, append_goals);
-      chart_options.goalLineColors = prefix_colors.concat(colors, append_colors);
+      chart_options.goals = [].concat(prefix_goals, goals, append_goals);
+      chart_options.goalLineColors = [].concat(prefix_colors, colors, append_colors);
       chart_options.goalStrokeWidth = 2;
     }
     chart_options['data'] = parsed;
