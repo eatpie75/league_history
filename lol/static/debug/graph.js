@@ -21,7 +21,7 @@
   };
 
   draw_chart = function(data, kwargs) {
-    var append_colors, append_goals, chart_defaults, chart_options, colors, data_defaults, data_options, date, day, e, goals, high, high_rank, high_tier, low, low_rank, low_tier, now, parsed, prefix_colors, prefix_goals, s, x, _chistorywr_hover, _i, _j, _k, _l, _lcs_hover, _lcs_num_reverser, _len, _len1, _len2, _len3, _m;
+    var append_colors, append_goals, chart_defaults, chart_options, colors, data_defaults, data_options, day, goals, high, high_rank, high_tier, low, low_rank, low_tier, parsed, prefix_colors, prefix_goals, x, _chistorywr_hover, _i, _j, _k, _l, _lcs_hover, _lcs_num_reverser, _len, _len1, _len2, _len3, _m;
 
     if (kwargs == null) {
       kwargs = {};
@@ -82,8 +82,6 @@
       chart_options.hoverCallback = _chistorywr_hover;
       for (_j = 0, _len1 = data.length; _j < _len1; _j++) {
         day = data[_j];
-        date = new Date(day[0]);
-        now = new Date();
         if (day[1]['champions'][data_options.y]['count'] < 20) {
           continue;
         }
@@ -104,7 +102,7 @@
           'y': (day[1]['champions'][data_options.y]['won'] / day[1]['count']) * 100
         });
       }
-    } else if (data_options.data_parse === 'lcs') {
+    } else if (data_options.data_parse === 'lcs' && data.length > 2) {
       chart_options.hoverCallback = _lcs_hover;
       chart_options.yLabelFormat = function(x) {
         return '';
@@ -136,18 +134,8 @@
       prefix_colors = [];
       append_colors = [];
       for (x = _m = low_tier; low_tier <= high_tier ? _m <= high_tier : _m >= high_tier; x = low_tier <= high_tier ? ++_m : --_m) {
-        if (x === low_tier && low_rank['division'] !== 5) {
-          s = low_rank['division'] - 1;
-          e = 50;
-        } else if (x === high_tier && high_rank['division'] !== 1) {
-          s = 0;
-          e = high_rank['division'] + 1;
-        } else {
-          s = 0;
-          e = 50;
-        }
-        goals = goals.concat(tier_goals[x].slice(s, e));
-        colors = colors.concat(tier_colors[x].slice(s, e));
+        goals = goals.concat(tier_goals[x]);
+        colors = colors.concat(tier_colors[x]);
       }
       if (low_tier === high_tier) {
         if (low_tier !== 1) {

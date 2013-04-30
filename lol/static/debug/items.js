@@ -196,6 +196,14 @@
       name: "Explorer's Ward",
       description: "Places an invisible ward with 1100 range. Lasts 1 minute."
     },
+    2051: {
+      name: "Guardian's Horn",
+      description: "+180 Health<br>+12 Health Regen per 5 seconds<br>UNIQUE Passive: Enemy spellcasts reduce the cooldown of Battle Cry by 1 second.<br>UNIQUE Active: Battle Cry: Gain 30% movement speed, 20 Armor, and 20 Magic Resistance for 3 seconds (25 second cooldown)."
+    },
+    2052: {
+      name: "Poro-Snax",
+      description: "This savory blend of free-range, grass-fed Avarosan game hens and organic, non-ZMO Freljordian herbs contains the essential nutrients necessary to keep your Poro purring with pleasure.<br>All proceeds will be donated towards fighting Noxian animal cruelty."
+    },
     3001: {
       name: "Abyssal Scepter",
       description: "+70 Ability Power<br>+45 Magic Resist<br>UNIQUE Aura: Reduces the Magic Resist of nearby enemy champions by 20."
@@ -246,7 +254,7 @@
     },
     3026: {
       name: "Guardian Angel",
-      description: "+50 Armor<br>+30 Magic Resist<br>UNIQUE Passive: Revives champion upon death, restoring 30% of maximum Health and Mana (5 minute cooldown)."
+      description: "+50 Armor<br>+30 Magic Resist<br>UNIQUE Passive: Upon taking lethal damage, restores 30% of maximum Health and Mana after 4 seconds of stasis (5 minute cooldown)."
     },
     3027: {
       name: "Rod of Ages",
@@ -270,7 +278,7 @@
     },
     3040: {
       name: "Seraph's Embrace",
-      description: "+1000 Mana<br>+60 Ability Power<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: Insight: Grants Ability Power equal to 3% of maximum Mana.<br>UNIQUE Active: Mana Shield: Consumes 25% of current Mana to grant a shield for 3 seconds that absorbs damage equal to the amount of Mana consumed (120 second cooldown)."
+      description: "+1000 Mana<br>+60 Ability Power<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: Insight: Grants Ability Power equal to 3% of maximum Mana.<br>UNIQUE Active: Mana Shield: Drains 20% of your current mana to shield yourself for an equal amount plus 150 for 3 seconds (120 second cooldown)."
     },
     3041: {
       name: "Mejai's Soulstealer",
@@ -278,7 +286,7 @@
     },
     3042: {
       name: "Muramana",
-      description: "+1000 Mana<br>+20 Attack Damage<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Awe: Grants bonus Attack Damage equal to 2% of maximum Mana.<br>UNIQUE Toggle: Single target spells and attacks (on hit) consume 3% of current Mana to deal bonus magic damage equal to twice the amount of Mana consumed."
+      description: "+1000 Mana<br>+20 Attack Damage<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Awe: Grants bonus Attack Damage equal to 2% of maximum Mana.<br>UNIQUE Toggle: Single target spells and attacks (on hit) consume 3% of current Mana to deal bonus physical damage equal to twice the amount of Mana consumed."
     },
     3044: {
       name: "Phage",
@@ -346,7 +354,7 @@
     },
     3077: {
       name: "Tiamat",
-      description: "+50 Attack Damage<br>+15 Health Regen per 5 seconds<br>UNIQUE Passive: Cleave: Basic attacks deal 20% to 60% of total Attack Damage as bonus physical damage to enemies near the target on hit (enemies closest to the target take the most damage).<br>UNIQUE Active: Crescent: Deals 60% to 100% of total Attack Damage as physical damage to nearby enemy units (closest enemies take the most damage)(10 second cooldown)."
+      description: "+40 Attack Damage<br>+15 Health Regen per 5 seconds<br>UNIQUE Passive: Cleave: Basic attacks deal 20% to 60% of total Attack Damage as bonus physical damage to enemies near the target on hit (enemies closest to the target take the most damage).<br>UNIQUE Active: Crescent: Deals 60% to 100% of total Attack Damage as physical damage to nearby enemy units (closest enemies take the most damage)(10 second cooldown)."
     },
     3078: {
       name: "Trinity Force",
@@ -683,11 +691,11 @@
     },
     3207: {
       name: "Spirit of the Ancient Golem",
-      description: "+500 Health<br>+30 Armor<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 25%.<br>UNIQUE Passive: Tenacity: Reduces the duration of stuns, slows, taunts, fears, silences, blinds, and immobilizes by 35%."
+      description: "+500 Health<br>+10% Cooldown Reduction<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 25%.<br>UNIQUE Passive: Tenacity: Reduces the duration of stuns, slows, taunts, fears, silences, blinds, and immobilizes by 35%."
     },
     3209: {
       name: "Spirit of the Elder Lizard",
-      description: "+50 Attack Damage<br>+10% Cooldown Reduction<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 25%.<br>UNIQUE Passive: Basic attacks and spells that do not inflict damage-over-time deal 14-50 (based on level) bonus true damage over 3 seconds on hit."
+      description: "+45 Attack Damage<br>+10% Cooldown Reduction<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 25%.<br>UNIQUE Passive: Basic attacks and spells that do not inflict damage-over-time deal 6-40 (based on level) bonus true damage over 3 seconds on hit."
     },
     3222: {
       name: "Mikael's Crucible",

@@ -12,7 +12,9 @@ import json
 
 def player_info(request, player):
 	player=Player.objects.filter(pk=player)
-	return HttpResponse(json.dumps(list(player.values())[0]), mimetype='application/json')
+	result=player.values()[0]
+	result['gpm']=player[0].gpm
+	return HttpResponse(json.dumps(result), mimetype='application/json')
 
 
 def summoner_games(request, region, account_id):

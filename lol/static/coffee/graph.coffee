@@ -59,8 +59,8 @@ draw_chart=(data, kwargs={})->
 	else if data_options.data_parse=='chistorywr'
 		chart_options.hoverCallback=_chistorywr_hover
 		for day in data
-			date=new Date(day[0])
-			now=new Date()
+			# date=new Date(day[0])
+			# now=new Date()
 			if day[1]['champions'][data_options.y]['count']<20# or (date.getUTCMonth()!=now.getUTCMonth()|date.getUTCFullYear()!=now.getUTCFullYear())
 				continue
 			parsed.push({'x':day[0], 'y':Math.round((day[1]['champions'][data_options.y]['won']/day[1]['champions'][data_options.y]['count'])*100), 'count':day[1]['champions'][data_options.y]['count']})
@@ -69,7 +69,7 @@ draw_chart=(data, kwargs={})->
 			if day[1]['champions'][data_options.y]['count']<10
 				continue
 			parsed.push({'x':day[0], 'y':(day[1]['champions'][data_options.y]['won']/day[1]['count'])*100})
-	else if data_options.data_parse=='lcs'
+	else if data_options.data_parse=='lcs' and data.length>2
 		chart_options.hoverCallback=_lcs_hover
 		chart_options.yLabelFormat=(x)->return ''
 		chart_options.grid=false
@@ -91,17 +91,19 @@ draw_chart=(data, kwargs={})->
 		prefix_colors=[]
 		append_colors=[]
 		for x in [low_tier..high_tier]
-			if x==low_tier and low_rank['division']!=5
-				s=low_rank['division']-1
-				e=50
-			else if x==high_tier and high_rank['division']!=1
-				s=0
-				e=high_rank['division']+1
-			else
-				s=0
-				e=50
-			goals=goals.concat(tier_goals[x].slice(s, e))
-			colors=colors.concat(tier_colors[x].slice(s, e))
+			# if x==low_tier and low_rank['division']!=5
+			# 	s=low_rank['division']-1
+			# 	e=50
+			# else if x==high_tier and high_rank['division']!=1
+			# 	s=0
+			# 	e=high_rank['division']+1
+			# else
+			# 	s=0
+			# 	e=50
+			# goals=goals.concat(tier_goals[x].slice(s, e))
+			# colors=colors.concat(tier_colors[x].slice(s, e))
+			goals=goals.concat(tier_goals[x])
+			colors=colors.concat(tier_colors[x])
 		if low_tier==high_tier
 			if low_tier!=1
 				prefix_goals=prefix_goals.concat(tier_goals[low_tier-1].slice(-1))

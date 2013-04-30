@@ -157,6 +157,7 @@ def summoner_auto_added(sender=None, task_id=None, task=None, args=None, kwargs=
 	summoner=Summoner.objects.get(pk=args[0])
 	# print '{} added'.format(summoner.name)
 	cache.set('summoner/{}/{}/updating'.format(summoner.region, summoner.account_id), task_id, 60*20)
+	if cache.get('queue_len') is None: cache.set('queue_len', 0, timeout=0)
 	cache.incr('queue_len')
 
 
@@ -165,6 +166,7 @@ def summoner_auto_finished(sender=None, task_id=None, task=None, args=None, kwar
 	summoner=Summoner.objects.get(pk=args[0])
 	# print '{} done'.format(summoner.name)
 	cache.delete('summoner/{}/{}/updating'.format(summoner.region, summoner.account_id))
+	if cache.get('queue_len') is None: cache.set('queue_len', 1, timeout=0)
 	cache.decr('queue_len')
 
 
@@ -173,6 +175,7 @@ def fill_game_added(sender=None, task_id=None, task=None, args=None, kwargs=None
 	game=Game.objects.get(pk=args[0])
 	# print '{} added'.format(summoner.name)
 	cache.set('game/{}/{}/filling'.format(game.region, game.game_id), task_id, 60*10)
+	if cache.get('queue_len') is None: cache.set('queue_len', 0, timeout=0)
 	cache.incr('queue_len')
 
 
@@ -181,4 +184,5 @@ def fill_game_finished(sender=None, task_id=None, task=None, args=None, kwargs=N
 	game=Game.objects.get(pk=args[0])
 	# print '{} done'.format(summoner.name)
 	cache.delete('game/{}/{}/filling'.format(game.region, game.game_id))
+	if cache.get('queue_len') is None: cache.set('queue_len', 1, timeout=0)
 	cache.decr('queue_len')

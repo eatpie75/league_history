@@ -196,7 +196,7 @@ class Stats:
 
 				if self.index_items:
 					stats=self.__index_items(stats, game)
-				if self.index_league and self.summoner_pk is not None and game.game.game_map==1 and game.game.game_mode==3 and game.tier!=0 and game.game.time>=date-timedelta(days=30):
+				if self.index_league and self.summoner_pk is not None and game.game.game_map==1 and game.game.game_mode==3 and game.tier is not None and game.game.time>=date-timedelta(days=30):
 					stats=self.__index_league(stats, game)
 				if self.champion_history:
 					itime=game.game.time.strftime('%Y-%m-%d')

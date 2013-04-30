@@ -95,7 +95,7 @@ class SummonerRatingForm(forms.ModelForm):
 
 
 class SummonerRatingAdmin(admin.ModelAdmin):
-	list_display=('summoner', 'game_map', 'game_mode', 'tier', 'division', 'wins', 'losses', 'update_automatically', 'fully_update')
+	list_display=('summoner', 'game_map', 'game_mode', 'tier', 'division', 'rank', 'wins', 'losses', 'update_automatically', 'fully_update', 'summoner_link')
 	# list_editable=('summoner__update_automatically', 'summoner__fully_update')
 	list_filter=('summoner__region', 'game_map', 'game_mode', 'tier')
 	search_fields=('summoner__name',)
@@ -110,7 +110,7 @@ class SummonerRatingAdmin(admin.ModelAdmin):
 	fully_update.short_description='Auto Fill'
 
 	def summoner_link(self, obj):
-		return "<a href='{}'>Link</a>".format(obj.get_absolute_url())
+		return "<a href='{}'>Link</a>".format(obj.summoner.get_absolute_url())
 	summoner_link.short_description='Link'
 	summoner_link.allow_tags=True
 

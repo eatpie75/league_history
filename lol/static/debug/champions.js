@@ -106,6 +106,7 @@
     121: "Kha'Zix",
     122: "Darius",
     126: "Jayce",
+    127: "Lissandra",
     131: "Diana",
     133: "Quinn",
     134: "Syndra",

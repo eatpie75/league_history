@@ -18,19 +18,28 @@ class TellMeMore
 				_this_.collapse($(@), extra)
 		)
 	info_template:(args)->
-		"<td colspan=11>
+		# "<td colspan=11>
+		# 	<div class='span3'>
+		# 		<b>Physical/Magical Damage</b><br>
+		# 		<div class='hori-bar centered'>
+		# 			<div class='red' title='Physical Damage' style='width:#{(args.physical_damage_dealt/args.damage_dealt)*100}%;'></div>
+		# 			<div class='blue' title='Magical Damage' style='width:#{100-(args.physical_damage_dealt/args.damage_dealt)*100}%;'></div>
+		# 		</div>
+		# 	</div>
+		# 	<div class='span3'>
+		# 		<b>Sight/Vision wards bought</b><br>
+		# 		#{args.sight_wards_bought_in_game}/#{args.vision_wards_bought_in_game}
+		# 	</div>
+		# </td>"
+		result="<td colspan=11>"
+		for key, stat of args
+			result+="
 			<div class='span3'>
-				<b>Physical/Magical Damage</b><br>
-				<div class='hori-bar centered'>
-					<div class='red' title='Physical Damage' style='width:#{(args.physical_damage_dealt/args.damage_dealt)*100}%;'></div>
-					<div class='blue' title='Magical Damage' style='width:#{100-(args.physical_damage_dealt/args.damage_dealt)*100}%;'></div>
-				</div>
-			</div>
-			<div class='span3'>
-				<b>Sight/Vision wards bought</b><br>
-				#{args.sight_wards_bought_in_game}/#{args.vision_wards_bought_in_game}
-			</div>
-		</td>"
+				<b>#{key.toUpperCase().replace('_', ' ', 'm')}</b><br>
+				#{stat}
+			</div>"
+		result+="</td>"
+		return result
 	get_info:(player)->
 		if "#{player}" not in Object.keys(@cache)
 			$.ajax(

@@ -242,7 +242,7 @@ class Player(models.Model):
 
 	@property
 	def length(self):
-		ip=self.ip_earned-self.boosted_ip_earned if self.ip_earned-self.boosted_ip_earned<145 else (self.ip_earned-self.boosted_ip_earned)-150
+		ip=self.ip_earned-self.boosted_ip_earned if self.ip_earned-self.boosted_ip_earned<=145 else (self.ip_earned-self.boosted_ip_earned)-150
 		if self.game.game_mode not in (2, 3, 4, 5): return 0
 		if self.game.game_map in (1,4):  # classic, twisted treeline
 			base=18 if self.won else 16
