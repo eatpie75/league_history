@@ -370,7 +370,7 @@ def parse_games(games, summoner, full=False, current=None):
 				game.game_mode=4
 			elif ogame['queue_type'] in ('RANKED_TEAM_3x3', 'RANKED_TEAM_5x5'):
 				game.game_mode=5
-			elif ogame['game_mode']=='ARAM' and ogame['game_type']=='CUSTOM_GAME':
+			elif ogame['game_mode']=='ARAM' and (ogame['game_type']=='CUSTOM_GAME' or ogame['queue_type']=='ARAM_UNRANKED_5x5'):
 				game.game_mode=6
 			elif ogame['queue_type']=='NONE' and ogame['game_type']=='CUSTOM_GAME':
 				game.game_mode=0
@@ -383,7 +383,7 @@ def parse_games(games, summoner, full=False, current=None):
 				game.game_map=1
 			elif ogame['game_map']==8:
 				game.game_map=2
-			elif ogame['game_map']==7:
+			elif ogame['game_map'] in (7, 12):
 				game.game_map=3
 			elif ogame['game_map']==10:
 				game.game_map=4
