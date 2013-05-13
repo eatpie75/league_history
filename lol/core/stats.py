@@ -11,9 +11,13 @@ class Queryset_Manager:
 		self.chunksize=chunksize
 		self.count=self.queryset.count()
 		if self.count!=0:
-			self.pk=self.queryset[0].pk-1
+			tmp=self.queryset[0:2]
+			len(tmp)
+			self.pk=tmp[0].pk-1
 			if self.count>self.chunksize:
-				self.last_pk=self.queryset.order_by('-pk')[0].pk
+				tmp=self.queryset.order_by('-pk')[0:2].pk
+				len(tmp)
+				self.last_pk=tmp[0].pk
 
 	def __iter__(self):
 		if self.count<=self.chunksize:

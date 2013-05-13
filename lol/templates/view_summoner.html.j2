@@ -18,8 +18,10 @@
 			var AJAX_BASE="{{AJAX_BASE}}";
 			var account_id={{summoner.account_id}};
 			var region={{summoner.region}};
+			{%- if stats.count>0 %}
 			var chart={'chart_options':{'ymin':'auto', 'ymax':'auto', 'smooth':true, 'labels':['League',], 'pointSize':0, 'hideHover':'auto'}, 'data_options':{'y':'date', 'data_parse':'lcs'}};
 			var chart_data={{stats.elo_toJSON()|safe}};
+			{%- endif %}
 		</script>
 {%- endblock %}
 
