@@ -82,7 +82,7 @@ compile_sprites=(cb)->
 	for dir in fs.readdirSync(SPRITEINDIR)
 		OPENCHILDREN+=1
 		console.log(">glue #{SPRITEINDIR}/#{dir}/ --css=#{TMPDIR}/ --img=#{SPRITEIMGOUTDIR}/ --url=../img/sprites/ --ignore-filename-paddings")
-		exec("glue #{SPRITEINDIR}/#{dir}/ --css=#{TMPDIR}/ --img=#{SPRITEIMGOUTDIR}/ --url=../img/sprites/ --ignore-filename-paddings", (err, stdout, stderr)->
+		exec("glue #{SPRITEINDIR}/#{dir}/ --css=#{TMPDIR}/ --img=#{SPRITEIMGOUTDIR}/ --url=../img/sprites/ --ignore-filename-paddings --optipng", (err, stdout, stderr)->
 			if stderr or err then console.log(err, stderr)
 			OPENCHILDREN-=1
 			if OPENCHILDREN==0
