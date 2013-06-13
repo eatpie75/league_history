@@ -5,8 +5,8 @@
 			<tr>
 				<th style='width:40px;'></th>
 				<th style='width:50px'>K/D/A</th>
-				<th style='width:50px'>Gold</th>
 				<th style='width:50px'>CS</th>
+				<th style='width:50px'>Gold</th>
 				<th style='width:50px'>Dealt</th>
 				<th style='width:50px'>Taken</th>
 				<th style='width:85px;'>Spells</th>
@@ -21,8 +21,8 @@
 			<tr class='{% if player.won %}good{% else %}bad{% endif %}'>
 				<td class='champion'>{{sprites.champion(player.champion_id)}}<small>{{player.champion_level}}</small></td>
 				<td>{{player.kills}}/{{player.deaths}}/{{player.assists}}</td>
-				<td>{{player.gold|to_k_format}}</td>
 				<td>{{player.minion_kills+player.neutral_minions_killed}}</td>
+				<td>{{player.gold|to_k_format}}</td>
 				<td>{{player.damage_dealt|to_k_format}}</td>
 				<td>{{player.damage_taken|to_k_format}}</td>
 				<td>{{sprites.summoner(player.summoner_spell1, style='margin-right:4px;')}}{{sprites.summoner(player.summoner_spell2)}}</td>
