@@ -42,7 +42,7 @@
       result = "<td colspan=11>";
       for (key in args) {
         stat = args[key];
-        result += "			<div class='span3'>				<b>" + (key.toUpperCase().replace('_', ' ', 'm')) + "</b><br>				" + stat + "			</div>";
+        result += "			<div class='span3'>				<b>" + (key.toUpperCase().replace('_', ' ', 'mg')) + "</b><br>				" + stat + "			</div>";
       }
       result += "</td>";
       return result;

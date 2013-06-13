@@ -70,7 +70,7 @@ items=
 		description:"+45 Attack Damage"
 	1039:
 		name:"Hunter's Machete"
-		description:"UNIQUE Passive: Butcher: Damage dealt to monsters increased by 10%.<br>UNIQUE Passive: Rend: Basic attacks deal 10 bonus true damage to monsters on hit."
+		description:"UNIQUE Passive: Butcher: Damage dealt to monsters increased by 10%.<br>UNIQUE Passive: Maim: Your basic attacks deal 10 bonus magic damage to monsters."
 	1042:
 		name:"Dagger"
 		description:"+12% Attack Speed"
@@ -88,13 +88,13 @@ items=
 		description:"+10 Attack Damage<br>+10% Life Steal"
 	1054:
 		name:"Doran's Shield"
-		description:"+100 Health<br>+5 Armor<br>+8 Health Regen per 5 seconds<br>UNIQUE Passive: Blocks 6 damage from champion basic attacks."
+		description:"+100 Health<br>+10 Health Regen per 5 seconds<br>UNIQUE Passive: Blocks 8 damage from champion basic attacks."
 	1055:
 		name:"Doran's Blade"
 		description:"+80 Health<br>+10 Attack Damage<br>Passive: Basic attacks restore 5 Health on hit."
 	1056:
 		name:"Doran's Ring"
-		description:"+80 Health<br>+15 Ability Power<br>+3 Mana Regen per 5 seconds<br>Passive: Restores 5 Mana upon killing a unit."
+		description:"+60 Health<br>+15 Ability Power<br>+3 Mana Regen per 5 seconds<br>Passive: Restores 4 Mana upon killing a unit."
 	1057:
 		name:"Negatron Cloak"
 		description:"+40 Magic Resist"
@@ -109,7 +109,7 @@ items=
 		description:"+40 Ability Power<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: Prospector: +200 Health."
 	1080:
 		name:"Spirit Stone"
-		description:"+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 15%.<br>UNIQUE Passive: Rend: Basic attacks deal 10 bonus true damage to monsters on hit."
+		description:"+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 15%.<br>UNIQUE Passive: Maim: Your basic attacks deal 10 bonus magic damage to monsters."
 	2003:
 		name:"Health Potion"
 		description:"Restores 150 Health over 15 seconds."
@@ -179,6 +179,12 @@ items=
 	3006:
 		name:"Berserker's Greaves"
 		description:"+20% Attack Speed<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed."
+	3007:
+		name:"Archangel's Staff (CS)"
+		description:"+250 Mana<br>+60 Ability Power<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: Insight: Grants Ability Power equal to 3% of maximum Mana.<br>UNIQUE Passive: Mana Charge: Grants +10 maximum Mana (max +750 Mana) for each spell cast and Mana expenditure (3 second cooldown)."
+	3008:
+		name:"Manamune (CS)"
+		description:"+250 Mana<br>+20 Attack Damage<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Awe: Grants bonus Attack Damage equal to 2% of maximum Mana.<br>UNIQUE Passive: Mana Charge: Grants +8 maximum Mana (max +750 Mana) for each basic attack, spell cast, and Mana expenditure (3 second cooldown)."
 	3009:
 		name:"Boots of Swiftness"
 		description:"UNIQUE Passive: Enhanced Movement: +60 Movement Speed<br>UNIQUE Passive: Slow Resist: Movement slowing effects are reduced by 25%."
@@ -209,6 +215,9 @@ items=
 	3028:
 		name:"Chalice of Harmony"
 		description:"+30 Magic Resist<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Mana Font: Increases Mana Regen by 1% per 1% of missing Mana."
+	3029:
+		name:"Rod of Ages (CS)"
+		description:"+450 Health<br>+450 Mana<br>+60 Ability Power<br>Passive: Grants +20 Health, +20 Mana, and +2 Ability Power per stack (max +200 Health, +200 Mana, and +20 Ability Power). Grants 1 stack per 40 seconds (max 10 stacks).<br>UNIQUE Passive - Valor's Reward: Upon leveling up, restores 150 Health and 200 Mana over 8 seconds."
 	3031:
 		name:"Infinity Edge"
 		description:"+70 Attack Damage<br>+25% Critical Strike Chance<br>UNIQUE Passive: Critical strikes deal 250% damage instead of 200%."
@@ -269,6 +278,9 @@ items=
 	3072:
 		name:"The Bloodthirster"
 		description:"+70 Attack Damage<br>+12% Life Steal<br>Passive: Grants +1 Attack Damage and +0.2% Life Steal per stack (max +30 Attack Damage and +6% Life Steal). Grants 1 stack per unit kill (max 30 stacks). Half of the stacks are lost upon death."
+	3073:
+		name:"Tear of the Goddess (CS)"
+		description:"+250 Mana<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Mana Charge: Grants +5 maximum Mana (max +750 Mana) for each spell cast and Mana expenditure (3 second cooldown)."
 	3074:
 		name:"Ravenous Hydra"
 		description:"+75 Attack Damage<br>+15 Health Regen per 5 seconds<br>+12% Life Steal<br>Passive: Life Steal applies to damage dealt by this item.<br>UNIQUE Passive: Cleave: Basic attacks deal 20% to 60% of total Attack Damage as bonus physical damage to enemies near the target on hit (enemies closest to the target take the most damage).<br>UNIQUE Active: Crescent: Deals 60% to 100% of total Attack Damage as physical damage to nearby enemy units (closest enemies take the most damage)(10 second cooldown)."
@@ -307,7 +319,7 @@ items=
 		description:"+100 Ability Power<br>+40 Armor<br>UNIQUE Passive: +25% Ability Power.<br>UNIQUE Active: Champion becomes invulnerable and untargetable for 2.5 seconds, but is unable to move, attack, cast spells, or use items during this time (90 second cooldown)."
 	3091:
 		name:"Wit's End"
-		description:"+40% Attack Speed<br>+25 Magic Resist<br>UNIQUE Passive: Basic attacks deal 42 bonus magic damage on hit.<br>UNIQUE Passive: Basic attacks grant +5 Magic Resist for 5 seconds on hit (stacks up to 4 times)."
+		description:"+42% Attack Speed<br>+25 Magic Resist<br>UNIQUE Passive: Basic attacks deal 42 bonus magic damage on hit.<br>UNIQUE Passive: Basic attacks increase your magic resistance by 5 for 5 seconds and reduce the target's magic resistance by 5 on hit (stacks up to 5 times)."
 	3092:
 		name:"Shard of True Ice"
 		description:"+45 Ability Power<br>UNIQUE Passive: Lucky Shadow: +4 Gold per 10 seconds.<br>UNIQUE Aura: Mana Warp: Grants nearby allied champions +6 Mana Regen per 5 seconds.<br>UNIQUE Active: Surrounds an ally with a blizzard for 4 seconds that slows nearby enemy movement speed by 30% (60 second cooldown)."
@@ -343,7 +355,7 @@ items=
 		description:"+250 Health<br>+20 Armor<br>+20 Magic Resist<br>UNIQUE Aura: Legion: Grants nearby allies +10 Armor, +15 Magic Resist, and +10 Health Regen per 5 seconds."
 	3106:
 		name:"Madred's Razors"
-		description:"+25 Armor<br>UNIQUE Passive: Maim: Basic attacks against minions and monsters have a 25% chance to deal 300 bonus magic damage on hit.<br>UNIQUE Passive: Rend: Basic attacks deal 10 bonus true damage to monsters on hit."
+		description:"+25 Armor<br>UNIQUE Passive: Maim: Your basic attacks against monsters deal 60 bonus magic damage."
 	3107:
 		name:"Runic Bulwark"
 		description:"+300 Health<br>+20 Armor<br>+30 Magic Resist<br>UNIQUE Aura: Legion: Grants nearby allies +10 Armor, +25 Magic Resist, and +10 Health Regen per 5 seconds."
@@ -364,7 +376,7 @@ items=
 		description:"+25 Ability Power<br>+45% Attack Speed<br>UNIQUE Passive: Basic attacks deal 15 (+10% of Ability Power) bonus magic damage on hit.<br>UNIQUE Passive: Basic attacks reduce the target's Magic Resist by 4 for 8 seconds on hit (stacks up to 7 times)."
 	3115:
 		name:"Nashor's Tooth"
-		description:"+50% Attack Speed<br>+65 Ability Power<br>UNIQUE Passive: +20% Cooldown Reduction."
+		description:"+50% Attack Speed<br>+60 Ability Power<br>UNIQUE Passive: +20% Cooldown Reduction.<br>UNIQUE Passive: Basic attacks deal 15 (+15% of Ability Power) bonus magic damage on hit."
 	3116:
 		name:"Rylai's Crystal Scepter"
 		description:"+500 Health<br>+80 Ability Power<br>UNIQUE Passive: Dealing ability damage slows the target's Movement Speed by 35% for 1.5 seconds (15% for multi-target and damage-over-time spells)."
@@ -439,7 +451,7 @@ items=
 		description:"+25 Attack Damage<br>+40% Attack Speed<br>+15% Life Steal<br>UNIQUE Passive: Basic attacks deal 5% of the target's current Health in bonus physical damage (max 60 vs. monsters and minions) on hit.<br>UNIQUE Active: Deals 15% of target champion's maximum Health (min. 100) as physical damage, heals for the same amount, and steals 30% of the target's Movement Speed for 4 seconds (60 second cooldown)."
 	3154:
 		name:"Wriggle's Lantern"
-		description:"+15 Attack Damage<br>+30 Armor<br>+10% Life Steal<br>UNIQUE Passive: Maim: Basic attacks against minions and monsters have a 25% chance to deal 500 additional magic damage on hit.<br>UNIQUE Active: Places an invisible Sight Ward that reveals the surrounding area for 3 minutes (3 minute cooldown)."
+		description:"+25 Attack Damage<br>+25 Armor<br>+15% Life Steal<br>UNIQUE Passive: Maim: Basic attacks deal 100 bonus magic damage to monsters on hit.<br>UNIQUE Active: Places an invisible Sight Ward that reveals the surrounding area for 90 seconds (90 second cooldown)."
 	3155:
 		name:"Hexdrinker"
 		description:"+25 Attack Damage<br>+25 Magic Resist<br>UNIQUE Passive: Lifeline: Upon taking magic damage that would reduce Health below 30%, grants a shield that absorbs 250 magic damage for 5 seconds (90 second cooldown)."
@@ -528,13 +540,13 @@ items=
 		description:"+3 Ability Power per level<br>This item can be upgraded into one of three augments that enhance Viktor's basic abilities."
 	3206:
 		name:"Spirit of the Spectral Wraith"
-		description:"+50 Ability Power<br>+10% Cooldown Reduction<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: +20% Spell Vamp.<br>UNIQUE Passive: Reduces the cooldown of Smite by 20%.<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 25%."
+		description:"+40 Ability Power<br>+10% Cooldown Reduction<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: +20% Spell Vamp.<br>UNIQUE Passive: Reduces the cooldown of Smite by 20%.<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 30%."
 	3207:
 		name:"Spirit of the Ancient Golem"
-		description:"+500 Health<br>+10% Cooldown Reduction<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 25%.<br>UNIQUE Passive: Tenacity: Reduces the duration of stuns, slows, taunts, fears, silences, blinds, and immobilizes by 35%."
+		description:"+500 Health<br>+10% Cooldown Reduction<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 30%.<br>UNIQUE Passive: Tenacity: Reduces the duration of stuns, slows, taunts, fears, silences, blinds, and immobilizes by 35%."
 	3209:
 		name:"Spirit of the Elder Lizard"
-		description:"+45 Attack Damage<br>+10% Cooldown Reduction<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 25%.<br>UNIQUE Passive: Basic attacks and spells that do not inflict damage-over-time deal 6-40 (based on level) bonus true damage over 3 seconds on hit."
+		description:"+35 Attack Damage<br>+10% Cooldown Reduction<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 30%.<br>UNIQUE Passive: Basic attacks and spells that do not inflict damage-over-time deal 6-40 (based on level) bonus true damage over 3 seconds on hit."
 	3222:
 		name:"Mikael's Crucible"
 		description:"+300 Mana<br>+40 Magic Resist<br>+9 Mana Regen per 5 seconds<br>UNIQUE Passive: Mana Font: Increases Mana Regen by 1% for every 1% of missing Mana.<br>UNIQUE Active: Removes all stuns, roots, taunts, fears, silences, and slows on an allied champion and heals that champion for 150 (+15% of missing Health)(180 second cooldown)."

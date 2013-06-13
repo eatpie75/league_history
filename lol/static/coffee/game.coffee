@@ -35,7 +35,7 @@ class TellMeMore
 		for key, stat of args
 			result+="
 			<div class='span3'>
-				<b>#{key.toUpperCase().replace('_', ' ', 'm')}</b><br>
+				<b>#{key.toUpperCase().replace('_', ' ', 'mg')}</b><br>
 				#{stat}
 			</div>"
 		result+="</td>"
