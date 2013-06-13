@@ -182,49 +182,79 @@ class Game(models.Model):
 class Player(models.Model):
 	game=models.ForeignKey(Game, db_index=True)
 	summoner=models.ForeignKey('Summoner', db_index=True)
+
 	won=models.BooleanField()
+
 	tier=models.IntegerField(choices=TIERS, null=True, blank=True)
 	division=models.IntegerField(choices=DIVISIONS, null=True, blank=True)
 	rank=models.IntegerField(null=True, blank=True)
+
 	afk=models.BooleanField()
 	leaver=models.BooleanField()
+
 	blue_team=models.BooleanField()
+
 	ping=models.IntegerField()
 	queue_length=models.IntegerField()
 	premade_size=models.IntegerField()
+
 	experience_earned=models.IntegerField()
 	boosted_experience_earned=models.IntegerField()
+
 	ip_earned=models.IntegerField()
 	boosted_ip_earned=models.IntegerField()
+
 	summoner_level=models.IntegerField()
+
 	summoner_spell1=models.IntegerField()
 	summoner_spell2=models.IntegerField()
+
 	champion_id=models.IntegerField()
 	skin_index=models.IntegerField()
 	skin_name=models.CharField(max_length=64, null=True, blank=True)
+
 	champion_level=models.IntegerField()
+
 	items=models.CharField(max_length=128)
+
 	kills=models.IntegerField()
 	deaths=models.IntegerField()
 	assists=models.IntegerField()
+
 	minion_kills=models.IntegerField()
+
 	neutral_minions_killed=models.IntegerField()
+	neutral_minions_killed_your_jungle=models.IntegerField()
+	neutral_minions_killed_enemy_jungle=models.IntegerField()
+
 	gold=models.IntegerField()
-	damage_dealt=models.IntegerField()
+
 	physical_damage_dealt=models.IntegerField()
 	magic_damage_dealt=models.IntegerField()
-	damage_taken=models.IntegerField()
+	true_damage_dealt=models.IntegerField()
+	damage_dealt=models.IntegerField()
+
 	physical_damage_taken=models.IntegerField()
 	magic_damage_taken=models.IntegerField()
+	true_damage_taken=models.IntegerField()
+	damage_taken=models.IntegerField()
+
+	total_time_crowd_control_dealt=models.IntegerField()
 	total_healing_done=models.IntegerField()
 	time_spent_dead=models.IntegerField()
+
 	largest_multikill=models.IntegerField()
 	largest_killing_spree=models.IntegerField()
 	largest_critical_strike=models.IntegerField()
+
 	turrets_destroyed=models.IntegerField()
 	inhibitors_destroyed=models.IntegerField()
+
 	sight_wards_bought_in_game=models.IntegerField()
 	vision_wards_bought_in_game=models.IntegerField()
+	ward_placed=models.IntegerField()
+	ward_killed=models.IntegerField()
+
 	node_neutralize=models.IntegerField(null=True, blank=True)
 	node_neutralize_assist=models.IntegerField(null=True, blank=True)
 	node_capture=models.IntegerField(null=True, blank=True)
@@ -414,30 +444,65 @@ def parse_games(games, summoner, full=False, current=None):
 				rank=0
 			player=Player(
 				game=game,
-				summoner=summoner, tier=tier, division=division, rank=rank,
+				summoner=summoner,
+				
+				tier=tier, division=division, rank=rank,
+
 				afk=ogame['afk'], leaver=ogame['leaver'],
+
 				ping=ogame['ping'],	queue_length=ogame['queue_length'],	premade_size=ogame['premade_size'],
+
 				experience_earned=ogame['xp_earned'], boosted_experience_earned=ogame['boost_xp'],
+
 				ip_earned=ogame['ip_earned'], boosted_ip_earned=ogame['boost_ip'],
+
 				summoner_level=ogame['summoner_level'],
+
 				summoner_spell1=ogame['summoner_spell_one'], summoner_spell2=ogame['summoner_spell_two'],
+
 				champion_id=ogame['champion'],
 				skin_index=ogame['skin_index'], skin_name=ogame['skin_name'],
+
 				champion_level=ogame['stats']['level'],
+
 				kills=ogame['stats']['champions_killed'],
 				deaths=ogame['stats']['num_deaths'],
 				assists=ogame['stats']['assists'],
-				minion_kills=ogame['stats']['minions_killed'], neutral_minions_killed=ogame['stats']['neutral_minions_killed'],
+
+				minion_kills=ogame['stats']['minions_killed'],
+
+				neutral_minions_killed=ogame['stats']['neutral_minions_killed'],
+				neutral_minions_killed_your_jungle=ogame['stats']['neutral_minions_killed_your_jungle'],
+				neutral_minions_killed_enemy_jungle=ogame['stats']['neutral_minions_killed_enemy_jungle'],
+
 				gold=ogame['stats']['gold_earned'],
-				damage_dealt=ogame['stats']['total_damage_dealt_to_champions'], physical_damage_dealt=ogame['stats']['physical_damage_dealt_to_champions'],	magic_damage_dealt=ogame['stats']['magic_damage_dealt_to_champions'],
-				damage_taken=ogame['stats']['total_damage_taken'], physical_damage_taken=ogame['stats']['physical_damage_taken'], magic_damage_taken=ogame['stats']['magic_damage_taken'],
+
+				physical_damage_dealt=ogame['stats']['physical_damage_dealt_to_champions'],
+				magic_damage_dealt=ogame['stats']['magic_damage_dealt_to_champions'],
+				true_damage_dealt=ogame['stats']['true_damage_dealt_to_champions'],
+				damage_dealt=ogame['stats']['total_damage_dealt_to_champions'],
+
+				physical_damage_taken=ogame['stats']['physical_damage_taken'],
+				magic_damage_taken=ogame['stats']['magic_damage_taken'],
+				true_damage_taken=ogame['stats']['true_damage_taken'],
+				damage_taken=ogame['stats']['total_damage_taken'],
+
+				total_time_crowd_control_dealt=ogame['stats']['total_time_crowd_control_dealt'],
 				total_healing_done=ogame['stats']['total_heal'],
 				time_spent_dead=ogame['stats']['total_time_spent_dead'],
+
 				largest_multikill=ogame['stats']['largest_multi_kill'],
 				largest_killing_spree=ogame['stats']['largest_killing_spree'],
 				largest_critical_strike=ogame['stats']['largest_critical_strike'],
-				turrets_destroyed=ogame['stats']['turrets_killed'], inhibitors_destroyed=ogame['stats']['inhibitors_destroyed'],
-				sight_wards_bought_in_game=ogame['stats']['sight_wards_bought_in_game'], vision_wards_bought_in_game=ogame['stats']['vision_wards_bought_in_game'],
+
+				turrets_destroyed=ogame['stats']['turrets_killed'],
+				inhibitors_destroyed=ogame['stats']['barracks_killed'],
+
+				sight_wards_bought_in_game=ogame['stats']['sight_wards_bought_in_game'],
+				vision_wards_bought_in_game=ogame['stats']['vision_wards_bought_in_game'],
+				ward_placed=ogame['stats']['ward_placed'],
+				ward_killed=ogame['stats']['ward_killed'],
+
 				node_neutralize=ogame['stats']['node_neutralize'], node_neutralize_assist=ogame['stats']['node_neutralize_assist'],
 				node_capture=ogame['stats']['node_capture'], node_capture_assist=ogame['stats']['node_capture_assist'],
 				victory_point_total=ogame['stats']['victory_point_total'],
