@@ -109,6 +109,7 @@ CHAMPIONS={
 	154:"Zac",
 	238:"Zed",
 	254:"Vi",
+	266:"Aatrox",
 	267:"Nami",
 	412:"Thresh"
 }
