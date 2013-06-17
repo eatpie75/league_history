@@ -365,4 +365,13 @@ def client_status(request):
 @user_passes_test(lambda u:u.is_superuser)
 def test_items(request):
 	from core.items import ITEMS
+
+	from lol.models import SummonerRating
+	summoners=SummonerRating.objects.filter(tier=6, summoner__time_updated__lt=(datetime.now(timezone('UTC'))-timedelta(hours=3)), summoner__region__in=[0, 1]).select_related('summoner').only('summoner__id')
+	players=Player.objects.filter(game__fetched=False, game__time__gt=(datetime.now(timezone('UTC'))-timedelta(days=2)), game__region__in=[0, 1], summoner__in=summoners).distinct('game').order_by().only('game')
+	# print(len(summoners))
+	for wat in players:
+		# print(wat.summoner.id, wat.summoner.region)
+		pass
+
 	return render_to_response('test_items.html.j2', {'items':ITEMS}, RequestContext(request))

@@ -53,6 +53,10 @@ CELERYBEAT_SCHEDULE = {
 		"task": "lol.tasks.auto_fill",
 		"schedule": timedelta(minutes=11),
 	},
+	"challenger_fill": {
+		"task": "lol.tasks.challenger_fill",
+		"schedule": timedelta(minutes=23),
+	},
 	"check_all_servers": {
 		"task": "lol.tasks.check_servers",
 		"schedule": timedelta(minutes=2),

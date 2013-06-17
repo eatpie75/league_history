@@ -5,7 +5,7 @@ from django.core.cache import cache
 from django.db import transaction
 from lol.core.servers import REGIONS
 from lol.core.stats import Stats
-from lol.models import Summoner, Player, Game, get_data, parse_games, parse_ratings, parse_summoner, parse_runes, parse_masteries, create_summoner
+from lol.models import Summoner, SummonerRating, Player, Game, get_data, parse_games, parse_ratings, parse_summoner, parse_runes, parse_masteries, create_summoner
 from pytz import timezone
 
 
@@ -27,6 +27,22 @@ def auto_fill():
 	for player in games:
 		if cache.get('game/{}/{}/filling'.format(player.game.region, player.game.game_id)) is None:
 			fill_game.apply_async(args=[player.game.pk,], priority=5)
+
+
+@task(ignore_result=True, priority=5)
+def challenger_fill():
+	print(u'running challenger fill')
+	server_list=cache.get('servers')
+	available_regions=[next(value for value, name in REGIONS if name==region.upper()) for region in server_list.available_regions]
+	summoners=SummonerRating.objects.filter(tier=6, summoner__time_updated__lt=(datetime.now(timezone('UTC'))-timedelta(hours=5)), summoner__region__in=available_regions).select_related('summoner').only('summoner__id', 'summoner__region', 'summoner__account_id')
+	games=Player.objects.filter(game__fetched=False, game__time__gt=(datetime.now(timezone('UTC'))-timedelta(days=2)), game__region__in=available_regions, summoner__in=summoners).distinct('game').order_by().only('game')
+	for summoner in summoners:
+		if cache.get('summoner/{}/{}/updating'.format(summoner.summoner.region, summoner.summoner.account_id)) is None:
+			summoner_auto_task.apply_async(args=[summoner.summoner.pk,], priority=6)
+	for player in games:
+		if cache.get('game/{}/{}/filling'.format(player.game.region, player.game.game_id)) is None:
+			fill_game.apply_async(args=[player.game.pk,], priority=6)
+	print(u'challenger fill finished')
 
 
 @task(ignore_result=True, priority=3)
