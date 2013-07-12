@@ -56,6 +56,8 @@ def game_list(request):
 		games=Game.objects.all()
 		if 'game_map' in request.GET:
 			games=games.filter(game_map=request.GET['game_map'])
+		if 'fetched' in request.GET:
+			games=games.filter(fetched=True)
 		games=games[:150]
 		players=Player.objects.filter(game__in=games).only('game', 'summoner').select_related('summoner__name', 'summoner__account_id', 'summoner__region', 'summoner__update_automatically', 'game__pk')
 	return render_to_response('game_list.html.j2', {'games':games, 'players':players}, RequestContext(request))
