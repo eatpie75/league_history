@@ -15,7 +15,7 @@ class Queryset_Manager:
 			len(tmp)
 			self.pk=tmp[0].pk-1
 			if self.count>self.chunksize:
-				tmp=self.queryset.order_by('-pk')[0:2].pk
+				tmp=self.queryset.order_by('-pk')[0:2]
 				len(tmp)
 				self.last_pk=tmp[0].pk
 
