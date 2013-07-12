@@ -1,14 +1,14 @@
-from coffin import template
 from datetime import datetime
+from django_jinja.base import Library
 from lol.models import TIERS, DIVISIONS
 from pytz import timezone
 
-register = template.Library()
+register = Library()
 
 
 @register.filter
 def get_percent(val1, val2):
-	return '{:.0%}'.format(float(val1)/float(val2))
+	return '{:.0%}'.format(float(val1)/float(val2)) if val2!=0 else '0%'
 
 
 @register.filter

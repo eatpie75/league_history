@@ -1,7 +1,7 @@
-from coffin import template
+from django_jinja.base import Library
 from lol.core.runes import RUNES, RUNE_STATS
 
-register = template.Library()
+register = Library()
 
 
 @register.filter

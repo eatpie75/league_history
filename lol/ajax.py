@@ -3,7 +3,7 @@ from django.core.cache import cache
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from django.template import RequestContext
-from coffin.shortcuts import render_to_response
+from django.shortcuts import render_to_response
 from lol.tasks import summoner_auto_task
 from lol.models import Player, Summoner
 from pytz import timezone

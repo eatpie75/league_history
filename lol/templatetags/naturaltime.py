@@ -1,10 +1,10 @@
-from coffin import template
 from datetime import date, datetime
+from django_jinja.base import Library
 from django.template import defaultfilters
 from django.utils.translation import pgettext, ungettext, ugettext as _
 from django.utils.timezone import is_aware, utc
 
-register = template.Library()
+register = Library()
 
 
 @register.filter

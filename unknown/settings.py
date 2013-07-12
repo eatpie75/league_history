@@ -132,17 +132,14 @@ SECRET_KEY = 'z6oyhza0dob#eue&amp;*2*_nsx79_-xa#3-05sitokb(l-07^pvuc'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-	'django.template.loaders.filesystem.Loader',
-	'django.template.loaders.app_directories.Loader',
+	'django_jinja.loaders.AppLoader',
+	'django_jinja.loaders.FileSystemLoader',
 )
-# JINJA2_ENVIRONMENT_OPTIONS = {
-# 	'trim_blocks':True,
-# }
-from django.utils import safestring
-if not hasattr(safestring, '__html__'):
-	safestring.SafeString.__html__ = lambda self: str(self)
-	safestring.SafeUnicode.__html__ = lambda self: unicode(self)
 
+DEFAULT_JINJA2_TEMPLATE_EXTENSION = '.html.j2'
+JINJA2_ENVIRONMENT_OPTIONS = {
+	'autoescape': True
+}
 MIDDLEWARE_CLASSES = (
 	'django.middleware.gzip.GZipMiddleware',
 	'django.middleware.common.CommonMiddleware',
@@ -193,31 +190,9 @@ INSTALLED_APPS = (
 	# 'django.contrib.admindocs',
 	'south',
 	'djcelery',
+	'django_jinja',
 	'lol',
 )
-
-# LOGGING = {
-# 	'version': 1,
-# 	'disable_existing_loggers': False,
-# 	'formatters': {
-# 		'verbose': {
-# 			'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
-# 		},
-# 	},
-# 	'handlers': {
-# 		'file': {
-# 			'class': 'logging.FileHandler',
-# 			'filename': '/var/www/logs/lol.log',
-# 			'formatter': 'verbose'
-# 		}
-# 	},
-# 	'loggers': {
-# 		'lol.main': {
-# 			'handlers': ['file'],
-# 			'propagate': True,
-# 		},
-# 	}
-# }
 
 try:
 	from settings_local import *
