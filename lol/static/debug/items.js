@@ -166,7 +166,7 @@
     },
     2042: {
       name: "Oracle's Elixir",
-      description: "Grants 750 radius stealth detection for up to 5 minutes or until death."
+      description: "Grants 600 radius stealth detection for up to 4 minutes or until death."
     },
     2043: {
       name: "Vision Ward",
@@ -182,7 +182,7 @@
     },
     2047: {
       name: "Oracle's Extract",
-      description: "Grants 750 radius stealth detection for up to 5 minutes or until death."
+      description: "Grants 600 radius stealth detection for up to 5 minutes or until death."
     },
     2048: {
       name: "Ichor of Illumination",
@@ -210,11 +210,11 @@
     },
     3003: {
       name: "Archangel's Staff",
-      description: "+250 Mana<br>+60 Ability Power<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: Insight: Grants Ability Power equal to 3% of maximum Mana.<br>UNIQUE Passive: Mana Charge: Grants +6 maximum Mana (max +750 Mana) for each spell cast and Mana expenditure (3 second cooldown)."
+      description: "+250 Mana<br>+60 Ability Power<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: Insight: Grants Ability Power equal to 3% of maximum Mana.<br>UNIQUE Passive: Mana Charge: Grants +8 maximum Mana (max +750 Mana) for each spell cast and Mana expenditure."
     },
     3004: {
       name: "Manamune",
-      description: "+250 Mana<br>+20 Attack Damage<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Awe: Grants bonus Attack Damage equal to 2% of maximum Mana.<br>UNIQUE Passive: Mana Charge: Grants +4 maximum Mana (max +750 Mana) for each basic attack, spell cast, and Mana expenditure (3 second cooldown)."
+      description: "+250 Mana<br>+20 Attack Damage<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Awe: Grants bonus Attack Damage equal to 2% of maximum Mana.<br>UNIQUE Passive: Mana Charge: Grants +4 maximum Mana (max +750 Mana) for each basic attack, spell cast, and Mana expenditure."
     },
     3005: {
       name: "Atma's Impaler",
@@ -226,11 +226,11 @@
     },
     3007: {
       name: "Archangel's Staff (CS)",
-      description: "+250 Mana<br>+60 Ability Power<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: Insight: Grants Ability Power equal to 3% of maximum Mana.<br>UNIQUE Passive: Mana Charge: Grants +10 maximum Mana (max +750 Mana) for each spell cast and Mana expenditure (3 second cooldown)."
+      description: "+250 Mana<br>+60 Ability Power<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: Insight: Grants Ability Power equal to 3% of maximum Mana.<br>UNIQUE Passive: Mana Charge: Grants +10 maximum Mana (max +750 Mana) for each spell cast and Mana expenditure."
     },
     3008: {
       name: "Manamune (CS)",
-      description: "+250 Mana<br>+20 Attack Damage<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Awe: Grants bonus Attack Damage equal to 2% of maximum Mana.<br>UNIQUE Passive: Mana Charge: Grants +8 maximum Mana (max +750 Mana) for each basic attack, spell cast, and Mana expenditure (3 second cooldown)."
+      description: "+250 Mana<br>+20 Attack Damage<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Awe: Grants bonus Attack Damage equal to 2% of maximum Mana.<br>UNIQUE Passive: Mana Charge: Grants +8 maximum Mana (max +750 Mana) for each basic attack, spell cast, and Mana expenditure."
     },
     3009: {
       name: "Boots of Swiftness",
@@ -480,6 +480,10 @@
       name: "Mercury's Treads",
       description: "+25 Magic Resist<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed<br>UNIQUE Passive: Tenacity: Reduces the duration of stuns, slows, taunts, fears, silences, blinds, and immobilizes by 35%."
     },
+    3112: {
+      name: "Orb of Winter",
+      description: "+70 Magic Resist<br>+20 Health Regen per 5 seconds<br>UNIQUE Passive: Grants a shield that absorbs up to 30 (+10 per level) damage. The shield will refresh after 9 seconds without receiving damage."
+    },
     3114: {
       name: "Malady",
       description: "+25 Ability Power<br>+45% Attack Speed<br>UNIQUE Passive: Basic attacks deal 15 (+10% of Ability Power) bonus magic damage on hit.<br>UNIQUE Passive: Basic attacks reduce the target's Magic Resist by 4 for 8 seconds on hit (stacks up to 7 times)."
@@ -506,7 +510,7 @@
     },
     3124: {
       name: "Guinsoo's Rageblade",
-      description: "+30 Attack Damage<br>+40 Ability Power<br>Passive: Basic attacks (on hit) and spell casts grant +4% Attack Speed and +4 Ability Power for 8 seconds (stacks up to 8 times).<br>UNIQUE Passive: Falling below 50% Health grants +20% Attack Speed, +10% Life Steal, and +10% Spell Vamp until out of combat (30 second cooldown)."
+      description: "+30 Attack Damage<br>+40 Ability Power<br>Passive: Basic attacks (on attack) and spell casts grant +4% Attack Speed and +4 Ability Power for 8 seconds (stacks up to 8 times).<br>UNIQUE Passive: Falling below 50% Health grants +20% Attack Speed, +10% Life Steal, and +10% Spell Vamp until out of combat (30 second cooldown)."
     },
     3126: {
       name: "Madred's Bloodrazor",
@@ -594,7 +598,7 @@
     },
     3156: {
       name: "Maw of Malmortius",
-      description: "+55 Attack Damage<br>+36 Magic Resist<br>UNIQUE Passive: Grants +1 Attack Damage for every 2.5% of missing Health.<br>UNIQUE Passive: Lifeline: Upon taking magic damage that would reduce Health below 30%, grants a shield that absorbs 400 magic damage for 5 seconds (90 second cooldown)."
+      description: "+60 Attack Damage<br>+40 Magic Resist<br>UNIQUE Passive: Grants +1 Attack Damage for every 2% of missing Health, up to a maximum of 35 Attack Damage.<br>UNIQUE Passive: Lifeline: Upon taking magic damage that would reduce Health below 30%, grants a shield that absorbs 400 magic damage for 5 seconds (90 second cooldown)."
     },
     3157: {
       name: "Zhonya's Hourglass",

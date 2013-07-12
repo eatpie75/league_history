@@ -112,6 +112,7 @@
     134: "Syndra",
     143: "Zyra",
     154: "Zac",
+    236: "Lucian",
     238: "Zed",
     254: "Vi",
     266: "Aatrox",
