@@ -14,9 +14,12 @@ def auto_update():
 	server_list=cache.get('servers')
 	available_regions=[next(value for value, name in REGIONS if name==region.upper()) for region in server_list.available_regions]
 	summoners=Summoner.objects.filter(update_automatically=True, time_updated__lt=(datetime.now(timezone('UTC'))-timedelta(hours=3)), region__in=available_regions).only('pk', 'region', 'account_id')
+	num=0
 	for summoner in summoners:
 		if cache.get('summoner/{}/{}/updating'.format(summoner.region, summoner.account_id)) is None:
 			summoner_auto_task.apply_async(args=[summoner.pk,], priority=5)
+			num+=1
+	print(u'autoupdate added {} summoner(s) to the queue'.format(num))
 
 
 @task(ignore_result=True, priority=3)
@@ -24,25 +27,33 @@ def auto_fill():
 	server_list=cache.get('servers')
 	available_regions=[next(value for value, name in REGIONS if name==region.upper()) for region in server_list.available_regions]
 	games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.now(timezone('UTC'))-timedelta(days=2)), game__region__in=available_regions).distinct('game').order_by().only('game')
+	num=0
 	for player in games:
 		if cache.get('game/{}/{}/filling'.format(player.game.region, player.game.game_id)) is None:
 			fill_game.apply_async(args=[player.game.pk,], priority=5)
+			num+=1
+	print(u'autofill added {} game(s) to the queue'.format(num))
 
 
 @task(ignore_result=True, priority=5)
 def challenger_fill():
-	print(u'running challenger fill')
+	# print(u'running challenger fill')
 	server_list=cache.get('servers')
 	available_regions=[next(value for value, name in REGIONS if name==region.upper()) for region in server_list.available_regions]
 	summoners=SummonerRating.objects.filter(tier=6, summoner__time_updated__lt=(datetime.now(timezone('UTC'))-timedelta(hours=5)), summoner__region__in=available_regions).select_related('summoner').only('summoner__id', 'summoner__region', 'summoner__account_id')
 	games=Player.objects.filter(game__fetched=False, game__time__gt=(datetime.now(timezone('UTC'))-timedelta(days=2)), game__region__in=available_regions, summoner__in=summoners).distinct('game').order_by().only('game')
+	summoner_num=0
+	game_num=0
 	for summoner in summoners:
 		if cache.get('summoner/{}/{}/updating'.format(summoner.summoner.region, summoner.summoner.account_id)) is None:
 			summoner_auto_task.apply_async(args=[summoner.summoner.pk,], priority=6)
+			summoner_num+=1
 	for player in games:
 		if cache.get('game/{}/{}/filling'.format(player.game.region, player.game.game_id)) is None:
 			fill_game.apply_async(args=[player.game.pk,], priority=6)
-	print(u'challenger fill finished')
+			game_num+=1
+	print(u'challenger fill added {} summoner(s) and {} game(s) to the queue'.format(summoner_num, game_num))
+	# print(u'challenger fill finished')
 
 
 @task(ignore_result=True, priority=3)
