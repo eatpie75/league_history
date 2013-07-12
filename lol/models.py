@@ -9,7 +9,7 @@ import requests
 import json
 
 MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (9, '?'))
-MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Aram'), (4, 'Twisted Treeline'), (9, '?'))
+MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Howling Abyss'), (4, 'Twisted Treeline'), (9, '?'))
 #{'queue', 'mode', 'map'}
 GAME_TYPES={'rankedpremade5x5':(4,1), 'rankedteam5x5':(5,1), 'rankedpremade3x3':(4,4), 'rankedteam3x3':(5,4), 'unranked':(2,1), 'odinunranked':(2,2), 'rankedsolo5x5':(3,1), 'coopvsai':(1,1), 'oldrankedpremade3x3':(4,0), 'oldrankedteam3x3':(5,0)}
 RANKED_SOLO_QUEUE_TYPES={'rankedpremade5x5':(5,1), 'rankedpremade3x3':(5,4), 'rankedsolo5x5':(3,1)}
