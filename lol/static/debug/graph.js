@@ -21,7 +21,7 @@
   };
 
   draw_chart = function(data, kwargs) {
-    var append_colors, append_goals, chart_defaults, chart_options, colors, data_defaults, data_options, day, goals, high, high_rank, high_tier, low, low_rank, low_tier, parsed, prefix_colors, prefix_goals, x, _chistorywr_hover, _i, _j, _k, _l, _lcs_hover, _lcs_num_reverser, _len, _len1, _len2, _len3, _m;
+    var append_colors, append_goals, champion, chart_defaults, chart_options, colors, data_defaults, data_options, day, goals, high, high_rank, high_tier, low, low_rank, low_tier, parsed, prefix_colors, prefix_goals, x, _chistorywr_hover, _i, _j, _k, _l, _lcs_hover, _lcs_num_reverser, _len, _len1, _len2, _len3, _len4, _m, _n;
     if (kwargs == null) {
       kwargs = {};
     }
@@ -48,6 +48,7 @@
       return JSON.stringify(_lcs_num_reverser(data['y']));
     };
     chart_defaults = {
+      type: 'Line',
       element: 'elo-graph',
       xkey: 'x',
       ykeys: 'y',
@@ -65,7 +66,7 @@
     chart_options = $.extend(true, {}, chart_defaults, kwargs.chart_options);
     data_options = $.extend(true, {}, data_defaults, kwargs.data_options);
     parsed = [];
-    if (data_options.data_parse === 'default') {
+    if (chart_options.type === 'Line' && data_options.data_parse === 'default') {
       for (_i = 0, _len = data.length; _i < _len; _i++) {
         day = data[_i];
         if (day[1][data_options.y] < 10) {
@@ -76,7 +77,7 @@
           'y': day[1][data_options.y]
         });
       }
-    } else if (data_options.data_parse === 'chistorywr') {
+    } else if (chart_options.type === 'Line' && data_options.data_parse === 'chistorywr') {
       chart_options.hoverCallback = _chistorywr_hover;
       for (_j = 0, _len1 = data.length; _j < _len1; _j++) {
         day = data[_j];
@@ -89,7 +90,7 @@
           'count': day[1]['champions'][data_options.y]['count']
         });
       }
-    } else if (data_options.data_parse === 'chistorypop') {
+    } else if (chart_options.type === 'Line' && data_options.data_parse === 'chistorypop') {
       for (_k = 0, _len2 = data.length; _k < _len2; _k++) {
         day = data[_k];
         if (day[1]['champions'][data_options.y]['count'] < 10) {
@@ -100,7 +101,7 @@
           'y': (day[1]['champions'][data_options.y]['won'] / day[1]['count']) * 100
         });
       }
-    } else if (data_options.data_parse === 'lcs' && data.length > 2) {
+    } else if (chart_options.type === 'Line' && data_options.data_parse === 'lcs' && data.length > 2) {
       chart_options.hoverCallback = _lcs_hover;
       chart_options.yLabelFormat = function(x) {
         return '';
@@ -153,16 +154,50 @@
       chart_options.goals = [].concat(prefix_goals, goals, append_goals);
       chart_options.goalLineColors = [].concat(prefix_colors, colors, append_colors);
       chart_options.goalStrokeWidth = 2;
+    } else if (chart_options.type === 'Donut' && data_options.data_parse === 'default') {
+      chart_options.colors = ['#D676E5', '#B15CBF', '#8D4299', '#692873', '#450F4E', '#88ACDE', '#6B8CBA', '#4F6D97', '#324E73', '#162F50'];
+      for (_n = 0, _len4 = data.length; _n < _len4; _n++) {
+        champion = data[_n];
+        parsed.push({
+          'label': "/static/img/champions/" + champion['champion_id'] + ".png",
+          'value': champion[data_options.y],
+          'blue_team': champion.blue_team
+        });
+      }
+      parsed.sort(function(a, b) {
+        if (a.blue_team && !b.blue_team) {
+          return 1;
+        } else if (!a.blue_team && b.blue_team) {
+          return -1;
+        } else if (a.value > b.value) {
+          return 1;
+        } else if (a.value < b.value) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
     }
     chart_options['data'] = parsed;
-    window.drawn_chart = Morris.Line(chart_options);
+    window.drawn_chart = Morris[chart_options['type']](chart_options);
     return [data_options, chart_options];
   };
 
   $(document).ready(function() {
+    var i_chart, _i, _len, _ref, _results;
     window.draw_chart = draw_chart;
     if (window.chart != null) {
-      return draw_chart(window.chart_data, window.chart);
+      if (Array.isArray(window.chart)) {
+        _ref = window.chart;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          i_chart = _ref[_i];
+          _results.push(draw_chart(window.chart_data, i_chart));
+        }
+        return _results;
+      } else {
+        return draw_chart(window.chart_data, window.chart);
+      }
     }
   });
 

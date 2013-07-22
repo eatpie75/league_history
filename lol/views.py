@@ -14,6 +14,7 @@ from lol.core.servers import REGIONS
 from lol.models import Summoner, Game, Player, get_data, create_summoner
 from pytz import timezone
 from tasks import summoner_auto_task, fill_game, generate_global_stats, test_fill, check_servers  # , spectate_check
+import json
 
 
 def __get_region(region):
@@ -141,7 +142,9 @@ def view_game(request, region, game_id):
 			metadata['stats'][team]['avg_elo']=round(metadata['stats'][team]['total_elo']/metadata['stats'][team]['num_players'])
 	if game.game_mode in (3, 4, 5):
 		metadata['avg_elo']=round((metadata['stats']['winner']['avg_elo']+metadata['stats']['loser']['avg_elo'])/2)
-	return render_to_response('view_game.html.j2', {'game':game, 'players':players, 'metadata':metadata, 'update_in_queue':update_in_queue}, RequestContext(request))
+	chart_data=players.values()
+	map(lambda x:x.update(gpm=round(x['gold']/metadata['length'])) if metadata['length']>0 else x.update(gpm=0), chart_data)
+	return render_to_response('view_game.html.j2', {'game':game, 'players':players, 'metadata':metadata, 'update_in_queue':update_in_queue, 'chart_data':json.dumps(list(chart_data))}, RequestContext(request))
 
 
 # @cache_page(60 * 15)

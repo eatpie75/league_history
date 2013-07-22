@@ -1,17 +1,25 @@
 {% extends 'base.html.j2' %}
 
+{% block extra_css %}
+		<link href="{{STATIC_URL}}css/morris.css" rel="stylesheet" type="text/css">
+{%- endblock %}
+
 {% block post_scripts %}
 		{%- if debug %}
 		<script src='{{STATIC_URL}}debug/items.js' type='text/javascript'></script>
 		<script src='{{STATIC_URL}}debug/core.js' type='text/javascript'></script>
 		<script src='{{STATIC_URL}}debug/game.js' type='text/javascript'></script>
+		<script src='{{STATIC_URL}}debug/graph.js' type='text/javascript'></script>
 		{%- else %}
 		<script src="{{STATIC_URL}}js/main.js" type="text/javascript"></script>
 		{%- endif %}
+		<script src='{{STATIC_URL}}js/morris.js' type='text/javascript'></script>
 		<script type="text/javascript">
 			var AJAX_BASE="{{AJAX_BASE}}";
 			var game_pk={{game.pk}};
 			var game_region={{game.region}};
+			var chart=[{'chart_options':{'type':'Donut', 'element':'damage-dealt-graph', 'useImages':true}, 'data_options':{'y':'damage_dealt'}}, {'chart_options':{'type':'Donut', 'element':'damage-taken-graph', 'useImages':true}, 'data_options':{'y':'damage_taken'}}, {'chart_options':{'type':'Donut', 'element':'gpm-graph', 'useImages':true}, 'data_options':{'y':'gpm'}}, {'chart_options':{'type':'Donut', 'element':'gold-graph', 'useImages':true}, 'data_options':{'y':'gold'}}];
+			var chart_data={{chart_data|safe}};
 		</script>
 {%- endblock %}
 
@@ -86,6 +94,24 @@
 					{%- endfor %}
 					{%- endfor %}
 				</table>
+			</div>
+			<div class='row span12'>
+				<div class='span3 no-margin'>
+					<div class='text-center'><strong>Damage Dealt</strong></div>
+					<div id='damage-dealt-graph' style='height:220px;'></div>
+				</div>
+				<div class='span3 no-margin'>
+					<div class='text-center'><strong>Damage Taken</strong></div>
+					<div id='damage-taken-graph' style='height:220px;'></div>
+				</div>
+				<div class='span3 no-margin'>
+					<div class='text-center'><strong>GPM</strong></div>
+					<div id='gpm-graph' style='height:220px;'></div>
+				</div>
+				<div class='span3 no-margin'>
+					<div class='text-center'><strong>Gold</strong></div>
+					<div id='gold-graph' style='height:220px;'></div>
+				</div>
 			</div>
 			{%- else %}
 			{{update_in_queue}}

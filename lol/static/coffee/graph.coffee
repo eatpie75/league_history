@@ -30,6 +30,7 @@ draw_chart=(data, kwargs={})->
 		return JSON.stringify(_lcs_num_reverser(data['y']))
 	# console.log data
 	chart_defaults={
+		type:'Line'
 		element:'elo-graph'
 		xkey:'x'
 		ykeys:'y'
@@ -51,12 +52,12 @@ draw_chart=(data, kwargs={})->
 	parsed=[]
 	# console.log chart_options
 
-	if data_options.data_parse=='default'
+	if chart_options.type=='Line' and data_options.data_parse=='default'
 		for day in data
 			if day[1][data_options.y]<10
 				continue
 			parsed.push({'x':day[0], 'y':day[1][data_options.y]})
-	else if data_options.data_parse=='chistorywr'
+	else if chart_options.type=='Line' and data_options.data_parse=='chistorywr'
 		chart_options.hoverCallback=_chistorywr_hover
 		for day in data
 			# date=new Date(day[0])
@@ -64,12 +65,12 @@ draw_chart=(data, kwargs={})->
 			if day[1]['champions'][data_options.y]['count']<20# or (date.getUTCMonth()!=now.getUTCMonth()|date.getUTCFullYear()!=now.getUTCFullYear())
 				continue
 			parsed.push({'x':day[0], 'y':Math.round((day[1]['champions'][data_options.y]['won']/day[1]['champions'][data_options.y]['count'])*100), 'count':day[1]['champions'][data_options.y]['count']})
-	else if data_options.data_parse=='chistorypop'
+	else if chart_options.type=='Line' and data_options.data_parse=='chistorypop'
 		for day in data
 			if day[1]['champions'][data_options.y]['count']<10
 				continue
 			parsed.push({'x':day[0], 'y':(day[1]['champions'][data_options.y]['won']/day[1]['count'])*100})
-	else if data_options.data_parse=='lcs' and data.length>2
+	else if chart_options.type=='Line' and data_options.data_parse=='lcs' and data.length>2
 		chart_options.hoverCallback=_lcs_hover
 		chart_options.yLabelFormat=(x)->return ''
 		chart_options.grid=false
@@ -79,7 +80,7 @@ draw_chart=(data, kwargs={})->
 		for day in data
 			if day[1]['avg']>high then high=day[1]['avg']
 			if day[1]['avg']<low then low=day[1]['avg']
-			parsed.push('x':day[0], 'y':day[1]['avg'])
+			parsed.push({'x':day[0], 'y':day[1]['avg']})
 		low_rank=_lcs_num_reverser(low)
 		high_rank=_lcs_num_reverser(high)
 		low_tier=low_rank['tier']
@@ -118,13 +119,46 @@ draw_chart=(data, kwargs={})->
 		chart_options.goals=[].concat(prefix_goals, goals, append_goals)
 		chart_options.goalLineColors=[].concat(prefix_colors, colors, append_colors)
 		chart_options.goalStrokeWidth=2
+	else if chart_options.type=='Donut' and data_options.data_parse=='default'
+		chart_options.colors=[
+			'#D676E5'
+			'#B15CBF'
+			'#8D4299'
+			'#692873'
+			'#450F4E'
+
+			'#88ACDE'
+			'#6B8CBA'
+			'#4F6D97'
+			'#324E73'
+			'#162F50'
+		]
+		for champion in data
+			parsed.push({'label':"/static/img/champions/#{champion['champion_id']}.png", 'value':champion[data_options.y], 'blue_team':champion.blue_team})
+		parsed.sort((a,b)->
+			if a.blue_team and !b.blue_team
+				return 1
+			else if !a.blue_team and b.blue_team
+				return -1
+			else if a.value>b.value
+				return 1
+			else if a.value<b.value
+				return -1
+			else
+				return 0
+		)
 
 	chart_options['data']=parsed
 
-	window.drawn_chart=Morris.Line(chart_options)
+	window.drawn_chart=Morris[chart_options['type']](chart_options)
 	return [data_options, chart_options]
 
 $(document).ready(->
 	window.draw_chart=draw_chart
-	if window.chart? then draw_chart(window.chart_data, window.chart)
+	if window.chart?
+		if Array.isArray(window.chart)
+			for i_chart in window.chart
+				draw_chart(window.chart_data, i_chart)
+		else
+			draw_chart(window.chart_data, window.chart)
 )
