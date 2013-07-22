@@ -47,18 +47,18 @@ def search(request, name):
 
 # @cache_page(60 * 2)
 def game_list(request):
+	games=Game.objects.all()
+	if 'game_map' in request.GET:
+		games=games.filter(game_map=request.GET['game_map'])
+	if 'fetched' in request.GET:
+		games=games.filter(fetched=True)
 	if 'auto' in request.GET:
 		a=Summoner.objects.filter(update_automatically=True)
 		b=Player.objects.filter(summoner__in=a, game__fetched=False)
-		games=Game.objects.filter(id__in=b.only('game_id').values('game_id'))[:50]
+		games=games.filter(id__in=b.only('game_id').values('game_id'))[:50]
 		players=Player.objects.filter(game__in=games).only('game', 'summoner').select_related('summoner__name', 'summoner__account_id', 'summoner__region', 'summoner__update_automatically', 'game__pk')
 	else:
-		games=Game.objects.all()
-		if 'game_map' in request.GET:
-			games=games.filter(game_map=request.GET['game_map'])
-		if 'fetched' in request.GET:
-			games=games.filter(fetched=True)
-		games=games[:150]
+		games=games[:50]
 		players=Player.objects.filter(game__in=games).only('game', 'summoner').select_related('summoner__name', 'summoner__account_id', 'summoner__region', 'summoner__update_automatically', 'game__pk')
 	return render_to_response('game_list.html.j2', {'games':games, 'players':players}, RequestContext(request))
 
