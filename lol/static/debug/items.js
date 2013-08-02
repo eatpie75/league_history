@@ -262,7 +262,7 @@
     },
     3026: {
       name: "Guardian Angel",
-      description: "+50 Armor<br>+30 Magic Resist<br>UNIQUE Passive: Upon taking lethal damage, restores 30% of maximum Health and Mana after 4 seconds of stasis (5 minute cooldown)."
+      description: "+50 Armor<br>+40 Magic Resist<br>UNIQUE Passive: Upon taking lethal damage, restores 30% of maximum Health and Mana after 4 seconds of stasis (5 minute cooldown)."
     },
     3027: {
       name: "Rod of Ages",
@@ -330,7 +330,7 @@
     },
     3065: {
       name: "Spirit Visage",
-      description: "+50 Magic Resist<br>+200 Health<br>+10% Cooldown Reduction<br>UNIQUE Passive: Increases self-healing, Health Regen, Lifesteal, and Spell Vamp effects by 20%."
+      description: "+400 Health<br>+55 Magic Resist<br>+20 Health Regen per 5 seconds<br>+20% Cooldown Reduction<br>UNIQUE Passive: Increases self-healing, Health Regen, Lifesteal, and Spell Vamp effects by 20%."
     },
     3067: {
       name: "Kindlegem",
@@ -378,7 +378,7 @@
     },
     3082: {
       name: "Warden's Mail",
-      description: "+50 Armor<br>UNIQUE Passive: Cold Steel: When hit by basic attacks, reduces the attacker's Attack Speed by 15% for 2 seconds."
+      description: "+50 Armor<br>UNIQUE Passive: Cold Steel: When hit by basic attacks, reduces the attacker's Attack Speed by 15% for 1 seconds."
     },
     3083: {
       name: "Warmog's Armor",
@@ -406,7 +406,7 @@
     },
     3090: {
       name: "Wooglet's Witchcap",
-      description: "+100 Ability Power<br>+40 Armor<br>UNIQUE Passive: +25% Ability Power.<br>UNIQUE Active: Champion becomes invulnerable and untargetable for 2.5 seconds, but is unable to move, attack, cast spells, or use items during this time (90 second cooldown)."
+      description: "+100 Ability Power<br>+45 Armor<br>UNIQUE Passive: +25% Ability Power.<br>UNIQUE Active: Champion becomes invulnerable and untargetable for 2.5 seconds, but is unable to move, attack, cast spells, or use items during this time (90 second cooldown)."
     },
     3091: {
       name: "Wit's End",
@@ -446,7 +446,7 @@
     },
     3102: {
       name: "Banshee's Veil",
-      description: "+400 Health<br>+300 Mana<br>+45 Magic Resist<br>UNIQUE Passive: Grants a spell shield that blocks the next enemy ability. This shield refreshes after no damage is taken from enemy champions for 25 seconds."
+      description: "+450 Health<br>+55 Magic Resist<br>UNIQUE Passive: Grants a spell shield that blocks the next enemy ability. This shield refreshes after no damage is taken from enemy champions for 25 seconds.<br>UNIQUE Passive: Grants 45 Health Regen per 5 for up to 10 seconds after taking damage from an enemy champion or when the spell shield breaks."
     },
     3104: {
       name: "Lord Van Damm's Pillager",
@@ -454,7 +454,7 @@
     },
     3105: {
       name: "Aegis of the Legion",
-      description: "+250 Health<br>+20 Armor<br>+20 Magic Resist<br>UNIQUE Aura: Legion: Grants nearby allies +10 Armor, +15 Magic Resist, and +10 Health Regen per 5 seconds."
+      description: "+200 Health<br>+20 Armor<br>UNIQUE Aura: Legion: Grants nearby allies +20 Magic Resist and +10 Health Regen per 5 seconds."
     },
     3106: {
       name: "Madred's Razors",
@@ -562,7 +562,7 @@
     },
     3143: {
       name: "Randuin's Omen",
-      description: "+500 Health<br>+70 Armor<br>UNIQUE Passive: Cold Steel: When hit by basic attacks, reduces the attacker's Attack Speed by 15% and Movement Speed by 10% for 1.5 seconds.<br>UNIQUE Active: Slows the Movement Speed of nearby enemy units by 35% for 2 seconds (+1 second per 200 Armor and +1 second per 200 Magic Resist)(60 second cooldown)."
+      description: "+500 Health<br>+70 Armor<br>UNIQUE Passive: Cold Steel: When hit by basic attacks, reduces the attacker's Attack Speed by 15% and Movement Speed by 10% for 1 seconds.<br>UNIQUE Active: Slows the Movement Speed of nearby enemy units by 35% for 2 seconds (+1 second per 200 Armor and +1 second per 200 Magic Resist)(60 second cooldown)."
     },
     3144: {
       name: "Bilgewater Cutlass",
@@ -586,7 +586,7 @@
     },
     3153: {
       name: "Blade of the Ruined King",
-      description: "+25 Attack Damage<br>+40% Attack Speed<br>+15% Life Steal<br>UNIQUE Passive: Basic attacks deal 5% of the target's current Health in bonus physical damage (max 60 vs. monsters and minions) on hit.<br>UNIQUE Active: Deals 15% of target champion's maximum Health (min. 100) as physical damage, heals for the same amount, and steals 30% of the target's Movement Speed for 4 seconds (60 second cooldown)."
+      description: "+25 Attack Damage<br>+40% Attack Speed<br>+15% Life Steal<br>UNIQUE Passive: Basic attacks deal 5% of the target's current Health in bonus physical damage (max 60 vs. monsters and minions) on hit.<br>UNIQUE Active: Deals 15% of target champion's maximum Health (min. 100) as physical damage, heals for the same amount, and steals 30% of the target's Movement Speed for 3 seconds (60 second cooldown)."
     },
     3154: {
       name: "Wriggle's Lantern",
@@ -622,7 +622,7 @@
     3169: __rengar_trophy,
     3170: {
       name: "Moonflair Spellblade",
-      description: "+50 Ability Power<br>UNIQUE Passive: Tenacity: Reduces the duration of stuns, slows, taunts, fears, silences, blinds, and immobilizes by 35%."
+      description: "+50 Ability Power<br>+50 Armor<br>+50 Magic Resistance<br>UNIQUE Passive: Tenacity: Reduces the duration of stuns, slows, taunts, fears, silences, blinds, and immobilizes by 35%."
     },
     3171: __rengar_trophy,
     3172: {
@@ -679,11 +679,11 @@
     },
     3188: {
       name: "Blackfire Torch",
-      description: "+80 Ability Power<br>+250 Health<br>+10 Mana Regeneration<br>UNIQUE Passive: +20% Cooldown Reduction.<br>UNIQUE Passive: Eyes of Pain: +15 Magic Penetration.<br>UNIQUE Passive: Dealing spell damage deals bonus magic damage over 2 seconds equal to 3.5% of the target's maximum Health. Each second burned consumes a charge. Up to 18 charges are generated when not in use."
+      description: "+80 Ability Power<br>+20% Cooldown Reduction<br>UNIQUE Active: Deals 20% of target champion's maximum Health in magic damage over 6 seconds and increases all subsequent magic damage taken by the target by 20% (60 second cooldown)."
     },
     3190: {
       name: "Locket of the Iron Solari",
-      description: "+300 Health<br>+35 Armor<br>+15% Cooldown Reduction<br>+10 Health Regen per 5 seconds<br>UNIQUE Active: Grants a shield to nearby allies for 5 seconds that absorbs up to 50 (+10 per level) damage (60 second cooldown)."
+      description: "+300 Health<br>+20 Armor<br>+10% Cooldown Reduction<br>UNIQUE Active: Grants a shield to nearby allies for 5 seconds that absorbs up to 50 (+10 per level) damage (60 second cooldown).<br>UNIQUE Aura: Legion: Grants nearby allies +20 Magic Resist and +10 Health Regen per 5 seconds."
     },
     3191: {
       name: "Seeker's Armguard",
@@ -716,6 +716,10 @@
     3209: {
       name: "Spirit of the Elder Lizard",
       description: "+35 Attack Damage<br>+10% Cooldown Reduction<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 30%.<br>UNIQUE Passive: Basic attacks and spells that do not inflict damage-over-time deal 6-40 (based on level) bonus true damage over 3 seconds on hit."
+    },
+    3211: {
+      name: "Spectre's Cowl",
+      description: "+200 Health<br>+45 Magic Resist<br><br>UNIQUE Passive: Grants 15 Health Regen per 5 seconds for up to 10 seconds after taking damage from an enemy champion."
     },
     3222: {
       name: "Mikael's Crucible",
