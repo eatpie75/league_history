@@ -15,7 +15,6 @@
 		{%- endif %}
 		<script src='{{STATIC_URL}}js/morris.js' type='text/javascript'></script>
 		<script type="text/javascript">{% if not generating %}
-			var AJAX_BASE="{{AJAX_BASE}}";
 			var champion_id={{champion_id}};
 			var chart={'chart_options':{'ymin':0, 'ymax':100, 'smooth':true, 'labels':['Win %',], 'pointSize':0}, 'data_options':{'y':window.champion_id, 'data_parse':'chistorywr'}};
 			var chart_data={{stats.history_toJSON()|safe}};
