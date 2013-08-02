@@ -159,7 +159,7 @@
       for (_n = 0, _len4 = data.length; _n < _len4; _n++) {
         champion = data[_n];
         parsed.push({
-          'label': "/static/img/champions/" + champion['champion_id'] + ".png",
+          'label': "" + window.STATIC_URL + "img/champions/" + champion['champion_id'] + ".png",
           'value': champion[data_options.y],
           'blue_team': champion.blue_team
         });

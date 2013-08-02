@@ -134,7 +134,7 @@ draw_chart=(data, kwargs={})->
 			'#162F50'
 		]
 		for champion in data
-			parsed.push({'label':"/static/img/champions/#{champion['champion_id']}.png", 'value':champion[data_options.y], 'blue_team':champion.blue_team})
+			parsed.push({'label':"#{window.STATIC_URL}img/champions/#{champion['champion_id']}.png", 'value':champion[data_options.y], 'blue_team':champion.blue_team})
 		parsed.sort((a,b)->
 			if a.blue_team and !b.blue_team
 				return 1
