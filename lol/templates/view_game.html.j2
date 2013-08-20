@@ -23,7 +23,7 @@
 {%- endblock %}
 
 {% block content %}
-			<div class='summoner-header row span12' style='background-image:url({{STATIC_URL}}img/map-backgrounds/{{game.game_map}}.png)'>
+			<div class='summoner-header row col-md-12' style='background-image:url({{STATIC_URL}}img/map-backgrounds/{{game.game_map}}.png)'>
 				<div class='info-block pull-right'>
 					{%- if metadata.avg_elo %}
 					<div>
@@ -51,11 +51,11 @@
 					<span class='green'>{{metadata.stats.winner.kills}}</span>/<span class='red'>{{metadata.stats.loser.kills}}</span>
 				</div>
 			</div>
-			<div class='row span12'>{% if not update_in_queue %}
+			<div class='row col-md-12'>{% if not update_in_queue %}
 				<table class='game-list table table-condensed'>
 					<thead>
 						<tr>
-							<th style='width:40px;'></th>
+							<th style='width:45px;'></th>
 							<th style='width:100px;'>Summoner</th>
 							<th style='width:50px'>K/D/A</th>
 							<th style='width:50px'>Gold</th>
@@ -88,26 +88,26 @@
 							{{sprites.item(item)}}
 							{%- endfor %}
 						</td>
-						<td><i class='icon-chevron-down player_expand' data-player='{{player.pk}}'></i></td>
+						<td><span class='glyphicon glyphicon-chevron-down player_expand' data-player='{{player.pk}}'></span></td>
 					</tr>
 					{%- endfor %}
 					{%- endfor %}
 				</table>
 			</div>
-			<div class='row span12'>
-				<div class='span3 no-margin'>
+			<div class='row col-md-12'>
+				<div class='col-md-3 no-margin'>
 					<div class='text-center'><strong>Damage Dealt</strong></div>
 					<div id='damage-dealt-graph' style='height:220px;'></div>
 				</div>
-				<div class='span3 no-margin'>
+				<div class='col-md-3 no-margin'>
 					<div class='text-center'><strong>Damage Taken</strong></div>
 					<div id='damage-taken-graph' style='height:220px;'></div>
 				</div>
-				<div class='span3 no-margin'>
+				<div class='col-md-3 no-margin'>
 					<div class='text-center'><strong>GPM</strong></div>
 					<div id='gpm-graph' style='height:220px;'></div>
 				</div>
-				<div class='span3 no-margin'>
+				<div class='col-md-3 no-margin'>
 					<div class='text-center'><strong>Gold</strong></div>
 					<div id='gold-graph' style='height:220px;'></div>
 				</div>

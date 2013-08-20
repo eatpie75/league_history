@@ -14,7 +14,7 @@
 {%- endblock %}
 
 {% block content %}
-			<div class='summoner-header row span12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{champion_id}}.png)'>
+			<div class='summoner-header row col-md-12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{champion_id}}.png)'>
 				{#- <div class='pull-left sprite sprite-champions-{{champion_id}}'></div> #}
 				<div class='pull-left'>{{sprites.champion(champion_id, size='large')}}</div>
 				<div class='info-block pull-right'>
@@ -34,18 +34,18 @@
 					<li class='active'><a href='{{ url("view_champion_items", champion_id=champion_id, champion_slug=champion|slugify) }}'>ITEMS</a></li>
 				</ul>
 			</div>{% if not generating %}
-			<div class='row span12' id='games'>
+			<div class='row col-md-12' id='games'>
 				<table class='table table-condensed table-sorted'>
 					<thead>
 						<tr>
 							<th style='width:32px;'></th>
-							<th style='width:210px;' class='table-sort' data-column='name'><span>ITEM<i></i></span></th>
-							<th class='table-sort active' data-column='total'><span>BOUGHT<i class='icon-arrow-down'></i></span></th>
-							<th class='table-sort' data-column='won'><span>WON<i></i></span></th>
-							<th class='table-sort' data-column='lost'><span>LOST<i></i></span></th>
-							<th class='table-sort' data-column='percent' data-spec-order='swin'><span>WIN %<i></i></span></th>
-							<th style='width:90px;' class='table-sort' data-column='avg_kills'><span>AVG KILLS<i></i></span></th>
-							<th style='width:90px;' class='table-sort' data-column='avg_deaths'><span>AVG DEATHS<i></i></span></th>
+							<th style='width:230px;' class='table-sort' data-column='name'><span>ITEM<small></small></span></th>
+							<th class='table-sort active' data-column='total'><span>BOUGHT<small class='glyphicon glyphicon-arrow-down'></small></span></th>
+							<th class='table-sort' data-column='won'><span>WON<small></small></span></th>
+							<th class='table-sort' data-column='lost'><span>LOST<small></small></span></th>
+							<th class='table-sort' data-column='percent' data-spec-order='swin'><span>WIN %<small></small></span></th>
+							<th style='width:100px;' class='table-sort' data-column='avg_kills'><span>AVG KILLS<small></small></span></th>
+							<th style='width:110px;' class='table-sort' data-column='avg_deaths'><span>AVG DEATHS<small></small></span></th>
 						</tr>
 					</thead>
 					<tbody class='cbody'>{% for item in stats.items_most_used() %}

@@ -14,7 +14,7 @@
 {%- endblock %}
 
 {% block content %}
-			<div class='summoner-header row span12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{stats.by_count()|first|first}}.png)'>
+			<div class='summoner-header row col-md-12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{stats.by_count()|first|first}}.png)'>
 				{#- <div class='pull-left sprite sprite-profile-{{summoner.profile_icon}}'></div> #}
 				<div class='pull-left'>{{sprites.profile(summoner.profile_icon, size='large')}}</div>
 				<div class='info-block pull-right'>
@@ -54,20 +54,20 @@
 					<li class='active'><a href='{{summoner.get_champions_url()}}'>CHAMPIONS</a></li>
 				</ul>
 			</div>
-			<div class='row span12' id='games'>
+			<div class='row col-md-12' id='games'>
 				<table class='table table-condensed' style='table-layout:fixed;'>
 					<thead>
 						<tr>
-							<th style='width:95px;' class='table-sort' data-column='name'><span>CHAMPION<i></i></span></th>
-							<th style='width:68px;' class='table-sort active' data-column='total'><span>PLAYED<i class='icon-arrow-down'></i></span></th>
-							<th style='width:70px;' class='table-sort' data-column='won'><span>WON<i></i></span></th>
-							<th style='width:50px;' class='table-sort' data-column='lost'><span>LOST<i></i></span></th>
-							<th style='width:55px;' class='table-sort' data-column='percent' data-spec-order='swin'><span>WIN %<i></i></span></th>
-							<th style='width:90px;' class='table-sort' data-column='avg_kills'><span>AVG KILLS<i></i></span></th>
-							<th style='width:142px;' class='table-sort' data-column='avg_deaths'><span>AVG DEATHS<i></i></span></th>
-							<th style='' class='table-sort' data-column='kdr'><span>KDR<i></i></span></th>
-							<th style='width:95px;' class='table-sort' data-column='avg_cs'><span>AVG CS<i></i></span></th>
-							<th class='table-sort' data-column='avg_gold'><span>AVG GOLD<i></i></span></th>
+							<th style='width:115px;' class='table-sort' data-column='name'><span>CHAMPION<small></small></span></th>
+							<th style='width:75px;' class='table-sort active' data-column='total'><span>PLAYED<small class='glyphicon glyphicon-arrow-down'></small></span></th>
+							<th style='width:60px;' class='table-sort' data-column='won'><span>WON<small></small></span></th>
+							<th style='width:60px;' class='table-sort' data-column='lost'><span>LOST<small></small></span></th>
+							<th style='width:65px;' class='table-sort' data-column='percent' data-spec-order='swin'><span>WIN %<small></small></span></th>
+							<th style='width:95px;' class='table-sort' data-column='avg_kills'><span>AVG KILLS<small></small></span></th>
+							<th style='width:140px;' class='table-sort' data-column='avg_deaths'><span>AVG DEATHS<small></small></span></th>
+							<th style='width:60px' class='table-sort' data-column='kdr'><span>KDR<small></small></span></th>
+							<th style='width:95px;' class='table-sort' data-column='avg_cs'><span>AVG CS<small></small></span></th>
+							<th style='width:70;' class='table-sort' data-column='avg_gold'><span>AVG GOLD<small></small></span></th>
 						</tr>
 					</thead>
 					<tbody class='cbody'>{% for champ in stats.by_count() %}

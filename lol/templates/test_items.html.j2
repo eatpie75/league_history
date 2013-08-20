@@ -10,12 +10,12 @@
 {% endblock %}
 
 {% block content %}
-			<div class='summoner-header row span12'>
+			<div class='summoner-header row col-md-12'>
 				<div class='name-block'>
 					<b>TEST ITEMS</b>
 				</div>
 			</div>
-			<div class='row span12'>
+			<div class='row col-md-12'>
 				{%- for item, data in items.iteritems() %}
 				{{sprites.item(item)}}{% if loop.index%26==0 %}<br>{% endif %}
 				{%- endfor %}

@@ -63,10 +63,10 @@
       this.column = $('.table-sort.active:first');
       this.column_str = this.column.data('column');
       this.direction = 1;
-      this.icon = this.column.children('span').children('i');
+      this.icon = this.column.children('span').children('small');
       this._icons = {
-        '-1': 'icon-arrow-up',
-        '1': 'icon-arrow-down'
+        '-1': 'glyphicon glyphicon-arrow-up',
+        '1': 'glyphicon glyphicon-arrow-down'
       };
       this._bind();
       qs = querystring(window.location.hash.slice(1));
@@ -94,7 +94,7 @@
         init = false;
       }
       if (init) {
-        this.icon.removeClass(this._icons["" + 1]);
+        this.icon.removeClass(this._icons['1']);
       }
       if (this.column_str === el.data('column')) {
         this.icon.removeClass(this._icons["" + this.direction]).addClass(this._icons["" + (this.direction * -1)]);
@@ -107,7 +107,7 @@
         }
         this.column = el;
         this.column_str = this.column.data('column');
-        this.icon = this.column.children('span').children('i');
+        this.icon = this.column.children('span').children('small');
         this.column.addClass('active');
         this.icon.addClass(this._icons["" + this.direction]);
       }

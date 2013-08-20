@@ -37,8 +37,8 @@ class ChampionSort
 		@column=$('.table-sort.active:first')
 		@column_str=@column.data('column')
 		@direction=1
-		@icon=@column.children('span').children('i')
-		@_icons={'-1':'icon-arrow-up', '1':'icon-arrow-down'}
+		@icon=@column.children('span').children('small')
+		@_icons={'-1':'glyphicon glyphicon-arrow-up', '1':'glyphicon glyphicon-arrow-down'}
 		@_bind()
 		qs=querystring(window.location.hash.slice(1))
 		if 'sort' of qs
@@ -54,7 +54,7 @@ class ChampionSort
 		)
 	change:(el, init=false)->
 		if init
-			@icon.removeClass(@_icons["#{1}"])
+			@icon.removeClass(@_icons['1'])
 		if @column_str==el.data('column')
 			@icon.removeClass(@_icons["#{@direction}"]).addClass(@_icons["#{@direction*-1}"])
 			@direction*=-1
@@ -64,7 +64,7 @@ class ChampionSort
 			@direction=1 if init==false
 			@column=el
 			@column_str=@column.data('column')
-			@icon=@column.children('span').children('i')
+			@icon=@column.children('span').children('small')
 			@column.addClass('active')
 			@icon.addClass(@_icons["#{@direction}"])
 		@sort(el.data('column'), el.data('spec-order'))

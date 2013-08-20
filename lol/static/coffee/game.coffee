@@ -31,10 +31,10 @@ class TellMeMore
 		# 		#{args.sight_wards_bought_in_game}/#{args.vision_wards_bought_in_game}
 		# 	</div>
 		# </td>"
-		result="<td colspan=11>"
+		result="<td colspan=10>"
 		for key, stat of args
 			result+="
-			<div class='span3'>
+			<div class='col-md-3'>
 				<b>#{key.toUpperCase().replace('_', ' ', 'mg')}</b><br>
 				#{stat}
 			</div>"

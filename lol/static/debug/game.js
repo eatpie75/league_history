@@ -36,10 +36,10 @@
 
     TellMeMore.prototype.info_template = function(args) {
       var key, result, stat;
-      result = "<td colspan=11>";
+      result = "<td colspan=10>";
       for (key in args) {
         stat = args[key];
-        result += "			<div class='span3'>				<b>" + (key.toUpperCase().replace('_', ' ', 'mg')) + "</b><br>				" + stat + "			</div>";
+        result += "			<div class='col-md-3'>				<b>" + (key.toUpperCase().replace('_', ' ', 'mg')) + "</b><br>				" + stat + "			</div>";
       }
       result += "</td>";
       return result;

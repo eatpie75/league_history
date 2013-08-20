@@ -22,7 +22,7 @@
 {%- endblock %}
 
 {% block content %}
-			<div class='summoner-header row span12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{champion_id}}.png)'>
+			<div class='summoner-header row col-md-12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{champion_id}}.png)'>
 				{#- <div class='pull-left sprite sprite-champions-{{champion_id}}'></div> #}
 				<div class='pull-left'>{{sprites.champion(champion_id, size='large')}}</div>
 				<div class='info-block pull-right'>
@@ -42,9 +42,9 @@
 					<li><a href='{{ url("view_champion_items", champion_id=champion_id, champion_slug=champion|slugify) }}'>ITEMS</a></li>
 				</ul>
 			</div>{% if not generating %}
-			<div class='row span12'>
-				<div id='elo-graph' style='height:450px;margin:6px 0 0 0;' class='span9'></div>
-				<div class='best-stats span3 pull-right'>
+			<div class='row col-md-12'>
+				<div id='elo-graph' style='height:450px;margin:6px 0 0 0;' class='col-md-9'></div>
+				<div class='best-stats col-md-3 pull-right'>
 					<div class='header'>
 						<strong>Best Items</strong>
 					</div>

@@ -25,7 +25,7 @@
 {%- endblock %}
 
 {% block content %}
-			<div class='summoner-header row span12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{stats.by_count()|first|first}}.png)'>
+			<div class='summoner-header row col-md-12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{stats.by_count()|first|first}}.png)'>
 				{#- <div class='pull-left sprite sprite-profile-{{summoner.profile_icon}}'></div> #}
 				<div class='pull-left'>{{sprites.profile(summoner.profile_icon, size='large')}}</div>
 				<div class='info-block pull-right'>
@@ -65,8 +65,8 @@
 					<li><a href='{{summoner.get_champions_url()}}'>CHAMPIONS</a></li>
 				</ul>
 			</div>
-			<div class='row span12'>
-				<div class='span9' id='games'>
+			<div class='row col-md-12'>
+				<div class='col-md-9' id='games'>
 					<table class='game-list table table-condensed'>
 						<thead>
 							<tr>
@@ -93,12 +93,12 @@
 									{%- endfor %}
 								</td>
 								<td>{{player.game.time|date('M d')}}
-								<td><a href='{{player.game.get_absolute_url()}}'>&raquo;</a>{% if (player.game.game_mode, player.game.game_map) in GAME_TYPES.RANKED_GAME_TYPES %}<i class='icon-ok' title='Ranked'></i>{% endif %}</td>
+								<td><a href='{{player.game.get_absolute_url()}}'>&raquo;</a>{% if (player.game.game_mode, player.game.game_map) in GAME_TYPES.RANKED_GAME_TYPES %}<small class='glyphicon glyphicon-ok' title='Ranked'></small>{% endif %}</td>
 							</tr>{% endfor %}
 						</tbody>
 					</table>
 				</div>
-				<div class='best-stats span3 pull-right'>
+				<div class='best-stats col-md-3 pull-right'>
 					<div class='header'>
 						<strong>Best Champions</strong>
 					</div>
@@ -116,11 +116,11 @@
 					</div>{% endfor %}
 				</div>
 			</div>
-			<div class='row span12'>
-				<div id='elo-graph' style='height:340px;width:100%;margin:6px 0 0 0;' class='span12'></div>
+			<div class='row col-md-12'>
+				<div id='elo-graph' style='height:340px;width:100%;margin:6px 0 0 0;' class='col-md-12'></div>
 			</div>
 			{%- if user.is_staff and rating.tier %}
-			<div class='row span12'>
+			<div class='row col-md-12'>
 				<pre>
 					Rank:{{rating.rank}}
 					Wins:{{rating.wins}}

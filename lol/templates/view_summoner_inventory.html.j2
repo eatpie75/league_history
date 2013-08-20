@@ -8,7 +8,7 @@
 {%- endblock %}
 
 {% block content %}
-			<div class='summoner-header row span12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{stats.by_count()|first|first}}.png)'>
+			<div class='summoner-header row col-md-12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{stats.by_count()|first|first}}.png)'>
 				{#- <div class='pull-left sprite sprite-profile-{{summoner.profile_icon}}'></div> #}
 				<div class='pull-left'>{{sprites.profile(summoner.profile_icon, size='large')}}</div>
 				<div class='info-block pull-right'>
@@ -48,18 +48,18 @@
 					<li><a href='{{summoner.get_champions_url()}}'>CHAMPIONS</a></li>
 				</ul>
 			</div>
-			<div class='row span12'>{% set runes, masteries = summoner.get_runes()|rune_summary, summoner.get_masteries() %}
+			<div class='row col-md-12'>{% set runes, masteries = summoner.get_runes()|rune_summary, summoner.get_masteries() %}
 				<div class='tabbable tabs-left'>
-					<ul class='span2 rune-nav rune-nav-tabs'>{% for page in runes %}
+					<ul class='col-md-2 rune-nav rune-nav-tabs'>{% for page in runes %}
 						<li{% if page.active %} class='active'{% endif %}><a href='#runetab{{loop.index0}}' data-toggle='tab'>{{page.name}}</a></li>
 					{% endfor %}</ul>
 					<div class='tab-content'>{% for page in runes %}
 						<div class='tab-pane{% if page.active %} active{% endif %}' id='runetab{{loop.index0}}'>
-							<div class='span5' style='margin-left:0;'>{% for stat, amount in page.stats.iteritems() %}
+							<div class='col-md-5' style='margin-left:0;'>{% for stat, amount in page.stats.iteritems() %}
 							<b>{{stat|rune_stat_str}}</b><br>
 							{{amount}}<hr>
 						{% endfor %}</div>
-							<div class='span5' style='margin-left:0;'>{% for id, rune in page.runes.iteritems() %}
+							<div class='col-md-5' style='margin-left:0;'>{% for id, rune in page.runes.iteritems() %}
 								<b>{{rune.count}}</b><small>x</small>{{rune.name}}<br>
 							{% endfor %}</div>
 					</div>

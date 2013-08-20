@@ -15,7 +15,7 @@
 {%- endblock %}
 
 {% block content %}
-			<div class='summoner-header row span12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{stats.by_count()|first|first}}.png)'>
+			<div class='summoner-header row col-md-12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{stats.by_count()|first|first}}.png)'>
 				{#- <div class='pull-left sprite sprite-profile-{{summoner.profile_icon}}'></div> #}
 				<div class='pull-left'>{{sprites.profile(summoner.profile_icon, size='large')}}</div>
 				<div class='info-block pull-right'>
@@ -55,7 +55,7 @@
 					<li><a href='{{summoner.get_champions_url()}}'>CHAMPIONS</a></li>
 				</ul>
 			</div>
-			<div class='row span12' id='games'>
+			<div class='row col-md-12' id='games'>
 				<div style='height:406px;'>
 					{% include 'macros/game_list_extended.html.j2' with context %}
 				</div>
