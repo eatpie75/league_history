@@ -63,7 +63,7 @@ class SummonerAdmin(admin.ModelAdmin):
 class GameAdmin(admin.ModelAdmin):
 	list_display=('time', 'game_id', 'game_map', 'game_mode', 'fetched', 'game_link')
 	list_editable=('fetched',)
-	list_filter=('region', 'game_map', 'game_mode', 'fetched')
+	list_filter=('region', 'game_map', 'game_mode', 'fetched', 'time')
 	search_fields=('game_id', 'unfetched_players')
 	actions=['force_fill']
 

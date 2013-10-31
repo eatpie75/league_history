@@ -18,7 +18,7 @@
 		{% set start=games.number-(20-(games.paginator.num_pages-games.number)) %}
 	{%- else %}
 		{% set start=games.number-10 %}
-{%- endif %}{% for page in games.paginator.page_range[start:start+23] -%}
+{%- endif %}{% for page in games.paginator.page_range[start:start+22] -%}
 {%- if page == games.number %}
 	<li class='active'><a href='javascript:void(0);'>{{page}}</a></li>
 {%- else %}

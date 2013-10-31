@@ -268,7 +268,7 @@ class Stats:
 				if g[1]['count']>=minimum:
 					return g[1]['won']-g[1]['lost']
 				else:
-					return -100
+					return -1000+(g[1]['won']-g[1]['lost'])
 			if not self.items_indexed: self.__index()
 			if champion_id is None: champion_id=self.champion
 			if minimum is None:

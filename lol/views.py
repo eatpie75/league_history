@@ -360,7 +360,7 @@ def run_auto(request):
 def client_status(request):
 	if 'reset_queue_len' in request.GET:
 		cache.set('queue_len', 0)
-		return HttpResponseRedirect('/admin/status/')
+		return HttpResponseRedirect(reverse('client_status'))
 	server_list=cache.get('servers')
 	unfetched_games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.utcnow().replace(tzinfo=timezone('UTC'))-timedelta(days=2))).distinct('game').only('pk').count()
 	queue_len=cache.get('queue_len')

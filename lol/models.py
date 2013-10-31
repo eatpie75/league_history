@@ -215,7 +215,7 @@ class Player(models.Model):
 
 	champion_level=models.IntegerField()
 
-	items=models.CharField(max_length=128)
+	items=models.CharField(max_length=38)
 
 	kills=models.IntegerField()
 	deaths=models.IntegerField()
@@ -301,7 +301,7 @@ class Player(models.Model):
 
 	@property
 	def rank_to_number(self):
-		return rank_to_number(self.tier, self.division, self.rank)
+		return rank_to_number(self.tier, self.division, self.rank) if self.tier is not None else 0
 
 	@models.permalink
 	def get_absolute_url(self):
@@ -400,7 +400,7 @@ def parse_games(games, summoner, full=False, current=None):
 				game.game_mode=4
 			elif ogame['queue_type'] in ('RANKED_TEAM_3x3', 'RANKED_TEAM_5x5'):
 				game.game_mode=5
-			elif ogame['game_mode']=='ARAM' and (ogame['game_type']=='CUSTOM_GAME' or ogame['queue_type']=='ARAM_UNRANKED_5x5'):
+			elif ogame['game_mode']=='ARAM' and ogame['queue_type']=='ARAM_UNRANKED_5x5':
 				game.game_mode=6
 			elif ogame['queue_type']=='NONE' and ogame['game_type']=='CUSTOM_GAME':
 				game.game_mode=0
@@ -523,8 +523,8 @@ def parse_games(games, summoner, full=False, current=None):
 				items+='{}|'.format(ogame['stats']['item{}'.format(n)])
 			player.items=items
 			player.save(force_insert=True)
-		else:
-			player=Player.objects.get(game=game, summoner=summoner)
+		#else:
+		#	player=Player.objects.get(game=game, summoner=summoner)
 	transaction.commit()
 
 
