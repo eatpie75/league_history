@@ -610,7 +610,7 @@
     },
     3159: {
       name: "Grez's Spectral Lantern",
-      description: "+20 Attack Damage<br>+20 Armor<br>+12% Life Steal<br>UNIQUE Passive: Basic attacks against minions and monsters have a 20% chance to deal 200 bonus magic damage on hit.<br>UNIQUE Active: A stealth-detecting mist grants vision in the target area for 10 seconds (60 second cooldown)."
+      description: "+15 Attack Damage<br>+20 Armor<br>+12% Life Steal<br>UNIQUE Passive: Basic attacks against minions and monsters have a 20% chance to deal 200 bonus magic damage on hit.<br>UNIQUE Active: A stealth-detecting mist grants vision in the target area for 5 seconds, revealing enemy champions that enter for 3 seconds (60 second cooldown)."
     },
     3165: {
       name: "Morellonomicon",
@@ -655,7 +655,7 @@
     },
     3181: {
       name: "Sanguine Blade",
-      description: "+65 Attack Damage<br>+15% Life Steal<br>UNIQUE Passive: Basic attacks grant +6 Attack Damage and +1% Life Steal for 4 seconds on hit (effect stacks up to 5 times)."
+      description: "+40 Attack Damage<br>+15% Life Steal<br>UNIQUE Passive: Basic attacks grant +6 Attack Damage and +1% Life Steal for 4 seconds on hit (effect stacks up to 5 times)."
     },
     3183: {
       name: "Priscilla's Blessing",
@@ -667,7 +667,7 @@
     },
     3185: {
       name: "The Lightbringer",
-      description: "+50% Attack Speed<br>+20 Attack Damage<br>+12% Life Steal<br>UNIQUE Passive: Vanquish: Basic attacks have a 20% chance to deal 100 bonus magic damage on hit (damage doubled for non-champions).<br>UNIQUE Passive: Trap Detection: Nearby stealthed enemy traps are revealed.<br>UNIQUE Active: A stealth-detecting mist grants vision in the target area for 10 seconds (60 second cooldown)."
+      description: "+20 Attack Damage<br>+25 Armor<br>+15% Life Steal<br>+200 Health<br>UNIQUE Passive: Vanquish: Basic attacks have a 20% chance to deal 100 bonus magic damage on hit (damage doubled for non-champions).<br>UNIQUE Passive: Trap Detection: Nearby stealthed enemy traps are revealed.<br>UNIQUE Active: A stealth-detecting mist grants vision in the target area for 5 seconds, revealing enemy champions that enter for 3 seconds (60 second cooldown)."
     },
     3186: {
       name: "Kitae's Bloodrazor",
@@ -675,11 +675,11 @@
     },
     3187: {
       name: "Hextech Sweeper",
-      description: "+50 Ability Power<br>+300 Health<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +10% Movement Speed.<br>UNIQUE Passive: Trap Detection: Nearby stealthed enemy traps are revealed.<br>UNIQUE Active: Covers an area with stealth-detecting mist for 10 seconds, granting vision of units which pass through it for 6 seconds (60 second cooldown)."
+      description: "40 Ability Power<br>+250 Health<br>+20% Cooldown Reduction<br>UNIQUE Passive: Trap Detection: Nearby stealthed enemy traps are revealed.<br>UNIQUE Active: A stealth-detecting mist grants vision in the target area for 5 seconds, revealing enemy champions that enter for 3 seconds (60 second cooldown)."
     },
     3188: {
       name: "Blackfire Torch",
-      description: "+80 Ability Power<br>+20% Cooldown Reduction<br>UNIQUE Active: Deals 20% of target champion's maximum Health in magic damage over 6 seconds and increases all subsequent magic damage taken by the target by 20% (60 second cooldown)."
+      description: "+80 Ability Power<br>+10% Cooldown Reduction<br>+10% Movement Speed<br>UNIQUE Active: Deals 20% of target champion's maximum Health in magic damage over 4 seconds and increases all subsequent magic damage taken by the target by 20% (60 second cooldown)."
     },
     3190: {
       name: "Locket of the Iron Solari",
@@ -864,6 +864,10 @@
     3284: {
       name: "Boots of Swiftness - Alacrity",
       description: "UNIQUE Passive: Enhanced Movement: +60 Movement Speed<br>UNIQUE Passive: Slow Resist: Movement slowing effects are reduced by 25%.<br>UNIQUE Passive: Alacrity: +15 Movement Speed."
+    },
+    3290: {
+      name: "Twin Shadows (CS)",
+      description: "+30 Ability Power<br>+30 Magic Resist<br>+6% Movement Speed<br>UNIQUE Active: Hunt: Summons up to 2 invulnerable ghosts that seek out the two nearest enemy champions for 6 seconds. If a ghost reaches its target, it reveals the target and reduces their Movement Speed by 40% for 2.5 seconds (60 second cooldown)."
     },
     9001: {
       name: "Cloak and Dagger",

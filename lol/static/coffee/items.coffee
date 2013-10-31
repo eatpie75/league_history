@@ -469,7 +469,7 @@ items=
 		description:"UNIQUE Passive: +15% Cooldown Reduction.<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed"
 	3159:
 		name:"Grez's Spectral Lantern"
-		description:"+20 Attack Damage<br>+20 Armor<br>+12% Life Steal<br>UNIQUE Passive: Basic attacks against minions and monsters have a 20% chance to deal 200 bonus magic damage on hit.<br>UNIQUE Active: A stealth-detecting mist grants vision in the target area for 10 seconds (60 second cooldown)."
+		description:"+15 Attack Damage<br>+20 Armor<br>+12% Life Steal<br>UNIQUE Passive: Basic attacks against minions and monsters have a 20% chance to deal 200 bonus magic damage on hit.<br>UNIQUE Active: A stealth-detecting mist grants vision in the target area for 5 seconds, revealing enemy champions that enter for 3 seconds (60 second cooldown)."
 	3165:
 		name:"Morellonomicon"
 		description:"+75 Ability Power<br>+12 Mana Regen per 5 seconds<br>+20% Cooldown Reduction<br>UNIQUE Passive: Dealing magic damage to enemy champions below 40% Health inflicts Grievous Wounds for 4 seconds."
@@ -504,7 +504,7 @@ items=
 		description:"+350 Health<br>+350 Mana<br>+50 Magic Resist<br>UNIQUE Passive: Reduces and stores 10% of magic damage received.<br>UNIQUE Active: Deals 200 + (stored magic) (max 400) magic damage to nearby enemy units (90 second cooldown)."
 	3181:
 		name:"Sanguine Blade"
-		description:"+65 Attack Damage<br>+15% Life Steal<br>UNIQUE Passive: Basic attacks grant +6 Attack Damage and +1% Life Steal for 4 seconds on hit (effect stacks up to 5 times)."
+		description:"+40 Attack Damage<br>+15% Life Steal<br>UNIQUE Passive: Basic attacks grant +6 Attack Damage and +1% Life Steal for 4 seconds on hit (effect stacks up to 5 times)."
 	3183:
 		name:"Priscilla's Blessing"
 		description:"+25 Health Regeneration per 5 seconds<br>UNIQUE Passive : +15% Capture Rate (Does not stack with other Capture Rate modifiers).<br>UNIQUE Active: +30% movement speed for 2 seconds (60 second cooldown)."
@@ -513,16 +513,16 @@ items=
 		description:"+275 Health<br>+70 Attack Damage<br>UNIQUE Passive: Icy: Basic attacks have a 25% chance to reduce target's Movement Speed by 30% for 2.5 seconds on hit.<br>UNIQUE Active: For the next 5 seconds, basic attacks reduce the target's Movement Speed by 30% and deal 80 true damage over 2.5 seconds (60 second cooldown)."
 	3185:
 		name:"The Lightbringer"
-		description:"+50% Attack Speed<br>+20 Attack Damage<br>+12% Life Steal<br>UNIQUE Passive: Vanquish: Basic attacks have a 20% chance to deal 100 bonus magic damage on hit (damage doubled for non-champions).<br>UNIQUE Passive: Trap Detection: Nearby stealthed enemy traps are revealed.<br>UNIQUE Active: A stealth-detecting mist grants vision in the target area for 10 seconds (60 second cooldown)."
+		description:"+20 Attack Damage<br>+25 Armor<br>+15% Life Steal<br>+200 Health<br>UNIQUE Passive: Vanquish: Basic attacks have a 20% chance to deal 100 bonus magic damage on hit (damage doubled for non-champions).<br>UNIQUE Passive: Trap Detection: Nearby stealthed enemy traps are revealed.<br>UNIQUE Active: A stealth-detecting mist grants vision in the target area for 5 seconds, revealing enemy champions that enter for 3 seconds (60 second cooldown)."
 	3186:
 		name:"Kitae's Bloodrazor"
 		description:"+30 Attack Damage<br>+40% Attack Speed<br>UNIQUE Passive: Basic attacks deal bonus magic damage equal to 2.5% of the target's maximum Health on hit."
 	3187:
 		name:"Hextech Sweeper"
-		description:"+50 Ability Power<br>+300 Health<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +10% Movement Speed.<br>UNIQUE Passive: Trap Detection: Nearby stealthed enemy traps are revealed.<br>UNIQUE Active: Covers an area with stealth-detecting mist for 10 seconds, granting vision of units which pass through it for 6 seconds (60 second cooldown)."
+		description:"40 Ability Power<br>+250 Health<br>+20% Cooldown Reduction<br>UNIQUE Passive: Trap Detection: Nearby stealthed enemy traps are revealed.<br>UNIQUE Active: A stealth-detecting mist grants vision in the target area for 5 seconds, revealing enemy champions that enter for 3 seconds (60 second cooldown)."
 	3188:
 		name:"Blackfire Torch"
-		description:"+80 Ability Power<br>+20% Cooldown Reduction<br>UNIQUE Active: Deals 20% of target champion's maximum Health in magic damage over 6 seconds and increases all subsequent magic damage taken by the target by 20% (60 second cooldown)."
+		description:"+80 Ability Power<br>+10% Cooldown Reduction<br>+10% Movement Speed<br>UNIQUE Active: Deals 20% of target champion's maximum Health in magic damage over 4 seconds and increases all subsequent magic damage taken by the target by 20% (60 second cooldown)."
 	3190:
 		name:"Locket of the Iron Solari"
 		description:"+300 Health<br>+20 Armor<br>+10% Cooldown Reduction<br>UNIQUE Active: Grants a shield to nearby allies for 5 seconds that absorbs up to 50 (+10 per level) damage (60 second cooldown).<br>UNIQUE Aura: Legion: Grants nearby allies +20 Magic Resist and +10 Health Regen per 5 seconds."
@@ -661,6 +661,9 @@ items=
 	3284:
 		name:"Boots of Swiftness - Alacrity"
 		description:"UNIQUE Passive: Enhanced Movement: +60 Movement Speed<br>UNIQUE Passive: Slow Resist: Movement slowing effects are reduced by 25%.<br>UNIQUE Passive: Alacrity: +15 Movement Speed."
+	3290:
+		name:"Twin Shadows (CS)"
+		description:"+30 Ability Power<br>+30 Magic Resist<br>+6% Movement Speed<br>UNIQUE Active: Hunt: Summons up to 2 invulnerable ghosts that seek out the two nearest enemy champions for 6 seconds. If a ghost reaches its target, it reveals the target and reduces their Movement Speed by 40% for 2.5 seconds (60 second cooldown)."
 	9001:
 		name:"Cloak and Dagger"
 		description:"+20% Attack Speed<br>+20% Critical Strike Chance<br>UNIQUE Passive: Tenacity: The durations of stuns, slows, taunts, fears, silences, blinds, and immobilizes are reduced by 35%."
