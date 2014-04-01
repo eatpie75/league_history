@@ -101,7 +101,7 @@ def prepare_servers():
 			sl=Server_List(settings.LOL_CLIENT_SERVERS)
 			sl.save()
 		else:
-			if servers.updated<datetime.now(timezone('UTC'))-timedelta(hours=1):
+			if servers.updated<datetime.now(timezone('UTC')) - timedelta(hours=1):
 				servers.check_servers()
 		if cache.get('queue_len') is None:
 			cache.set('queue_len', 0, timeout=0)

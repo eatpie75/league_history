@@ -34,7 +34,7 @@ def summoner_games(request, region, account_id):
 def force_update(request, region, account_id):
 	summoner=Summoner.objects.get(region=region, account_id=account_id)
 	c=cache.get('summoner/{}/{}/updating'.format(region, account_id))
-	if c is not None or summoner.time_updated>(datetime.now(timezone('UTC'))-timedelta(minutes=30)):
+	if c is not None or summoner.time_updated>(datetime.now(timezone('UTC')) - timedelta(minutes=30)):
 		return HttpResponse(json.dumps({'status':'DONE', 'msg':'REFRESH PAGE TO SEE UPDATED STATS'}), mimetype='application/json')
 	summoner_auto_task.apply_async(args=[summoner.pk,], ignore_result=True, priority=0)
 	return HttpResponse(json.dumps({'status':'QUEUE', 'msg':'UPDATE IN QUEUE', 'delay':3000}), mimetype='application/json')

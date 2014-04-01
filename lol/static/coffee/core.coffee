@@ -14,15 +14,17 @@ $(document).ready(->
 	window.connect_items=->
 		$('div.item.sprite,img.item.sprite').each(->
 			el=$(@)
-			item=window.items[el.data('item').slice(1)]
-			el.popover({
-				'html':true
-				'content':item.description
-				'title':item.name
-				'placement':'auto top'
-				'trigger':'hover'
-				'animation':false
-			})
+			item=el.data('item').slice(1)
+			if item of window.items
+				item=window.items[item]
+				el.popover({
+					'html':true
+					'content':item.description
+					'title':item.name
+					'placement':'auto top'
+					'trigger':'hover'
+					'animation':false
+				})
 		)
 	window.connect_items()
 )

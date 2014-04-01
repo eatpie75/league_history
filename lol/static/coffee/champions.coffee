@@ -108,6 +108,7 @@ champions=
 	134:"Syndra"
 	143:"Zyra"
 	154:"Zac"
+	161:"Velkoz"
 	222:"Jinx"
 	236:"Lucian"
 	238:"Zed"

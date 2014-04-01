@@ -1,6 +1,6 @@
 from champions import CHAMPIONS
 from datetime import datetime, timedelta
-from lol.models import Player, SummonerRating
+from lol.models import Player, SummonerRating, Summoner
 from pytz import timezone
 import json
 
@@ -13,7 +13,7 @@ class Queryset_Manager:
 		if self.count!=0:
 			tmp=self.queryset[0:2]
 			len(tmp)
-			self.pk=tmp[0].pk-1
+			self.pk=tmp[0].pk - 1
 			if self.count>self.chunksize:
 				tmp=self.queryset.order_by('-pk')[0:2]
 				len(tmp)
@@ -33,7 +33,7 @@ class Queryset_Manager:
 
 class Stats:
 		def __init__(self, games, **kwargs):
-			self.qs=games.only('game', 'champion_id', 'won', 'items', 'kills', 'deaths', 'assists', 'minion_kills', 'neutral_minions_killed', 'gold', 'summoner_spell1', 'summoner_spell2', 'tier', 'division', 'rank')
+			self.qs=games.only('summoner__id', 'game', 'champion_id', 'won', 'items', 'kills', 'deaths', 'assists', 'minion_kills', 'neutral_minions_killed', 'gold', 'summoner_spell1', 'summoner_spell2', 'tier', 'division', 'rank', 'blue_team')
 			#.defer(
 			# 	'afk', 'leaver', 'blue_team', 'ping', 'queue_length', 'premade_size',
 			# 	'ip_earned', 'experience_earned', 'boosted_experience_earned', 'boosted_ip_earned',
@@ -52,6 +52,7 @@ class Stats:
 			self.summoner_name=kwargs.get('summoner_name', None)
 			self.summoner_pk=kwargs.get('summoner_pk', None)
 			self.index_league=kwargs.get('index_league', False)
+			self.index_friends=kwargs.get('index_friends', False)
 			##
 			self.index_items=kwargs.get('index_items', True)
 			self.champion_history=kwargs.get('champion_history', False)
@@ -126,7 +127,44 @@ class Stats:
 				}
 			stats['elo'][itime]['count']+=1
 			stats['elo'][itime]['total']+=game.rank_to_number
-			stats['elo'][itime]['avg']=stats['elo'][itime]['total']/stats['elo'][itime]['count']
+			stats['elo'][itime]['avg']=stats['elo'][itime]['total'] / stats['elo'][itime]['count']
+			return stats
+
+		def __index_friends(self, stats, game):
+			for friend in Player.objects.filter(game__id=game.game.id, blue_team=game.blue_team).only('summoner', 'summoner__id', 'blue_team'):
+				if game.summoner_id==friend.summoner_id or game.blue_team!=friend.blue_team:
+					continue
+				if friend.summoner_id not in stats['friends']:
+					stats['friends'][friend.summoner_id]={
+						'count':	0,
+						'won':		0,
+						'lost':		0
+					}
+				stats['friends'][friend.summoner_id]['count']+=1
+				stats['friends'][friend.summoner_id]['won' if game.won else 'lost']+=1
+			return stats
+
+		def __process_friends(self, stats):
+			def bsort(a, b):
+				if a[1]['count']>b[1]['count']:
+					return 1
+				elif a[1]['count']<b[1]['count']:
+					return -1
+				else:
+					if a[1]['won']>b[1]['won']:
+						return 1
+					elif a[1]['won']<b[1]['won']:
+						return -1
+					else:
+						return 0
+			tmp=sorted(stats['friends'].iteritems(), cmp=bsort, reverse=True)[:3]
+			friends=[]
+			for friend in tmp:
+				friends.append((
+					Summoner.objects.get(pk=friend[0]),
+					friend[1]
+				))
+			stats['friends']=friends
 			return stats
 
 		def __index_global_stats(self, stats, game):
@@ -150,9 +188,9 @@ class Stats:
 					}
 				stats['champions'][game.champion_id]['items'][item]['count']+=1
 				stats['champions'][game.champion_id]['items'][item]['kills']+=game.kills
-				stats['champions'][game.champion_id]['items'][item]['avg_kills']=round(float(stats['champions'][game.champion_id]['items'][item]['kills'])/stats['champions'][game.champion_id]['items'][item]['count'], 1)
+				stats['champions'][game.champion_id]['items'][item]['avg_kills']=round(float(stats['champions'][game.champion_id]['items'][item]['kills']) / stats['champions'][game.champion_id]['items'][item]['count'], 1)
 				stats['champions'][game.champion_id]['items'][item]['deaths']+=game.deaths
-				stats['champions'][game.champion_id]['items'][item]['avg_deaths']=round(float(stats['champions'][game.champion_id]['items'][item]['deaths'])/stats['champions'][game.champion_id]['items'][item]['count'], 1)
+				stats['champions'][game.champion_id]['items'][item]['avg_deaths']=round(float(stats['champions'][game.champion_id]['items'][item]['deaths']) / stats['champions'][game.champion_id]['items'][item]['count'], 1)
 				stats['champions'][game.champion_id]['items'][item]['won' if game.won else 'lost']+=1
 			return stats
 
@@ -165,7 +203,8 @@ class Stats:
 				'champions':{},
 				'history':{},
 				'elo':{},
-				'global_stats':{'blue_side':{'won':0, 'lost':0}}
+				'global_stats':{'blue_side':{'won':0, 'lost':0}},
+				'friends':{}
 			}
 			date=datetime.now(timezone('utc'))
 			for game in self.games:
@@ -191,17 +230,19 @@ class Stats:
 				stats['champions'][game.champion_id]['count']+=1
 				for key, mapping in {'kills':'kills', 'deaths':'deaths', 'assists':'assists', 'minion_kills':'cs', 'neutral_minions_killed':'cs', 'gold':'gold'}.iteritems():
 					stats['champions'][game.champion_id][mapping]+=getattr(game, key)
-					stats['champions'][game.champion_id]['avg_{}'.format(mapping)]=round(float(stats['champions'][game.champion_id][mapping])/stats['champions'][game.champion_id]['count'], 1)
+					stats['champions'][game.champion_id]['avg_{}'.format(mapping)]=round(float(stats['champions'][game.champion_id][mapping]) / stats['champions'][game.champion_id]['count'], 1)
 				if stats['champions'][game.champion_id]['deaths']>0:
-					stats['champions'][game.champion_id]['kdr']=round(float(stats['champions'][game.champion_id]['kills'])/stats['champions'][game.champion_id]['deaths'], 2)
+					stats['champions'][game.champion_id]['kdr']=round(float(stats['champions'][game.champion_id]['kills']) / stats['champions'][game.champion_id]['deaths'], 2)
 				else:
 					stats['champions'][game.champion_id]['kdr']=round(float(stats['champions'][game.champion_id]['kills']), 2)
 				stats['champions'][game.champion_id]['won' if game.won else 'lost']+=1
 
 				if self.index_items:
 					stats=self.__index_items(stats, game)
-				if self.index_league and self.summoner_pk is not None and game.game.game_map==1 and game.game.game_mode==3 and game.tier is not None and game.game.time>=date-timedelta(days=30):
+				if self.index_league and self.summoner_pk is not None and game.game.game_map==1 and game.game.game_mode==3 and game.tier is not None and game.game.time>=date - timedelta(days=30):
 					stats=self.__index_league(stats, game)
+				if self.index_friends:
+					stats=self.__index_friends(stats, game)
 				if self.champion_history:
 					itime=game.game.time.strftime('%Y-%m-%d')
 					if itime not in stats['history']:
@@ -222,6 +263,8 @@ class Stats:
 			# self.index={'champions':champions, 'elo':sorted(elo.iteritems(), key=lambda x:x[0]), 'history':sorted(history.iteritems(), key=lambda x:x[0])[:-1], 'global_stats':global_stats}
 			stats['history']=sorted(stats['history'].iteritems(), key=lambda x:x[0])[:-1]
 			stats['elo']=sorted(stats['elo'].iteritems(), key=lambda x:x[0])
+			if self.index_friends:
+				stats=self.__process_friends(stats)
 			self.index=stats
 			self.indexed=True
 			if self.index_items: self.items_indexed=True
@@ -250,12 +293,12 @@ class Stats:
 		def best_ratio(self, minimum=None):
 			def bsort(g):
 				if g[1]['count']>=minimum:
-					return g[1]['won']-g[1]['lost']
+					return g[1]['won'] - g[1]['lost']
 				else:
-					return -100
+					return -100 - (g[1]['won'] - g[1]['lost'])
 			if not self.indexed: self.__index()
 			if minimum is None:
-				minimum=round(self.count*0.04)
+				minimum=round(self.count * 0.04)
 			return sorted(self.index['champions'].iteritems(), key=bsort, reverse=True)
 
 		def items_most_used(self, champion_id=None):
@@ -266,13 +309,13 @@ class Stats:
 		def items_best_ratio(self, champion_id=None, minimum=None):
 			def bsort(g):
 				if g[1]['count']>=minimum:
-					return g[1]['won']-g[1]['lost']
+					return g[1]['won'] - g[1]['lost']
 				else:
-					return -1000+(g[1]['won']-g[1]['lost'])
+					return -1000 + (g[1]['won'] - g[1]['lost'])
 			if not self.items_indexed: self.__index()
 			if champion_id is None: champion_id=self.champion
 			if minimum is None:
-				minimum=round(self.index['champions'][champion_id]['count']*0.05)
+				minimum=round(self.index['champions'][champion_id]['count'] * 0.05)
 			return sorted(self.index['champions'][champion_id]['items'].iteritems(), key=bsort, reverse=True)
 
 		def elo_toJSON(self):

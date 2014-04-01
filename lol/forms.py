@@ -1,6 +1,7 @@
 from django import forms
 from models import MAPS, MODES
 
+
 class MapModeForm(forms.Form):
 	def __init__(self, *args, **kwargs):
 		super(MapModeForm, self).__init__(*args, **kwargs)

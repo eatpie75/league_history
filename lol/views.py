@@ -60,7 +60,7 @@ def game_list(request):
 		players=Player.objects.filter(game__in=games).only('game', 'summoner').select_related('summoner__name', 'summoner__account_id', 'summoner__region', 'summoner__update_automatically', 'game__pk')
 	else:
 		games=games[:50]
-		players=Player.objects.filter(game__in=games).only('game', 'summoner').select_related('summoner__name', 'summoner__account_id', 'summoner__region', 'summoner__update_automatically', 'game__pk')
+		players=Player.objects.filter(game__pk__in=games).only('game', 'summoner').select_related('summoner__name', 'summoner__account_id', 'summoner__region', 'summoner__update_automatically', 'game__pk')
 	return render_to_response('game_list.html.j2', {'games':games, 'players':players}, RequestContext(request))
 
 
@@ -68,7 +68,7 @@ def game_list(request):
 def view_game(request, region, game_id):
 	region=__get_region(region)
 	game=Game.objects.get(game_id=game_id, region=region)
-	modes=('CUSTOM', 'BOT', 'UNRANKED', 'RANKED', 'RANKED TEAM', 'RANKED TEAM', 'ARAM')
+	modes=('CUSTOM', 'BOT', 'UNRANKED', 'RANKED', 'RANKED TEAM', 'RANKED TEAM', 'ARAM', 'ONE FOR ALL', 'SHOWDOWN', 'HEXAKILL', 'URF')
 	metadata={'map':game.get_game_map_display(), 'mode':modes[game.game_mode], 'ranked':True if game.game_mode in (3,4,5) else False, 'invalid':game.invalid, 'length':-1}
 	update_in_queue=False
 	if game.fetched is False:
@@ -76,10 +76,10 @@ def view_game(request, region, game_id):
 		if updating is not None:
 			updating=fill_game.AsyncResult(updating)
 			if updating.state=='PROGRESS':
-				update_in_queue='{:.0%} DONE'.format(float(updating.result['current'])/float(updating.result['total']))
+				update_in_queue='{:.0%} DONE'.format(float(updating.result['current']) / float(updating.result['total']))
 			else:
 				update_in_queue='UPDATE IN QUEUE.'
-		if game.time>(datetime.now(timezone('UTC'))-timedelta(days=2)) and not game.fetched:
+		if game.time>(datetime.now(timezone('UTC')) - timedelta(days=2)) and not game.fetched:
 			fill_game.apply_async(args=[game.pk,], priority=1)
 			update_in_queue='UPDATE IN QUEUE.'
 		elif not game.fetched and game.unfetched_players=='':
@@ -122,7 +122,7 @@ def view_game(request, region, game_id):
 		#Begin avg/total stats
 		for key, mapping in {'kills':'kills', 'deaths':'deaths', 'assists':'assists', 'minion_kills':'cs', 'neutral_minions_killed':'cs', 'gold':'gold', 'gpm':'gpm'}.iteritems():
 			metadata['stats'][team][mapping]+=getattr(player, key)
-			metadata['stats'][team]['avg_{}'.format(mapping)]=round(float(metadata['stats'][team][mapping])/metadata['stats'][team]['num_players'], 1)
+			metadata['stats'][team]['avg_{}'.format(mapping)]=round(float(metadata['stats'][team][mapping]) / metadata['stats'][team]['num_players'], 1)
 		#Begin damage dealt/taken
 		metadata['stats'][team]['pd_dealt']+=player.physical_damage_dealt
 		metadata['stats'][team]['pd_taken']+=player.physical_damage_taken
@@ -133,17 +133,17 @@ def view_game(request, region, game_id):
 		#Begin wards
 		metadata['stats'][team]['sw_bought']+=player.sight_wards_bought_in_game
 		metadata['stats'][team]['vw_bought']+=player.vision_wards_bought_in_game
-		metadata['stats'][team]['tw_bought']+=player.sight_wards_bought_in_game+player.vision_wards_bought_in_game
+		metadata['stats'][team]['tw_bought']+=player.sight_wards_bought_in_game + player.vision_wards_bought_in_game
 		if player.won and metadata['length']==-1:
 			metadata['length']=player.length
 		# print(u'{}:{}'.format(player.summoner.name, player.length))
 		if game.game_mode in (3, 4, 5) and player.tier>0:
 			metadata['stats'][team]['total_elo']+=player.rank_to_number
-			metadata['stats'][team]['avg_elo']=round(metadata['stats'][team]['total_elo']/metadata['stats'][team]['num_players'])
+			metadata['stats'][team]['avg_elo']=round(metadata['stats'][team]['total_elo'] / metadata['stats'][team]['num_players'])
 	if game.game_mode in (3, 4, 5):
-		metadata['avg_elo']=round((metadata['stats']['winner']['avg_elo']+metadata['stats']['loser']['avg_elo'])/2)
+		metadata['avg_elo']=round((metadata['stats']['winner']['avg_elo'] + metadata['stats']['loser']['avg_elo']) / 2)
 	chart_data=players.values()
-	map(lambda x:x.update(gpm=round(x['gold']/metadata['length'])) if metadata['length']>0 else x.update(gpm=0), chart_data)
+	map(lambda x:x.update(gpm=round(x['gold'] / metadata['length'])) if metadata['length']>0 else x.update(gpm=0), chart_data)
 	return render_to_response('view_game.html.j2', {'game':game, 'players':players, 'metadata':metadata, 'update_in_queue':update_in_queue, 'chart_data':json.dumps(list(chart_data))}, RequestContext(request))
 
 
@@ -174,13 +174,14 @@ def view_summoner(request, region, account_id, slug):
 	if stats is None:
 		stats=Stats(games, summoner_name=summoner.name, summoner_pk=summoner.pk, index_league=True, index_items=False)
 		stats.generate_index()
-		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
+		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60 * 60)
 	# spectate=cache.get('summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id))
 	# if spectate==None:
 	# 	result=spectate_check(summoner)
 	# 	spectate=Spectate('summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id))
 	# 	spectate.parse(result)
 	# 	cache.set('summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id), spectate, 60*5)
+
 	return render_to_response('view_summoner.html.j2', {'games':games, 'summoner':summoner, 'rating':rating, 'stats':stats, 'update_in_queue':update_in_queue, 'spectate':None}, RequestContext(request))
 
 
@@ -196,7 +197,7 @@ def view_summoner_games(request, region, account_id, slug):
 	if stats is None:
 		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
-		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
+		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60 * 60)
 	return render_to_response('view_summoner_games.html.j2', {'games':Paginator(games, 10).page(1), 'summoner':summoner, 'rating':rating, 'stats':stats}, RequestContext(request))
 
 
@@ -213,7 +214,7 @@ def view_summoner_champions(request, region, account_id, slug):
 	if stats is None:
 		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
-		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
+		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60 * 60)
 	return render_to_response('view_summoner_champions.html.j2', {'games':games, 'summoner':summoner, 'rating':rating, 'stats':stats, 'champions':CHAMPIONS}, RequestContext(request))
 
 
@@ -228,7 +229,7 @@ def view_summoner_inventory(request, region, account_id, slug):
 	if stats is None:
 		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
-		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60*60)
+		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60 * 60)
 	return render_to_response('view_summoner_inventory.html.j2', {'summoner':summoner, 'rating':rating, 'stats':stats}, RequestContext(request))
 
 
@@ -251,23 +252,23 @@ def view_all_champions(request):
 	form=MapModeForm(request.GET)
 	form.is_valid()
 	key='global_stats/all'
-	games=Player.objects.filter(game__time__gt=(datetime.now(timezone('UTC')))-timedelta(weeks=2)).select_related('game__time')
-	count=Game.objects.filter(time__gt=(datetime.now(timezone('UTC')))-timedelta(weeks=2))
+	games=Player.objects.filter(game__time__gt=(datetime.now(timezone('UTC'))) - timedelta(weeks=2)).select_related('game__time')
+	count=Game.objects.filter(time__gt=(datetime.now(timezone('UTC'))) - timedelta(weeks=2))
 	if form.cleaned_data['game_map'] not in ('', '-1'):
-		key+='/'+form.cleaned_data['game_map']
+		key+='/' + form.cleaned_data['game_map']
 		games=games.filter(game__game_map=form.cleaned_data['game_map'])
 		count=count.filter(game_map=form.cleaned_data['game_map'])
 	else: key+='/-1'
 	if form.cleaned_data['game_mode'] not in ('', '-1'):
-		key+='/'+form.cleaned_data['game_mode']
+		key+='/' + form.cleaned_data['game_mode']
 		games=games.filter(game__game_mode=form.cleaned_data['game_mode'])
 		count=count.filter(game_mode=form.cleaned_data['game_mode'])
 	else: key+='/-1'
 	stats=cache.get(key)
 	if stats is None:
 		generating=True
-		if cache.get(key+'/generating') is None:
-			cache.set(key+'/generating', True, 60*10)
+		if cache.get(key + '/generating') is None:
+			cache.set(key + '/generating', True, 60 * 10)
 			generate_global_stats.delay(key, games.query, display_count=count.count(), champion_history=True, global_stats=True, index_items=False)
 	else:
 		generating=False
@@ -286,18 +287,18 @@ def view_champion(request, champion_id, champion_slug):
 	key='global_stats/{}'.format(champion_id)
 	games=Player.objects.filter(champion_id=champion_id)
 	if form.cleaned_data['game_map'] not in ('', '-1'):
-		key+='/'+form.cleaned_data['game_map']
+		key+='/' + form.cleaned_data['game_map']
 		games=games.filter(game__game_map=form.cleaned_data['game_map'])
 	else: key+='/-1'
 	if form.cleaned_data['game_mode'] not in ('', '-1'):
-		key+='/'+form.cleaned_data['game_mode']
+		key+='/' + form.cleaned_data['game_mode']
 		games=games.filter(game__game_mode=form.cleaned_data['game_mode'])
 	else: key+='/-1'
 	stats=cache.get(key)
 	if stats is None:
 		generating=True
-		if cache.get(key+'/generating') is None:
-			cache.set(key+'/generating', True, 60*10)
+		if cache.get(key + '/generating') is None:
+			cache.set(key + '/generating', True, 60 * 10)
 			generate_global_stats.delay(key, games.query, champion=champion_id, champion_history=True, index_items=True)
 	else:
 		generating=False
@@ -316,18 +317,18 @@ def view_champion_items(request, champion_id, champion_slug):
 	key='global_stats/{}'.format(champion_id)
 	games=Player.objects.filter(champion_id=champion_id)
 	if form.cleaned_data['game_map'] not in ('', '-1'):
-		key+='/'+form.cleaned_data['game_map']
+		key+='/' + form.cleaned_data['game_map']
 		games=games.filter(game__game_map=form.cleaned_data['game_map'])
 	else: key+='/-1'
 	if form.cleaned_data['game_mode'] not in ('', '-1'):
-		key+='/'+form.cleaned_data['game_mode']
+		key+='/' + form.cleaned_data['game_mode']
 		games=games.filter(game__game_mode=form.cleaned_data['game_mode'])
 	else: key+='/-1'
 	stats=cache.get(key)
 	if stats is None:
 		generating=True
-		if cache.get(key+'/generating') is None:
-			cache.set(key+'/generating', True, 60*10)
+		if cache.get(key + '/generating') is None:
+			cache.set(key + '/generating', True, 60 * 10)
 			generate_global_stats.delay(key, games.query, champion=champion_id, champion_history=True, index_items=True)
 	else:
 		generating=False
@@ -339,9 +340,9 @@ def run_auto(request):
 	if 'force' in request.GET:
 		summoners=Summoner.objects.filter(update_automatically=True)
 	else:
-		summoners=Summoner.objects.filter(update_automatically=True, time_updated__lt=(datetime.utcnow().replace(tzinfo=timezone('UTC'))-timedelta(hours=3)))
+		summoners=Summoner.objects.filter(update_automatically=True, time_updated__lt=(datetime.utcnow().replace(tzinfo=timezone('UTC')) - timedelta(hours=3)))
 	if 'fill' in request.GET:
-		games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.utcnow().replace(tzinfo=timezone('UTC'))-timedelta(days=2))).distinct('game').order_by()
+		games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.utcnow().replace(tzinfo=timezone('UTC')) - timedelta(days=2))).distinct('game').order_by()
 		if 'limit' in request.GET:
 			games=games[:request.GET['limit']]
 		for player in games:
@@ -360,9 +361,9 @@ def run_auto(request):
 def client_status(request):
 	if 'reset_queue_len' in request.GET:
 		cache.set('queue_len', 0)
-		return HttpResponseRedirect(reverse('client_status'))
+		return HttpResponseRedirect(reverse('lol.views.client_status'))
 	server_list=cache.get('servers')
-	unfetched_games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.utcnow().replace(tzinfo=timezone('UTC'))-timedelta(days=2))).distinct('game').only('pk').count()
+	unfetched_games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.utcnow().replace(tzinfo=timezone('UTC')) - timedelta(days=2))).distinct('game').only('pk').count()
 	queue_len=cache.get('queue_len')
 	return render_to_response('client_status.html.j2', {'status':server_list.servers, 'unfetched_games':unfetched_games, 'queue_len':queue_len}, RequestContext(request))
 
@@ -372,8 +373,8 @@ def test_items(request):
 	from core.items import ITEMS
 
 	from lol.models import SummonerRating
-	summoners=SummonerRating.objects.filter(tier=6, summoner__time_updated__lt=(datetime.now(timezone('UTC'))-timedelta(hours=3)), summoner__region__in=[0, 1]).select_related('summoner').only('summoner__id')
-	players=Player.objects.filter(game__fetched=False, game__time__gt=(datetime.now(timezone('UTC'))-timedelta(days=2)), game__region__in=[0, 1], summoner__in=summoners).distinct('game').order_by().only('game')
+	summoners=SummonerRating.objects.filter(tier=6, summoner__time_updated__lt=(datetime.now(timezone('UTC')) - timedelta(hours=3)), summoner__region__in=[0, 1]).select_related('summoner').only('summoner__id')
+	players=Player.objects.filter(game__fetched=False, game__time__gt=(datetime.now(timezone('UTC')) - timedelta(days=2)), game__region__in=[0, 1], summoner__in=summoners).distinct('game').order_by().only('game')
 	# print(len(summoners))
 	for wat in players:
 		# print(wat.summoner.id, wat.summoner.region)

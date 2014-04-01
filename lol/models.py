@@ -8,10 +8,15 @@ from time import sleep
 import requests
 import json
 
-MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (9, '?'))
+MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (7, 'One For All'), (8, 'Showdown'), (9, 'Hexakill'), (10, 'URF'), (99, '?'))
 MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Howling Abyss'), (4, 'Twisted Treeline'), (9, '?'))
 #{'queue', 'mode', 'map'}
-GAME_TYPES={'rankedpremade5x5':(4,1), 'rankedteam5x5':(5,1), 'rankedpremade3x3':(4,4), 'rankedteam3x3':(5,4), 'unranked':(2,1), 'odinunranked':(2,2), 'rankedsolo5x5':(3,1), 'coopvsai':(1,1), 'oldrankedpremade3x3':(4,0), 'oldrankedteam3x3':(5,0)}
+GAME_TYPES={
+	'rankedpremade5x5':(4,1), 'rankedteam5x5':(5,1), 'rankedpremade3x3':(4,4), 'rankedteam3x3':(5,4),
+	'unranked':(2,1), 'odinunranked':(2,2),
+	'rankedsolo5x5':(3,1), 'coopvsai':(1,1),
+	'oneforall_5x5':(7,1),
+	'oldrankedpremade3x3':(4,0), 'oldrankedteam3x3':(5,0)}
 RANKED_SOLO_QUEUE_TYPES={'rankedpremade5x5':(5,1), 'rankedpremade3x3':(5,4), 'rankedsolo5x5':(3,1)}
 RANKED_GAME_TYPES=((4,1), (5,1), (4,4), (5,4), (3,1))
 TIERS=((1, 'BRONZE'), (2, 'SILVER'), (3, 'GOLD'), (4, 'PLATINUM'), (5, 'DIAMOND'), (6, 'CHALLENGER'))
@@ -76,7 +81,7 @@ class Summoner(models.Model):
 
 	@property
 	def needs_update(self):
-		if self.time_updated<(datetime.now(timezone('UTC'))-timedelta(hours=1)):
+		if self.time_updated<(datetime.now(timezone('UTC')) - timedelta(hours=1)):
 			updating=cache.get('summoner/{}/{}/updating'.format(self.region, self.account_id))
 			if updating is not None:
 				return updating
@@ -157,7 +162,7 @@ class Game(models.Model):
 	time=models.DateTimeField(db_index=True)
 	blue_team_won=models.BooleanField()
 	invalid=models.BooleanField(default=False)
-	unfetched_players=models.CharField(max_length=128, blank=True)
+	unfetched_players=models.CharField(max_length=256, blank=True)
 	fetched=models.BooleanField(default=False)
 
 	@models.permalink
@@ -215,7 +220,7 @@ class Player(models.Model):
 
 	champion_level=models.IntegerField()
 
-	items=models.CharField(max_length=38)
+	items=models.CharField(max_length=43)
 
 	kills=models.IntegerField()
 	deaths=models.IntegerField()
@@ -268,11 +273,11 @@ class Player(models.Model):
 
 	@property
 	def get_items(self):
-		return self.items.split('|')[1:-1]
+		return self.items.split('|')[1:-1][:6]
 
 	@property
 	def length(self):
-		ip=self.ip_earned-self.boosted_ip_earned if self.ip_earned-self.boosted_ip_earned<=145 else (self.ip_earned-self.boosted_ip_earned)-150
+		ip=self.ip_earned - self.boosted_ip_earned if self.ip_earned - self.boosted_ip_earned<=145 else (self.ip_earned - self.boosted_ip_earned) - 150
 		if self.game.game_mode not in (2, 3, 4, 5): return 0
 		if self.game.game_map in (1,4):  # classic, twisted treeline
 			base=18 if self.won else 16
@@ -284,18 +289,18 @@ class Player(models.Model):
 				result=55
 			else:
 				# result=round((ip-base)/mingain, 1)
-				result=(ip-base)/mingain
+				result=(ip - base) / mingain
 		elif self.game.game_map==2:  # dominion
 			base=20 if self.won else 12
 			mingain=2 if self.won else 1
 			max_length=55
-			result=(ip-base)/mingain
+			result=(ip - base) / mingain
 		return result if result<=max_length else max_length
 
 	@property
 	def gpm(self):
 		if self.length>0:
-			return round(self.gold/self.length)
+			return round(self.gold / self.length)
 		else:
 			return 0
 
@@ -367,7 +372,7 @@ def get_data(url, query, region='NA'):
 	return res['data']
 
 
-@transaction.commit_on_success
+@transaction.atomic
 def parse_games(games, summoner, full=False, current=None):
 	for ogame in games:
 		try:
@@ -392,7 +397,7 @@ def parse_games(games, summoner, full=False, current=None):
 				game.game_mode=0
 			elif ogame['queue_type'] in ('BOT', 'BOT_3x3'):
 				game.game_mode=1
-			elif ogame['queue_type'] in ('NORMAL', 'NORMAL_3x3', 'ODIN_UNRANKED'):
+			elif ogame['queue_type'] in ('NORMAL', 'NORMAL_3x3', 'ODIN_UNRANKED', 'CAP_5x5'):
 				game.game_mode=2
 			elif ogame['queue_type']=='RANKED_SOLO_5x5':
 				game.game_mode=3
@@ -402,6 +407,14 @@ def parse_games(games, summoner, full=False, current=None):
 				game.game_mode=5
 			elif ogame['game_mode']=='ARAM' and ogame['queue_type']=='ARAM_UNRANKED_5x5':
 				game.game_mode=6
+			elif ogame['game_mode']=='ONEFORALL' and ogame['queue_type']=='ONEFORALL_5x5':
+				game.game_mode=7
+			elif ogame['game_mode']=='FIRSTBLOOD' and ogame['queue_type'] in ('FIRSTBLOOD_1x1', 'FIRSTBLOOD_2x2'):
+				game.game_mode=8
+			elif ogame['queue_type']=='SR_6x6':
+				game.game_mode=9
+			elif ogame['queue_type'] in ('URF', 'URF_BOT'):
+				game.game_mode=10
 			elif ogame['queue_type']=='NONE' and ogame['game_type']=='CUSTOM_GAME':
 				game.game_mode=0
 			elif ogame['game_type']=='TUTORIAL_GAME':
@@ -445,12 +458,12 @@ def parse_games(games, summoner, full=False, current=None):
 			player=Player(
 				game=game,
 				summoner=summoner,
-				
+
 				tier=tier, division=division, rank=rank,
 
 				afk=ogame['afk'], leaver=ogame['leaver'],
 
-				ping=ogame['ping'],	queue_length=ogame['queue_length'],	premade_size=ogame['premade_size'],
+				ping=ogame['ping'], queue_length=ogame['queue_length'], premade_size=ogame['premade_size'],
 
 				experience_earned=ogame['xp_earned'], boosted_experience_earned=ogame['boost_xp'],
 
@@ -521,14 +534,16 @@ def parse_games(games, summoner, full=False, current=None):
 			items='|'
 			for n in xrange(0, 6):
 				items+='{}|'.format(ogame['stats']['item{}'.format(n)])
+			if 'item6' in ogame['stats'] and ogame['stats']['item6']!=0:
+				items+='{}|'.format(ogame['stats']['item6'])
 			player.items=items
 			player.save(force_insert=True)
 		#else:
 		#	player=Player.objects.get(game=game, summoner=summoner)
-	transaction.commit()
+	# transaction.commit()
 
 
-@transaction.commit_on_success
+@transaction.atomic
 def create_summoner(summoner, region=0):
 	tmp=Summoner(
 		region=region,
@@ -567,7 +582,7 @@ def parse_summoner(data, summoner):
 	return summoner
 
 
-@transaction.commit_on_success
+@transaction.atomic
 def parse_ratings(ratings, summoner):
 	# MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Aram'), (4, 'Twisted Treeline'), (9, '?'))
 	# MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (9, '?'))
@@ -611,17 +626,17 @@ def parse_runes(runes, summoner):
 
 
 def rank_to_number(tier, division, rank):
-	num=(500*(tier-1))+(100*(5-division))+(100-rank)
+	num=(500 * (tier - 1)) + (100 * (5 - division)) + (100 - rank)
 	if tier==6:
 		num-=450
 	return num
 
 
 def number_to_rank(number):
-	tier=number//500+1
-	division=(number-(tier-1)*500)//100
-	rank=100-(number-(tier-1)*500-division*100)
+	tier=number // 500 + 1
+	division=(number - (tier - 1) * 500) // 100
+	rank=100 - (number - (tier - 1) * 500 - division * 100)
 	if tier==6:
 		division=4
 		rank-=50
-	return {'tier':tier, 'division':5-division, 'rank':rank}
+	return {'tier':tier, 'division':5 - division, 'rank':rank}

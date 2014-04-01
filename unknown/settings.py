@@ -1,8 +1,5 @@
 from datetime import timedelta
 import os.path
-import djcelery
-
-djcelery.setup_loader()
 
 PROJECT_DIR=os.path.dirname(__file__)
 
@@ -17,11 +14,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
 	'default': {
-		'ENGINE':	'django_postgrespool',
+		'ENGINE':	'django.db.backends.postgresql_psycopg2',
 		'HOST':		'localhost',
 		'NAME':		'lol',
 		'USER':		'django',
-		'PASSWORD':	'ohsocool'
+		'PASSWORD':	'ohsocool',
+		'CONN_MAX_AGE': 300,
 	}
 }
 
@@ -62,6 +60,7 @@ CELERYBEAT_SCHEDULE = {
 		"schedule": timedelta(minutes=2),
 	},
 }
+CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -180,7 +179,7 @@ INSTALLED_APPS = (
 	'django.contrib.auth',
 	'django.contrib.contenttypes',
 	'django.contrib.sessions',
-	'django.contrib.sites',
+	# 'django.contrib.sites',
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
 	'django.contrib.humanize',
