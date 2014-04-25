@@ -119,6 +119,9 @@ items=
 	2009:
 		name:"Total Biscuit of Rejuvenation"
 		description:"Restores 80 Health and 50 Mana over 10 seconds."
+	2010:
+		name:"Total Biscuit of Rejuvenation"
+		description:"Restores 20 health and 10 mana immediately and then 150 Health over 15 seconds."
 	2037:
 		name:"Elixir of Fortitude"
 		description:"On use, grants +120-235 Health, based on champion level and +15 Attack Damage for 3 minutes."
@@ -267,8 +270,8 @@ items=
 		name:"Sunfire Cape"
 		description:"+450 Health<br>+45 Armor<br>UNIQUE Passive: Deals 40 magic damage per second to nearby enemies."
 	3069:
-		name:"Shurelya's Reverie"
-		description:"+250 Health<br>+10 Health Regen per 5 seconds<br>+10 Mana Regen per 5 seconds<br>+10% Cooldown Reduction<br>UNIQUE Active: Grants nearby allies +40% Movement Speed for 3 seconds (60 second cooldown)."
+		name:"Talisman of Ascension"
+		description:"+20% Cooldown Reduction<br>+15 Mana Regen per 5 seconds<br>+10 Health Regen per 5 seconds<br>+2 Gold per 10 seconds<br>UNIQUE Passive: Favor: Being near a minion death without dealing the killing blow grants 3 Gold and 10 Health.<br>UNIQUE Active: Grants nearby allies +40% Movement Speed for 3 seconds (60 second cooldown)."
 	3070:
 		name:"Tear of the Goddess"
 		description:"+250 Mana<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Mana Charge: Grants +4 maximum Mana (max +750 Mana) for each spell cast and Mana expenditure (3 second cooldown)."
@@ -321,20 +324,20 @@ items=
 		name:"Wit's End"
 		description:"+42% Attack Speed<br>+25 Magic Resist<br>UNIQUE Passive: Basic attacks deal 42 bonus magic damage on hit.<br>UNIQUE Passive: Basic attacks increase your magic resistance by 5 for 5 seconds and reduce the target's magic resistance by 5 on hit (stacks up to 5 times)."
 	3092:
-		name:"Shard of True Ice"
-		description:"+45 Ability Power<br>UNIQUE Passive: Lucky Shadow: +4 Gold per 10 seconds.<br>UNIQUE Aura: Mana Warp: Grants nearby allied champions +6 Mana Regen per 5 seconds.<br>UNIQUE Active: Surrounds an ally with a blizzard for 4 seconds that slows nearby enemy movement speed by 30% (60 second cooldown)."
+		name:"Frost Queen's Claim"
+		description:"+50 Ability Power<br>+10 Mana Regen per 5 seconds<br>+10% Cooldown Reduction<br>+4 Gold per 10 seconds<br>UNIQUE Passive: Tribute: Spells and basic attacks against champions or buildings deal 15 additional damage and grant 10 Gold. This can occur up to three times every 30 seconds.<br>UNIQUE Active: Fires an ice lance that explodes dealing 50 (+5 per champion level) magic damage to nearby enemies and slowing their Movement Speed by 80%, decaying over 2 seconds (60 second cooldown.)"
 	3093:
 		name:"Avarice Blade"
 		description:"+10% Critical Strike Chance<br>UNIQUE Passive: Avarice: +3 Gold per 10 seconds.<br>UNIQUE Passive: Greed: Grants 2 Gold upon killing a unit."
 	3096:
-		name:"Philosopher's Stone"
-		description:"+7 Health Regen per 5 seconds<br>+9 Mana Regen per 5 seconds<br>UNIQUE Passive: Transmute: +5 Gold per 10 seconds."
+		name:"Nomad's Medallion"
+		description:"+7 Mana Regen per 5 seconds<br>+5 Health Regen per 5 seconds<br>+2 Gold per 10 seconds<br>UNIQUE Passive: Favor: Being near a minion death without dealing the killing blow grants 3 Gold and 5 Health."
 	3097:
-		name:"Emblem of Valor"
-		description:"+20 Armor<br>UNIQUE Aura: Valor: Grants nearby allied champions +7 Health Regen per 5 seconds."
+		name:"Targon's Brace"
+		description:"+175 Health<br>+8 Health Regen per 5 seconds<br>UNIQUE Passive: Spoils of War: Melee basic attacks execute minions below 200 Health. Killing a minion heals you and the nearest allied champion for 50 Health and grants them kill Gold."
 	3098:
-		name:"Kage's Lucky Pick"
-		description:"+25 Ability Power<br>UNIQUE Passive: Lucky Shadow: +4 Gold per 10 seconds."
+		name:"Frostfang"
+		description:"+10 Ability Power<br>+5 Mana Regen per 5 seconds<br>+4 Gold per 10 seconds<br>UNIQUE Passive: Tribute: Spells and basic attacks against champions or buildings deal 15 additional damage and grant 10 Gold."
 	3099:
 		name:"Soul Shroud"
 		description:"+520 Health<br>UNIQUE Aura: Grants nearby allied champions +10% Cooldown Reduction and +12 Mana Regen per 5 seconds."
@@ -374,9 +377,12 @@ items=
 	3112:
 		name:"Orb of Winter"
 		description:"+70 Magic Resist<br>+20 Health Regen per 5 seconds<br>UNIQUE Passive: Grants a shield that absorbs up to 30 (+10 per level) damage. The shield will refresh after 9 seconds without receiving damage."
+	3113:
+		name:"Aether Wisp"
+		description:"+30 Ability Power<br>UNIQUE Passive: +5% Movement Speed."
 	3114:
-		name:"Malady"
-		description:"+25 Ability Power<br>+45% Attack Speed<br>UNIQUE Passive: Basic attacks deal 15 (+10% of Ability Power) bonus magic damage on hit.<br>UNIQUE Passive: Basic attacks reduce the target's Magic Resist by 4 for 8 seconds on hit (stacks up to 7 times)."
+		name:"Forbidden Idol"
+		description:"+8 Mana Regen per 5 seconds<br><br>UNIQUE Passive: +10% Cooldown Reduction."
 	3115:
 		name:"Nashor's Tooth"
 		description:"+50% Attack Speed<br>+60 Ability Power<br>UNIQUE Passive: +20% Cooldown Reduction.<br>UNIQUE Passive: Basic attacks deal 15 (+15% of Ability Power) bonus magic damage on hit."
@@ -416,6 +422,9 @@ items=
 	3136:
 		name:"Haunting Guise"
 		description:"+25 Ability Power<br>+200 Health<br>UNIQUE Passive: Eyes of Pain: +15 Magic Penetration."
+	3137:
+		name:"Dervish Blade"
+		description:"+50% Attack Speed<br>+45 Magic Resist<br>+10% Cooldown Reduction<br>UNIQUE Active: Quicksilver: Removes all debuffs, and if champion is melee, also grants +50% bonus Movement Speed for 1 second (90 second cooldown)."
 	3138:
 		name:"Leviathan"
 		description:"+180 Health<br>UNIQUE Passive: Grants +32 Health per stack. Grants 2 stacks for a kill or 1 stack for an assist (maximum 20 stacks). A third of the stacks are lost upon death. At 20 stacks, reduces all damage taken by 15%."
@@ -470,6 +479,9 @@ items=
 	3159:
 		name:"Grez's Spectral Lantern"
 		description:"+15 Attack Damage<br>+20 Armor<br>+12% Life Steal<br>UNIQUE Passive: Basic attacks against minions and monsters have a 20% chance to deal 200 bonus magic damage on hit.<br>UNIQUE Active: A stealth-detecting mist grants vision in the target area for 5 seconds, revealing enemy champions that enter for 3 seconds (60 second cooldown)."
+	3160:
+		name:"Feral Flare"
+		description:"+15 Attack Damage<br>+35% Attack Speed<br>UNIQUE Passive: Maim: Basic attacks deal 100 bonus magic damage (33% against champions) and heal 10 Health on hit. This damage and heal increases with kills, assists and large monster kills.<br>UNIQUE Passive: Gain 30% increased Gold from monsters.<br>UNIQUE Active: Places a Stealth Ward that reveals the surrounding area for 180 seconds (180 second cooldown)."
 	3165:
 		name:"Morellonomicon"
 		description:"+75 Ability Power<br>+12 Mana Regen per 5 seconds<br>+20% Cooldown Reduction<br>UNIQUE Passive: Dealing magic damage to enemy champions below 40% Health inflicts Grievous Wounds for 4 seconds."
@@ -550,6 +562,9 @@ items=
 	3209:
 		name:"Spirit of the Elder Lizard"
 		description:"+35 Attack Damage<br>+10% Cooldown Reduction<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 30%.<br>UNIQUE Passive: Basic attacks and spells that do not inflict damage-over-time deal 6-40 (based on level) bonus true damage over 3 seconds on hit."
+	3210:
+		name:"Spellbreaker"
+		description:"+40 Attack Damage<br>+25 Magic Resist<br>+20% Critical Strike Chance<br>UNIQUE Passive: Tenacity: Reduces the duration of stuns, slows, taunts, fears, silences, blinds, and immobilizes by 35%.<br>UNIQUE Passive: Lifeline: Upon taking magic damage that would reduce Health below 30%, grants a shield that absorbs 400 magic damage for 5 seconds (90 second cooldown)."
 	3211:
 		name:"Spectre's Cowl"
 		description:"+200 Health<br>+45 Magic Resist<br><br>UNIQUE Passive: Grants 15 Health Regen per 5 seconds for up to 10 seconds after taking damage from an enemy champion."
@@ -664,9 +679,24 @@ items=
 	3290:
 		name:"Twin Shadows (CS)"
 		description:"+30 Ability Power<br>+30 Magic Resist<br>+6% Movement Speed<br>UNIQUE Active: Hunt: Summons up to 2 invulnerable ghosts that seek out the two nearest enemy champions for 6 seconds. If a ghost reaches its target, it reveals the target and reduces their Movement Speed by 40% for 2.5 seconds (60 second cooldown)."
+	3301:
+		name:"Ancient Coin"
+		description:"+3 Mana Regen per 5 seconds<br>UNIQUE Passive: Favor: Being near a minion death without dealing the killing blow grants 2 Gold and 5 Health."
+	3302:
+		name:"Relic Shield"
+		description:"+75 Health<br>UNIQUE Passive: Spoils of War: Melee basic attacks execute minions below 200 Health. Killing a minion heals you and the nearest allied champion for 40 Health and grants them kill Gold."
+	3303:
+		name:"Spellthief's Edge"
+		description:"+5 Ability Power<br>+2 Mana Regen per 5 seconds<br>+2 Gold per 10 seconds<br>UNIQUE Passive: Tribute: Spells and basic attacks against champions or buildings deal 10 additional damage and grant 5 Gold."
+	3401:
+		name:"Face of the Mountain"
+		description:"+500 Health<br>+20 Health Regen per 5 seconds<br>+10% Cooldown Reduction<br>UNIQUE Passive: Spoils of War: Melee basic attacks execute minions below 200 Health. Killing a minion heals you and the nearest allied champion for 50 (+1% of your maximum Health) and grants them kill Gold.<br>UNIQUE Active: Shield target ally for 10% of your maximum Health for 4 seconds. After 4 seconds, the target explodes dealing 100% of their total Attack Damage plus 30% of their Ability Power as magic damage in an area. (60 second cooldown)"
 	9001:
 		name:"Cloak and Dagger"
 		description:"+20% Attack Speed<br>+20% Critical Strike Chance<br>UNIQUE Passive: Tenacity: The durations of stuns, slows, taunts, fears, silences, blinds, and immobilizes are reduced by 35%."
+	9002:
+		name:"Malady"
+		description:"+25 Ability Power<br>+45% Attack Speed<br>UNIQUE Passive: Basic attacks deal 15 (+10% of Ability Power) bonus magic damage on hit.<br>UNIQUE Passive: Basic attacks reduce the target's Magic Resist by 4 for 8 seconds on hit (stacks up to 7 times)."
 
 if typeof(module?.exports)!='undefined'
 	module.exports=items
