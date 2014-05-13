@@ -109,6 +109,7 @@ champions=
 	143:"Zyra"
 	154:"Zac"
 	161:"Velkoz"
+	201:"Braum"
 	222:"Jinx"
 	236:"Lucian"
 	238:"Zed"

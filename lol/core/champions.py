@@ -110,6 +110,7 @@ CHAMPIONS={
 	154:"Zac",
 	157:"Yasuo",
 	161:"Velkoz",
+	201:"Braum",
 	222:"Jinx",
 	236:"Lucian",
 	238:"Zed",
