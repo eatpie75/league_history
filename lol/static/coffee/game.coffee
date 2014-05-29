@@ -65,7 +65,7 @@ class TellMeMore
 	collapse:(el, extra)->
 		extra.html('')
 		extra.css('height', '0px')
-		setTimeout(=>
+		setTimeout(->
 			extra.remove()
 		, 500)
 		@bind_toggle(el)

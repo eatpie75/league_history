@@ -87,7 +87,7 @@ class GameAdmin(admin.ModelAdmin):
 class SummonerRatingForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		super(SummonerRatingForm, self).__init__(*args, **kwargs)
-		#self.fields['winner_tags'].widget=forms.SelectMultiple(attrs={'style':'height:250px'})
+		# self.fields['winner_tags'].widget=forms.SelectMultiple(attrs={'style':'height:250px'})
 		if 'instance' in kwargs:
 			self.fields['summoner'].queryset=Summoner.objects.filter(pk=kwargs['instance'].summoner.pk)
 		else:

@@ -407,7 +407,7 @@ def parse_games(games, summoner, full=False, current=None):
 				game.game_mode=5
 			elif ogame['game_mode']=='ARAM' and ogame['queue_type']=='ARAM_UNRANKED_5x5':
 				game.game_mode=6
-			elif ogame['game_mode']=='ONEFORALL' and ogame['queue_type']=='ONEFORALL_5x5':
+			elif ogame['game_mode'] in ('ONEFORALL', 'ARAM') and ogame['queue_type']=='ONEFORALL_5x5':
 				game.game_mode=7
 			elif ogame['game_mode']=='FIRSTBLOOD' and ogame['queue_type'] in ('FIRSTBLOOD_1x1', 'FIRSTBLOOD_2x2'):
 				game.game_mode=8
@@ -538,8 +538,8 @@ def parse_games(games, summoner, full=False, current=None):
 				items+='{}|'.format(ogame['stats']['item6'])
 			player.items=items
 			player.save(force_insert=True)
-		#else:
-		#	player=Player.objects.get(game=game, summoner=summoner)
+		# else:
+		# 	player=Player.objects.get(game=game, summoner=summoner)
 	# transaction.commit()
 
 

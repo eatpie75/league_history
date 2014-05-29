@@ -34,7 +34,7 @@ class Queryset_Manager:
 class Stats:
 		def __init__(self, games, **kwargs):
 			self.qs=games.only('summoner__id', 'game', 'champion_id', 'won', 'items', 'kills', 'deaths', 'assists', 'minion_kills', 'neutral_minions_killed', 'gold', 'summoner_spell1', 'summoner_spell2', 'tier', 'division', 'rank', 'blue_team')
-			#.defer(
+			# .defer(
 			# 	'afk', 'leaver', 'blue_team', 'ping', 'queue_length', 'premade_size',
 			# 	'ip_earned', 'experience_earned', 'boosted_experience_earned', 'boosted_ip_earned',
 			# 	'summoner_level', 'summoner_spell1', 'summoner_spell2',

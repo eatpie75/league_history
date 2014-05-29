@@ -119,18 +119,18 @@ def view_game(request, region, game_id):
 	for player in players:
 		team='winner' if player.won else 'loser'
 		metadata['stats'][team]['num_players']+=1
-		#Begin avg/total stats
+		# Begin avg/total stats
 		for key, mapping in {'kills':'kills', 'deaths':'deaths', 'assists':'assists', 'minion_kills':'cs', 'neutral_minions_killed':'cs', 'gold':'gold', 'gpm':'gpm'}.iteritems():
 			metadata['stats'][team][mapping]+=getattr(player, key)
 			metadata['stats'][team]['avg_{}'.format(mapping)]=round(float(metadata['stats'][team][mapping]) / metadata['stats'][team]['num_players'], 1)
-		#Begin damage dealt/taken
+		# Begin damage dealt/taken
 		metadata['stats'][team]['pd_dealt']+=player.physical_damage_dealt
 		metadata['stats'][team]['pd_taken']+=player.physical_damage_taken
 		metadata['stats'][team]['md_dealt']+=player.magic_damage_dealt
 		metadata['stats'][team]['md_taken']+=player.magic_damage_taken
 		metadata['stats'][team]['td_dealt']+=player.damage_dealt
 		metadata['stats'][team]['td_taken']+=player.damage_taken
-		#Begin wards
+		# Begin wards
 		metadata['stats'][team]['sw_bought']+=player.sight_wards_bought_in_game
 		metadata['stats'][team]['vw_bought']+=player.vision_wards_bought_in_game
 		metadata['stats'][team]['tw_bought']+=player.sight_wards_bought_in_game + player.vision_wards_bought_in_game

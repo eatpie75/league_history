@@ -146,7 +146,7 @@ force_update=(e)->
 			type: 'GET',
 			url: "#{window.AJAX_BASE}ajax/force_update_status/#{window.region}/#{window.account_id}/",
 			dataType: "json",
-			success: (msg)=>
+			success: (msg)->
 				if msg.status=='QUEUE'
 					setTimeout(_update_status, msg.delay)
 				else if msg.status=='DONE'
@@ -157,7 +157,7 @@ force_update=(e)->
 		type: 'GET',
 		url: "#{window.AJAX_BASE}ajax/force_update/#{window.region}/#{window.account_id}/",
 		dataType: "json",
-		success: (msg)=>
+		success: (msg)->
 			$('#last-updated').text("LAST UPDATED:#{msg.msg}")
 			if msg.status=='QUEUE'
 				setTimeout(_update_status, msg.delay)

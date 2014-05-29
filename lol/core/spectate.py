@@ -37,7 +37,7 @@ class Spectate:
 
 	def _url(self):
 		return "lolspectate://ip={ip}&port={port}&game_id={game_id}&region={region}&key={key}".format(**self.info)
-		#return "lrf://spectator {ip} {key} {game_id} {region} 1.0.0.152"
+		# return "lrf://spectator {ip} {key} {game_id} {region} 1.0.0.152"
 	url=property(_url)
 
 	def _link(self):

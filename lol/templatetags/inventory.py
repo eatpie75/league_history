@@ -1,10 +1,8 @@
-from django_jinja.base import Library
+from django_jinja import library
 from lol.core.runes import RUNES, RUNE_STATS
 
-register = Library()
 
-
-@register.filter
+@library.filter
 def rune_summary(runepage):
 	def _format(page):
 		for stat, amount in page['stats'].iteritems():
@@ -14,7 +12,7 @@ def rune_summary(runepage):
 				page['stats'][stat]=round(amount, 1)
 			else:
 				page['stats'][stat]=int(round(amount))
-			if page['stats'][stat]%1==0:
+			if page['stats'][stat] % 1==0:
 				page['stats'][stat]=int(page['stats'][stat])
 		return page
 	presum=[]
@@ -26,7 +24,7 @@ def rune_summary(runepage):
 		name=page['name']
 		tmp['name']=name
 		tmp['id']=page['id']
-		tmp['active']=page.get('active') if page.get('active')!=None else False
+		tmp['active']=page.get('active') if page.get('active') is not None else False
 		for slot in page['slots']:
 			rune=RUNES[slot['id']]
 			if slot['id'] not in tmp['runes']:
@@ -45,6 +43,6 @@ def rune_summary(runepage):
 	return presum
 
 
-@register.filter
+@library.filter
 def rune_stat_str(id):
 	return RUNE_STATS[id]

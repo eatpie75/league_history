@@ -1,17 +1,15 @@
 from datetime import datetime
-from django_jinja.base import Library
+from django_jinja import library
 from lol.models import TIERS, DIVISIONS
 from pytz import timezone
 
-register = Library()
 
-
-@register.filter
+@library.filter
 def get_percent(val1, val2):
 	return '{:.0%}'.format(float(val1) / float(val2)) if val2!=0 else '0%'
 
 
-@register.filter
+@library.filter
 def to_k_format(value):
 	try:
 		value=int(value)
@@ -25,7 +23,7 @@ def to_k_format(value):
 	return tmp
 
 
-@register.filter
+@library.filter
 def is_in_game(player, game):
 	if player.game_id==game.pk:
 		return True
@@ -33,7 +31,7 @@ def is_in_game(player, game):
 		return False
 
 
-@register.filter
+@library.filter
 def timediff(val1, val2=None):
 	if val2 is None:
 		val2=datetime.now(timezone('UTC'))
@@ -41,7 +39,7 @@ def timediff(val1, val2=None):
 	return diff.total_seconds()
 
 
-@register.filter
+@library.filter
 def number_to_rank(number):
 	tier=number // 500 + 1
 	division=(number - (tier - 1) * 500) // 100
@@ -50,7 +48,7 @@ def number_to_rank(number):
 	return {'tier':int(tier), 'division':int(5 - division), 'rank':int(rank)}
 
 
-@register.filter
+@library.filter
 def display_rank(rank):
 	tier=next(name for value, name in TIERS if value==rank['tier'])
 	division=next(name for value, name in DIVISIONS if value==rank['division'])
