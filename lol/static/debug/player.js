@@ -264,15 +264,13 @@
         type: 'GET',
         url: "" + window.AJAX_BASE + "ajax/force_update_status/" + window.region + "/" + window.account_id + "/",
         dataType: "json",
-        success: (function(_this) {
-          return function(msg) {
-            if (msg.status === 'QUEUE') {
-              return setTimeout(_update_status, msg.delay);
-            } else if (msg.status === 'DONE') {
-              return $('#last-updated').text(msg.msg);
-            }
-          };
-        })(this)
+        success: function(msg) {
+          if (msg.status === 'QUEUE') {
+            return setTimeout(_update_status, msg.delay);
+          } else if (msg.status === 'DONE') {
+            return $('#last-updated').text(msg.msg);
+          }
+        }
       });
     };
     $('#last-updated-block').html("<small id='last-updated'>WORKING...</small>");
@@ -280,14 +278,12 @@
       type: 'GET',
       url: "" + window.AJAX_BASE + "ajax/force_update/" + window.region + "/" + window.account_id + "/",
       dataType: "json",
-      success: (function(_this) {
-        return function(msg) {
-          $('#last-updated').text("LAST UPDATED:" + msg.msg);
-          if (msg.status === 'QUEUE') {
-            return setTimeout(_update_status, msg.delay);
-          }
-        };
-      })(this)
+      success: function(msg) {
+        $('#last-updated').text("LAST UPDATED:" + msg.msg);
+        if (msg.status === 'QUEUE') {
+          return setTimeout(_update_status, msg.delay);
+        }
+      }
     });
   };
 

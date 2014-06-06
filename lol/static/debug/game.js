@@ -81,11 +81,9 @@
     TellMeMore.prototype.collapse = function(el, extra) {
       extra.html('');
       extra.css('height', '0px');
-      setTimeout((function(_this) {
-        return function() {
-          return extra.remove();
-        };
-      })(this), 500);
+      setTimeout(function() {
+        return extra.remove();
+      }, 500);
       return this.bind_toggle(el);
     };
 
