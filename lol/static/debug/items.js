@@ -4,7 +4,7 @@
 
   __rengar_trophy = {
     'name': "Bonetooth Necklace",
-    'description': "+5 Attack Damage<br> UNIQUE Passive: +2 Attack Damage per level.<br> UNIQUE Passive: Rengar collects trophies when killing champions, and gains bonus effects based on how many trophies he collects. Grants 1 trophy for kills and assists. One trophy is lost upon death <dl><dt>3 Trophies:<ul> <li>+10 Armor Penetration</li> <li>+5% Cooldown Reduction</li></ul></dt> <dt>6 Trophies:<ul> <li>+25 Movement Speed</li></ul></dt> <dt>9 Trophies:<ul> <li>Increases the range of Rengar's leap by 150.</li></ul></dt> <dt>14 Trophies:<ul> <li>Increases the duration of Thrill of the Hunt by 3 seconds. Additionally, Rengar's next ability used after activating Thrill of the Hunt generates 1 bonus Ferocity.</li></ul></dt> </dl>"
+    'description': "UNIQUE Passive: Rengar collects trophies when killing champions, and gains bonus effects based on how many trophies he collects. Grants 1 trophy for kills and assists. <dl><dt>3 Trophies:<ul> <li>Rengar gains flat movement speed while out of combat or while in brush</li></ul></dt> <dt>6 Trophies:<ul> <li>Unseen Predator's range is increased by 125</li></ul></dt> <dt>12 Trophies:<ul> <li>Thrill of the Hunt stealth duration is increased</li></ul></dt> <dt>20 Trophies:<ul> <li>Thrill of the Hunt's bonus movement speed is doubled</li></ul></dt> </dl>"
   };
 
   items = {
@@ -74,7 +74,7 @@
     },
     1038: {
       name: "B. F. Sword",
-      description: "+45 Attack Damage"
+      description: "+50 Attack Damage"
     },
     1039: {
       name: "Hunter's Machete",
@@ -82,7 +82,7 @@
     },
     1042: {
       name: "Dagger",
-      description: "+12% Attack Speed"
+      description: "+15% Attack Speed"
     },
     1043: {
       name: "Recurve Bow",
@@ -98,7 +98,7 @@
     },
     1053: {
       name: "Vampiric Scepter",
-      description: "+10 Attack Damage<br>+10% Life Steal"
+      description: "+10 Attack Damage<br>+8% Life Steal"
     },
     1054: {
       name: "Doran's Shield",
@@ -106,7 +106,7 @@
     },
     1055: {
       name: "Doran's Blade",
-      description: "+80 Health<br>+10 Attack Damage<br>Passive: Basic attacks restore 5 Health on hit."
+      description: "+70 Health<br>+7 Attack Damage<br>+3% Life Steal"
     },
     1056: {
       name: "Doran's Ring",
@@ -226,7 +226,7 @@
     },
     3006: {
       name: "Berserker's Greaves",
-      description: "+20% Attack Speed<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed."
+      description: "+25% Attack Speed<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed."
     },
     3007: {
       name: "Archangel's Staff (CS)",
@@ -282,7 +282,7 @@
     },
     3031: {
       name: "Infinity Edge",
-      description: "+70 Attack Damage<br>+25% Critical Strike Chance<br>UNIQUE Passive: Critical strikes deal 250% damage instead of 200%."
+      description: "+80 Attack Damage<br>+25% Critical Strike Chance<br>UNIQUE Passive: Critical strikes deal 250% damage instead of 200%."
     },
     3035: {
       name: "Last Whisper",
@@ -358,7 +358,7 @@
     },
     3072: {
       name: "The Bloodthirster",
-      description: "+70 Attack Damage<br>+12% Life Steal<br>Passive: Grants +1 Attack Damage and +0.2% Life Steal per stack (max +30 Attack Damage and +6% Life Steal). Grants 1 stack per unit kill (max 30 stacks). Half of the stacks are lost upon death."
+      description: "+80 Attack Damage<br>+15% Life Steal<br>UNIQUE Passive: Your life steal overheals you, converting the excess healing into a shield that absorbs up to 50-450 damage and decays when out of combat for 15 seconds."
     },
     3073: {
       name: "Tear of the Goddess (CS)",
@@ -382,7 +382,7 @@
     },
     3082: {
       name: "Warden's Mail",
-      description: "+50 Armor<br>UNIQUE Passive: Cold Steel: When hit by basic attacks, reduces the attacker's Attack Speed by 15% for 1 seconds."
+      description: "+50 Armor<br>UNIQUE Passive: Cold Steel: When hit by basic attacks, reduces the attacker's Attack Speed by 10% for 1 second."
     },
     3083: {
       name: "Warmog's Armor",
@@ -398,7 +398,7 @@
     },
     3086: {
       name: "Zeal",
-      description: "+18% Attack Speed<br>+10% Critical Strike Chance<br>+5% Movement Speed"
+      description: "+20% Attack Speed<br>+10% Critical Strike Chance<br>+5% Movement Speed"
     },
     3087: {
       name: "Statikk Shiv",
@@ -414,7 +414,7 @@
     },
     3091: {
       name: "Wit's End",
-      description: "+42% Attack Speed<br>+25 Magic Resist<br>UNIQUE Passive: Basic attacks deal 42 bonus magic damage on hit.<br>UNIQUE Passive: Basic attacks increase your magic resistance by 5 for 5 seconds and reduce the target's magic resistance by 5 on hit (stacks up to 5 times)."
+      description: "+50% Attack Speed<br>+25 Magic Resist<br>UNIQUE Passive: Basic attacks deal 42 bonus magic damage on hit.<br>UNIQUE Passive: Basic attacks increase your magic resistance by 5 for 5 seconds and reduce the target's magic resistance by 5 on hit (stacks up to 5 times)."
     },
     3092: {
       name: "Frost Queen's Claim",
@@ -558,7 +558,7 @@
     },
     3139: {
       name: "Mercurial Scimitar",
-      description: "+60 Attack Damage<br>+45 Magic Resist<br>UNIQUE Active: Quicksilver: Removes all debuffs, and if champion is melee, also grants +50% bonus Movement Speed for 1 second (90 second cooldown)."
+      description: "+80 Attack Damage<br>+45 Magic Resist<br>UNIQUE Active: Quicksilver: Removes all debuffs from your champion and grants +50% movement speed for 1 second (90 second cooldown)."
     },
     3140: {
       name: "Quicksilver Sash",
@@ -570,15 +570,15 @@
     },
     3142: {
       name: "Youmuu's Ghostblade",
-      description: "+30 Attack Damage<br>+15% Critical Strike Chance<br>UNIQUE Passive: +10% Cooldown Reduction.<br>UNIQUE Passive: +20 Armor Penetration.<br>UNIQUE Active: Grants +20% Movement Speed and +40% Attack Speed (lasts 6 seconds for melee champions, 4 seconds for ranged champions)(45 second cooldown)."
+      description: "+30 Attack Damage<br>+15% Critical Strike Chance<br>+10% Cooldown Reduction.<br>UNIQUE Passive: +20 Armor Penetration.<br>UNIQUE Active: Grants +20% Movement Speed and +40% Attack Speed for 6 seconds (45 second cooldown)."
     },
     3143: {
       name: "Randuin's Omen",
-      description: "+500 Health<br>+70 Armor<br>UNIQUE Passive: Cold Steel: When hit by basic attacks, reduces the attacker's Attack Speed by 15% and Movement Speed by 10% for 1 seconds.<br>UNIQUE Active: Slows the Movement Speed of nearby enemy units by 35% for 2 seconds (+1 second per 200 Armor and +1 second per 200 Magic Resist)(60 second cooldown)."
+      description: "+500 Health<br>+70 Armor<br>UNIQUE Passive: Cold Steel: When hit by basic attacks, reduces the attacker's Attack Speed by 10% for 1 second.<br>UNIQUE Active: Slows the Movement Speed of nearby enemy units by 35% for 2 seconds (+1 second per 200 Armor and +1 second per 200 Magic Resist)(60 second cooldown)."
     },
     3144: {
       name: "Bilgewater Cutlass",
-      description: "+25 Attack Damage<br>+12% Life Steal<br>UNIQUE Active: Deals 100 magic damage and slows the target champion's Movement Speed by 25% for 2 seconds (90 second cooldown)."
+      description: "+25 Attack Damage<br>+8% Life Steal<br>UNIQUE Active: Deals 100 magic damage and slows the target champion's Movement Speed by 25% for 2 seconds (90 second cooldown)."
     },
     3145: {
       name: "Hextech Revolver",
@@ -598,7 +598,7 @@
     },
     3153: {
       name: "Blade of the Ruined King",
-      description: "+25 Attack Damage<br>+40% Attack Speed<br>+15% Life Steal<br>UNIQUE Passive: Basic attacks deal 5% of the target's current Health in bonus physical damage (max 60 vs. monsters and minions) on hit.<br>UNIQUE Active: Deals 15% of target champion's maximum Health (min. 100) as physical damage, heals for the same amount, and steals 30% of the target's Movement Speed for 3 seconds (60 second cooldown)."
+      description: "+25 Attack Damage<br>+40% Attack Speed<br>+10% Life Steal<br>UNIQUE Passive: Basic attacks deal 8% of the target's current Health in bonus physical damage (max 60 vs. monsters and minions) on hit.<br>UNIQUE Active: Deals 10% of target champion's maximum Health (min. 100) as physical damage, heals for the same amount, and steals 25% of the target's Movement Speed for 3 seconds (90 second cooldown)."
     },
     3154: {
       name: "Wriggle's Lantern",
@@ -630,7 +630,7 @@
     },
     3165: {
       name: "Morellonomicon",
-      description: "+75 Ability Power<br>+12 Mana Regen per 5 seconds<br>+20% Cooldown Reduction<br>UNIQUE Passive: Dealing magic damage to enemy champions below 40% Health inflicts Grievous Wounds for 4 seconds."
+      description: "+80 Ability Power<br>+10 Mana Regen per 5 seconds<br>+20% Cooldown Reduction<br>UNIQUE Passive: Dealing magic damage to enemy champions below 40% Health inflicts Grievous Wounds for 4 seconds."
     },
     3166: __rengar_trophy,
     3167: __rengar_trophy,
@@ -651,7 +651,7 @@
     },
     3174: {
       name: "Athene's Unholy Grail",
-      description: "+60 Ability Power<br>+40 Magic Resist<br>+15 Mana Regen per 5 seconds<br>UNIQUE Passive: 20% Cooldown Reduction.<br>UNIQUE Passive: Restores 12% of maximum Mana on kill or assist.<br>UNIQUE Passive: Mana Font: Increases Mana Regen by 1% for every 1% of missing Mana."
+      description: "+60 Ability Power<br>+25 Magic Resist<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: 20% Cooldown Reduction.<br>UNIQUE Passive: Restores 15% of maximum Mana on kill or assist.<br>UNIQUE Passive: Mana Font: Increases Mana Regen by 1% for every 1% of missing Mana."
     },
     3175: {
       name: "Head of Kha'Zix",
@@ -743,27 +743,27 @@
     },
     3222: {
       name: "Mikael's Crucible",
-      description: "+300 Mana<br>+40 Magic Resist<br>+9 Mana Regen per 5 seconds<br>UNIQUE Passive: Mana Font: Increases Mana Regen by 1% for every 1% of missing Mana.<br>UNIQUE Active: Removes all stuns, roots, taunts, fears, silences, and slows on an allied champion and heals that champion for 150 (+15% of missing Health)(180 second cooldown)."
+      description: "+40 Magic Resist<br>+20 Mana Regen per 5 seconds<br>+10% Cooldown Reduction<br>UNIQUE Passive: Mana Font: Increases Mana Regen by 1% for every 1% of missing Mana.<br>UNIQUE Active: Removes all stuns, roots, taunts, fears, silences, and slows on an allied champion and heals that champion for 150 (+10% of missing Health)(180 second cooldown)."
     },
     3250: {
       name: "Berserker's Greaves - Homeguard",
-      description: "+20% Attack Speed<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed.<br>UNIQUE Passive: Homeguard: After being out of combat for 8 seconds, visiting the shop grants full Health, Mana, and +200% Movement Speed that decays over 8 seconds (bonus Movement Speed ends upon entering combat)."
+      description: "+25% Attack Speed<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed.<br>UNIQUE Passive: Homeguard: After being out of combat for 8 seconds, visiting the shop grants full Health, Mana, and +200% Movement Speed that decays over 8 seconds (bonus Movement Speed ends upon entering combat)."
     },
     3251: {
       name: "Berserker's Greaves - Captain",
-      description: "+20% Attack Speed<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed.<br>UNIQUE Passive: Captain: Grants +8% Movement Speed to nearby approaching allied champions. Grants nearby minions +20% Movement Speed."
+      description: "+25% Attack Speed<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed.<br>UNIQUE Passive: Captain: Grants +8% Movement Speed to nearby approaching allied champions. Grants nearby minions +20% Movement Speed."
     },
     3252: {
       name: "Berserker's Greaves - Furor",
-      description: "+20% Attack Speed<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed.<br>UNIQUE Passive: Furor: Upon dealing damage with a single target spell or attack (on hit), grants +12% Movement Speed that decays over 2 seconds."
+      description: "+25% Attack Speed<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed.<br>UNIQUE Passive: Furor: Upon dealing damage with a single target spell or attack (on hit), grants +12% Movement Speed that decays over 2 seconds."
     },
     3253: {
       name: "Berserker's Greaves - Distortion",
-      description: "+20% Attack Speed<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed.<br>UNIQUE Passive: Distortion: Teleport, Flash, and Ghost summoner spell cooldowns are reduced by 25%."
+      description: "+25% Attack Speed<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed.<br>UNIQUE Passive: Distortion: Teleport, Flash, and Ghost summoner spell cooldowns are reduced by 25%."
     },
     3254: {
       name: "Berserker's Greaves - Alacrity",
-      description: "+20% Attack Speed<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed.<br>UNIQUE Passive: Alacrity: +15 Movement Speed."
+      description: "+25% Attack Speed<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed.<br>UNIQUE Passive: Alacrity: +15 Movement Speed."
     },
     3255: {
       name: "Sorcerer's Shoes - Homeguard",
@@ -904,6 +904,14 @@
     3401: {
       name: "Face of the Mountain",
       description: "+500 Health<br>+20 Health Regen per 5 seconds<br>+10% Cooldown Reduction<br>UNIQUE Passive: Spoils of War: Melee basic attacks execute minions below 200 Health. Killing a minion heals you and the nearest allied champion for 50 (+1% of your maximum Health) and grants them kill Gold.<br>UNIQUE Active: Shield target ally for 10% of your maximum Health for 4 seconds. After 4 seconds, the target explodes dealing 100% of their total Attack Damage plus 30% of their Ability Power as magic damage in an area. (60 second cooldown)"
+    },
+    3504: {
+      name: "Ardent Censer",
+      description: "+30 Ability Power<br>+10 Mana Regen per 5 seconds<br>+10% Cooldown Reduction<br>UNIQUE Passive: +8% Movement Speed<br>UNIQUE Passive: Your heals and shields on another unit grant them 25% Attack Speed for 6 seconds."
+    },
+    3508: {
+      name: "Essence Reaver",
+      description: "+50 Attack Damage<br>+10% Life Steal<br>+10% Cooldown Reduction<br>UNIQUE Passive: You gain 2% to 8% of the damage dealt by basic attacks as Mana. This effect increases based on how much Mana you are missing."
     },
     9001: {
       name: "Cloak and Dagger",
