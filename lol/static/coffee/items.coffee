@@ -67,7 +67,7 @@ items=
 		description:"+50 Attack Damage"
 	1039:
 		name:"Hunter's Machete"
-		description:"UNIQUE Passive: Butcher: Damage dealt to monsters increased by 10%.<br>UNIQUE Passive: Maim: Your basic attacks deal 10 bonus magic damage to monsters."
+		description:"+5 Damage Reduction vs. Monsters<br>+10 Attack Damage vs. Monsters"
 	1042:
 		name:"Dagger"
 		description:"+15% Attack Speed"
@@ -550,12 +550,15 @@ items=
 	3200:
 		name:"The Hex Core"
 		description:"+3 Ability Power per level<br>This item can be upgraded into one of three augments that enhance Viktor's basic abilities."
+	3205:
+		name:"Quill Coat"
+		description:"+20 armor<br>UNIQUE Passive: Sapping Barbs: You gain 40 HP/5 and 30 MP/5 for 5 seconds whenever you take damage from a monster. Additionally, monsters who attack you bleed for 5% of their maximum health over 3 seconds.<br>UNIQUE Active: Hunter's Ward: Places a Stealth Ward that reveals the surrounding area for 180 seconds (180 second cooldown)."
 	3206:
 		name:"Spirit of the Spectral Wraith"
 		description:"+40 Ability Power<br>+10% Cooldown Reduction<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: +20% Spell Vamp.<br>UNIQUE Passive: Reduces the cooldown of Smite by 20%.<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 30%."
 	3207:
 		name:"Spirit of the Ancient Golem"
-		description:"+500 Health<br>+10% Cooldown Reduction<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 30%.<br>UNIQUE Passive: Tenacity: Reduces the duration of stuns, slows, taunts, fears, silences, blinds, and immobilizes by 35%."
+		description:"+200 Health<br>+20 Armor<br>+10% Cooldown Reduction<br>UNIQUE Passive: +25% bonus health.<br>UNIQUE Active: Sapping Barbs: You gain 40 HP/5 and 30 MP/5 for 5 seconds whenever you take damage from a monster. Additionally, monsters who attack you bleed for 5% of their maximum health over 3 seconds.<br>UNIQUE Passive: Conservation: You generate Conservation stacks every 1.5 seconds, up to 80. Killing a large monster will consume up to 40 stacks and grant 1 bonus gold per stack consumed.<br>UNIQUE Active: Hunter's Ward: Places a Stealth Ward that reveals the surrounding area for 180 seconds (180 second cooldown)."
 	3209:
 		name:"Spirit of the Elder Lizard"
 		description:"+35 Attack Damage<br>+10% Cooldown Reduction<br>+14 Health Regen per 5 seconds<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Butcher: Damage dealt to monsters increased by 30%.<br>UNIQUE Passive: Basic attacks and spells that do not inflict damage-over-time deal 6-40 (based on level) bonus true damage over 3 seconds on hit."
@@ -693,7 +696,7 @@ items=
 		description:"+30 Ability Power<br>+10 Mana Regen per 5 seconds<br>+10% Cooldown Reduction<br>UNIQUE Passive: +8% Movement Speed<br>UNIQUE Passive: Your heals and shields on another unit grant them 25% Attack Speed for 6 seconds."
 	3508:
 		name:"Essence Reaver"
-		description:"+50 Attack Damage<br>+10% Life Steal<br>+10% Cooldown Reduction<br>UNIQUE Passive: You gain 2% to 8% of the damage dealt by basic attacks as Mana. This effect increases based on how much Mana you are missing."
+		description:"+60 Attack Damage<br>+10% Life Steal<br>+10% Cooldown Reduction<br>UNIQUE Passive: You gain 2% to 8% of the damage dealt by basic attacks as Mana. This effect increases based on how much Mana you are missing."
 	9001:
 		name:"Cloak and Dagger"
 		description:"+20% Attack Speed<br>+20% Critical Strike Chance<br>UNIQUE Passive: Tenacity: The durations of stuns, slows, taunts, fears, silences, blinds, and immobilizes are reduced by 35%."

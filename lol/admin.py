@@ -7,7 +7,7 @@ from tasks import summoner_auto_task, fill_game
 class PlayerForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		super(PlayerForm, self).__init__(*args, **kwargs)
-		#self.fields['winner_tags'].widget=forms.SelectMultiple(attrs={'style':'height:250px'})
+		# self.fields['winner_tags'].widget=forms.SelectMultiple(attrs={'style':'height:250px'})
 		if 'instance' in kwargs:
 			self.fields['summoner'].queryset=Summoner.objects.filter(pk=kwargs['instance'].summoner.pk)
 			self.fields['game'].queryset=Game.objects.filter(pk=kwargs['instance'].game.pk)
@@ -17,7 +17,7 @@ class PlayerForm(forms.ModelForm):
 
 
 class PlayerAdmin(admin.ModelAdmin):
-	#list_filter=('summoner',)
+	# list_filter=('summoner',)
 	list_display=('summoner', 'game_time', 'tier', 'division', 'rank', 'rank_to_number', 'game_link')
 	list_filter=('summoner__update_automatically', 'game__fetched', 'game__game_map', 'game__game_mode', 'leaver', 'won')
 	list_per_page=25

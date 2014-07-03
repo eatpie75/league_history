@@ -173,8 +173,8 @@ def generate_global_stats(key, qs, **kwargs):
 	stats=Stats(new_qs, **kwargs)
 	stats.generate_index()
 	print 'generated, caching'
-	cache.set(key, stats, 60*60*24)
-	cache.delete(key+'/generating')
+	cache.set(key, stats, 60 * 60 * 24)
+	cache.delete(key + '/generating')
 	print 'finished generating global stats with key:{}'.format(key)
 	return True
 

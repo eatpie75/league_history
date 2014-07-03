@@ -17,9 +17,9 @@ key=_winreg.OpenKey(reg, r'SOFTWARE\Riot Games\RADS')
 path=os.path.normpath(_winreg.EnumValue(key, 0)[1])
 reg.Close()
 key.Close()
-#"0.0.0.159", "deploy"
+# "0.0.0.159", "deploy"
 launcherbase=os.path.join(path, "solutions", "lol_game_client_sln", "releases")
-#"0.0.0.152", "deploy", "LolClient.exe"
+# "0.0.0.152", "deploy", "LolClient.exe"
 clientbase=os.path.join(path, "projects", "lol_air_client", "releases")
 launcher=os.path.join(launcherbase, sorted(os.listdir(launcherbase), key=lambda val:val.split('.')[-1], reverse=True)[0], "deploy")
 client=os.path.join(clientbase, sorted(os.listdir(clientbase), key=lambda val:val.split('.')[-1], reverse=True)[0], "deploy", "LolClient.exe")
