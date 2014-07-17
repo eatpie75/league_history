@@ -8,7 +8,7 @@ from time import sleep
 import requests
 import json
 
-MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (7, 'One For All'), (8, 'Showdown'), (9, 'Hexakill'), (10, 'URF'), (99, '?'))
+MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (7, 'One For All'), (8, 'Showdown'), (9, 'Hexakill'), (10, 'URF'), (11, 'Nightmare Bot'), (99, '?'))
 MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Howling Abyss'), (4, 'Twisted Treeline'), (9, '?'))
 # {'queue', 'mode', 'map'}
 GAME_TYPES={
@@ -415,6 +415,8 @@ def parse_games(games, summoner, full=False, current=None):
 				game.game_mode=9
 			elif ogame['queue_type'] in ('URF', 'URF_BOT'):
 				game.game_mode=10
+			elif ogame['queue_type']=='NIGHTMARE_BOT':
+				game.game_mode=11
 			elif ogame['queue_type']=='NONE' and ogame['game_type']=='CUSTOM_GAME':
 				game.game_mode=0
 			elif ogame['game_type']=='TUTORIAL_GAME':

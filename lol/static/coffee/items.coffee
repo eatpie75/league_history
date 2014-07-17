@@ -172,7 +172,7 @@ items=
 		description:"+250 Mana<br>+60 Ability Power<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: Insight: Grants Ability Power equal to 3% of maximum Mana.<br>UNIQUE Passive: Mana Charge: Grants +8 maximum Mana (max +750 Mana) for each spell cast and Mana expenditure."
 	3004:
 		name:"Manamune"
-		description:"+250 Mana<br>+20 Attack Damage<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Awe: Grants bonus Attack Damage equal to 2% of maximum Mana.<br>UNIQUE Passive: Mana Charge: Grants +4 maximum Mana (max +750 Mana) for each basic attack, spell cast, and Mana expenditure."
+		description:"+250 Mana<br>+25 Attack Damage<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Awe: Grants bonus Attack Damage equal to 2% of maximum Mana.<br>UNIQUE Passive: Mana Charge: Grants +4 maximum Mana (max +750 Mana) for each basic attack, spell cast, and Mana expenditure."
 	3005:
 		name:"Atma's Impaler"
 		description:"+45 Armor<br>+15% Critical Strike Chance<br>UNIQUE Passive: Grants bonus Attack Damage equal to 1.5% of maximum Health."
@@ -184,7 +184,7 @@ items=
 		description:"+250 Mana<br>+60 Ability Power<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: Insight: Grants Ability Power equal to 3% of maximum Mana.<br>UNIQUE Passive: Mana Charge: Grants +10 maximum Mana (max +750 Mana) for each spell cast and Mana expenditure."
 	3008:
 		name:"Manamune (CS)"
-		description:"+250 Mana<br>+20 Attack Damage<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Awe: Grants bonus Attack Damage equal to 2% of maximum Mana.<br>UNIQUE Passive: Mana Charge: Grants +8 maximum Mana (max +750 Mana) for each basic attack, spell cast, and Mana expenditure."
+		description:"+250 Mana<br>+25 Attack Damage<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Awe: Grants bonus Attack Damage equal to 2% of maximum Mana.<br>UNIQUE Passive: Mana Charge: Grants +8 maximum Mana (max +750 Mana) for each basic attack, spell cast, and Mana expenditure."
 	3009:
 		name:"Boots of Swiftness"
 		description:"UNIQUE Passive: Enhanced Movement: +60 Movement Speed<br>UNIQUE Passive: Slow Resist: Movement slowing effects are reduced by 25%."
@@ -245,6 +245,9 @@ items=
 	3047:
 		name:"Ninja Tabi"
 		description:"+25 Armor<br>UNIQUE Passive: Blocks 10% of the damage from basic attacks.<br>UNIQUE Passive: Enhanced Movement: +45 Movement Speed."
+	3048:
+		name:"Seraph's Embrace"
+		description:"+1000 Mana<br>+60 Ability Power<br>+10 Mana Regen per 5 seconds<br>UNIQUE Passive: Insight: Grants Ability Power equal to 3% of maximum Mana.<br>UNIQUE Active: Mana Shield: Drains 20% of your current mana to shield yourself for an equal amount plus 150 for 3 seconds (120 second cooldown)."
 	3050:
 		name:"Zeke's Herald"
 		description:"+250 Health<br>+20% Cooldown Reduction<br>UNIQUE Aura: Grants allied champions +10% Life Steal and +20 Attack Damage."
@@ -277,7 +280,7 @@ items=
 		description:"+200 Health<br>+50 Attack Damage<br>+10% Cooldown Reduction<br>UNIQUE Passive: +10 Armor Penetration<br>Passive: Dealing physical damage to an enemy champion reduces their Armor by 5% for 4 seconds (stacks up to 5 times, up to 25%)."
 	3072:
 		name:"The Bloodthirster"
-		description:"+80 Attack Damage<br>+15% Life Steal<br>UNIQUE Passive: Your life steal overheals you, converting the excess healing into a shield that absorbs up to 50-450 damage and decays when out of combat for 15 seconds."
+		description:"+80 Attack Damage<br>UNIQUE Passive: +20% Life Steal<br>UNIQUE Passive: Your life steal overheals you, converting the excess healing into a shield that absorbs up to 50-350 damage and decays when out of combat for 25 seconds."
 	3073:
 		name:"Tear of the Goddess (CS)"
 		description:"+250 Mana<br>+7 Mana Regen per 5 seconds<br>UNIQUE Passive: Mana Charge: Grants +5 maximum Mana (max +750 Mana) for each spell cast and Mana expenditure (3 second cooldown)."
@@ -693,10 +696,10 @@ items=
 		description:"+500 Health<br>+20 Health Regen per 5 seconds<br>+10% Cooldown Reduction<br>UNIQUE Passive: Spoils of War: Melee basic attacks execute minions below 200 Health. Killing a minion heals you and the nearest allied champion for 50 (+1% of your maximum Health) and grants them kill Gold.<br>UNIQUE Active: Shield target ally for 10% of your maximum Health for 4 seconds. After 4 seconds, the target explodes dealing 100% of their total Attack Damage plus 30% of their Ability Power as magic damage in an area. (60 second cooldown)"
 	3504:
 		name:"Ardent Censer"
-		description:"+30 Ability Power<br>+10 Mana Regen per 5 seconds<br>+10% Cooldown Reduction<br>UNIQUE Passive: +8% Movement Speed<br>UNIQUE Passive: Your heals and shields on another unit grant them 25% Attack Speed for 6 seconds."
+		description:"+40 Ability Power<br>+10 Mana Regen per 5 seconds<br>+10% Cooldown Reduction<br>UNIQUE Passive: +8% Movement Speed<br>UNIQUE Passive: Your heals and shields on another unit grant them 25% Attack Speed for 6 seconds."
 	3508:
 		name:"Essence Reaver"
-		description:"+60 Attack Damage<br>+10% Life Steal<br>+10% Cooldown Reduction<br>UNIQUE Passive: You gain 2% to 8% of the damage dealt by basic attacks as Mana. This effect increases based on how much Mana you are missing."
+		description:"+80 Attack Damage<br>+10% Life Steal<br>+10% Cooldown Reduction<br>UNIQUE Passive: You gain 2% to 8% of the damage dealt by basic attacks as Mana. This effect increases based on how much Mana you are missing."
 	9001:
 		name:"Cloak and Dagger"
 		description:"+20% Attack Speed<br>+20% Critical Strike Chance<br>UNIQUE Passive: Tenacity: The durations of stuns, slows, taunts, fears, silences, blinds, and immobilizes are reduced by 35%."
