@@ -107,6 +107,7 @@ CHAMPIONS={
 	133:"Quinn",
 	134:"Syndra",
 	143:"Zyra",
+	150:"Gnar",
 	154:"Zac",
 	157:"Yasuo",
 	161:"Velkoz",

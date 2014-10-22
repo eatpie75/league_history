@@ -23,100 +23,97 @@
 {%- endblock %}
 
 {% block content %}
-			<div class='summoner-header row col-md-12' style='background-image:url({{STATIC_URL}}img/map-backgrounds/{{game.game_map}}.png)'>
-				<div class='info-block pull-right'>
-					{%- if metadata.avg_elo %}
-					<div>
-						<b>{{metadata.avg_elo|number_to_rank|display_rank}}</b>
-						<small>AVG LEAGUE</small>
+			<div class='row'>
+				<div class='col-md-12 summoner-header' style='background-image:url({{STATIC_URL}}img/map-backgrounds/{{game.game_map}}.png)'>
+					<div class='info-block pull-right'>
+						{%- if metadata.avg_elo %}
+						<div>
+							<b>{{metadata.avg_elo|number_to_rank|display_rank}}</b>
+							<small>AVG LEAGUE</small>
+						</div>
+						{% endif -%}
+						<div>
+							<b>{{metadata.mode}}</b>
+							<small>MODE</small>
+						</div>
+						<div>
+							<b>{{metadata.map|upper}}</b>
+							<small>MAP</small>
+						</div>
+						<div>
+							<b>{{game.time|date('N d')|upper}}</b>
+							<small>{{game.time|naturaltime|upper}}</small>
+						</div>
 					</div>
-					{% endif -%}
-					<div>
-						<b>{{metadata.mode}}</b>
-						<small>MODE</small>
-					</div>
-					<div>
-						<b>{{metadata.map|upper}}</b>
-						<small>MAP</small>
-					</div>
-					<div>
-						<b>{{game.time|date('N d')|upper}}</b>
-						<small>{{game.time|naturaltime|upper}}</small>
+					<div class='bottom-right large'>
+						<span class='green'>{{metadata.stats.winner.kills}}</span>/<span class='red'>{{metadata.stats.loser.kills}}</span>
 					</div>
 				</div>
-				<div class='bottom-right large'>
-					<span class='green'>{{metadata.stats.winner.kills}}</span>/<span class='red'>{{metadata.stats.loser.kills}}</span>
-				</div>
-			</div>
-			<div class='row col-md-12'>{% if not update_in_queue %}
-				<table class='game-list table table-condensed'>
-					<thead>
-						<tr>
-							<th style='width:45px;'></th>
-							<th style='width:100px;'>Summoner</th>
-							<th style='width:50px'>K/D/A</th>
-							<th style='width:50px'>Gold</th>
-							<th style='width:50px'>CS</th>
-							<th style='width:50px'>Dealt</th>
-							<th style='width:50px'>Taken</th>
-							<th style='width:85px;'>Spells</th>
-							<th style='width:215px;'>Items</th>
-							<th style='width:150px;'></th>
+				<div class='col-md-12'>{% if not update_in_queue %}
+					<table class='game-list table table-condensed'>
+						<thead>
+							<tr>
+								<th style='width:45px;'></th>
+								<th style='width:100px;'>Summoner</th>
+								<th style='width:50px'>K/D/A</th>
+								<th style='width:50px'>Gold</th>
+								<th style='width:50px'>CS</th>
+								<th style='width:50px'>Dealt</th>
+								<th style='width:50px'>Taken</th>
+								<th style='width:85px;'>Spells</th>
+								<th style='width:215px;'>Items</th>
+								<th style='width:150px;'></th>
+							</tr>
+						</thead>
+						{%- for team in players|groupby('won')|reverse %}
+						{%- if loop.first %}
+						<tr class='interlude win'><td colspan=10>WINNING TEAM</td></tr>
+						{%- else %}
+						<tr class='interlude lose'><td colspan=10>LOSING TEAM</td></tr>
+						{%- endif %}
+						{%- for player in team.list %}
+						<tr class='player{% if player.blue_team %} team_blue{% else %} team_purple{% endif %}{% if player.won %} won{% else %} lose{% endif %}{% if player.afk or player.leaver %} leaver {% endif %}'>
+							<td class='champion'>{{sprites.champion(player.champion_id)}}<small>{{player.champion_level}}</small></td>
+							<td><a href='{{player.summoner.get_absolute_url()}}'{% if metadata.ranked %} title='Rating: {{player.get_tier_display()}} {{player.get_division_display()}}'{% endif %}>{{player.summoner.name}}</a></td>
+							<td>{{player.kills}}/{{player.deaths}}/{{player.assists}}</td>
+							<td>{{player.gold|to_k_format}}</td>
+							<td>{{player.minion_kills+player.neutral_minions_killed}}</td>
+							<td>{{player.damage_dealt|to_k_format}}</td>
+							<td>{{player.damage_taken|to_k_format}}</td>
+							<td>{{sprites.summoner(player.summoner_spell1, style='margin-right:4px;')}}{{sprites.summoner(player.summoner_spell2)}}</td>
+							<td>
+								{%- for item in player.get_items %}
+								{{sprites.item(item)}}
+								{%- endfor %}
+							</td>
+							<td><span class='glyphicon glyphicon-chevron-down player_expand' data-player='{{player.pk}}'></span></td>
 						</tr>
-					</thead>
-					{%- for team in players|groupby('won')|reverse %}
-					{%- if loop.first %}
-					<tr class='interlude win'><td colspan=10>WINNING TEAM</td></tr>
-					{%- else %}
-					<tr class='interlude lose'><td colspan=10>LOSING TEAM</td></tr>
-					{%- endif %}
-					{%- for player in team.list %}
-					<tr class='player{% if player.blue_team %} team_blue{% else %} team_purple{% endif %}{% if player.won %} won{% else %} lose{% endif %}{% if player.afk or player.leaver %} leaver {% endif %}'>
-						<td class='champion'>{{sprites.champion(player.champion_id)}}<small>{{player.champion_level}}</small></td>
-						<td><a href='{{player.summoner.get_absolute_url()}}'{% if metadata.ranked %} title='Rating: {{player.get_tier_display()}} {{player.get_division_display()}}'{% endif %}>{{player.summoner.name}}</a></td>
-						<td>{{player.kills}}/{{player.deaths}}/{{player.assists}}</td>
-						<td>{{player.gold|to_k_format}}</td>
-						<td>{{player.minion_kills+player.neutral_minions_killed}}</td>
-						<td>{{player.damage_dealt|to_k_format}}</td>
-						<td>{{player.damage_taken|to_k_format}}</td>
-						<td>{{sprites.summoner(player.summoner_spell1, style='margin-right:4px;')}}{{sprites.summoner(player.summoner_spell2)}}</td>
-						<td>
-							{%- for item in player.get_items %}
-							{{sprites.item(item)}}
-							{%- endfor %}
-						</td>
-						<td><span class='glyphicon glyphicon-chevron-down player_expand' data-player='{{player.pk}}'></span></td>
-					</tr>
-					{%- endfor %}
-					{%- endfor %}
-				</table>
+						{%- endfor %}
+						{%- endfor %}
+					</table>
+				</div>
+				<div class='col-md-12'>
+					<div class='row'>
+						<div class='col-md-3 no-margin'>
+							<div class='text-center'><strong>Damage Dealt</strong></div>
+							<div id='damage-dealt-graph' style='height:220px;'></div>
+						</div>
+						<div class='col-md-3 no-margin'>
+							<div class='text-center'><strong>Damage Taken</strong></div>
+							<div id='damage-taken-graph' style='height:220px;'></div>
+						</div>
+						<div class='col-md-3 no-margin'>
+							<div class='text-center'><strong>GPM</strong></div>
+							<div id='gpm-graph' style='height:220px;'></div>
+						</div>
+						<div class='col-md-3 no-margin'>
+							<div class='text-center'><strong>Gold</strong></div>
+							<div id='gold-graph' style='height:220px;'></div>
+						</div>
+					</div>
+				</div>
+				{%- else %}
+				{{update_in_queue}}
+				{% endif %}
 			</div>
-			<div class='row col-md-12'>
-				<div class='col-md-3 no-margin'>
-					<div class='text-center'><strong>Damage Dealt</strong></div>
-					<div id='damage-dealt-graph' style='height:220px;'></div>
-				</div>
-				<div class='col-md-3 no-margin'>
-					<div class='text-center'><strong>Damage Taken</strong></div>
-					<div id='damage-taken-graph' style='height:220px;'></div>
-				</div>
-				<div class='col-md-3 no-margin'>
-					<div class='text-center'><strong>GPM</strong></div>
-					<div id='gpm-graph' style='height:220px;'></div>
-				</div>
-				<div class='col-md-3 no-margin'>
-					<div class='text-center'><strong>Gold</strong></div>
-					<div id='gold-graph' style='height:220px;'></div>
-				</div>
-			</div>
-			{%- else %}
-			{{update_in_queue}}
-			{% endif %}
-			{%- if user.is_staff %}
-			<br>{{game.fetched}}<br>
-			<pre>{{metadata|pprint}}</pre><br>
-			<div style='line-height:0px;'>
-				<div class='hori-bar large'><div class='blue' style='width:29%;'></div><div class='purple' style='width:71%;'></div></div>
-			</div>
-			{%- endif %}
 {%- endblock %}

@@ -3,12 +3,13 @@ from django.core.cache import cache
 from django.db import models, transaction
 from django.utils.text import slugify
 from lol.core.servers import prepare_servers, REGIONS
+from lol.utils import log_event
 from pytz import timezone
 from time import sleep
 import requests
 import json
 
-MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (7, 'One For All'), (8, 'Showdown'), (9, 'Hexakill'), (10, 'URF'), (11, 'Nightmare Bot'), (99, '?'))
+MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (7, 'One For All'), (8, 'Showdown'), (9, 'Hexakill'), (10, 'URF'), (11, 'Nightmare Bot'), (12, 'Ascension'), (99, '?'))
 MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Howling Abyss'), (4, 'Twisted Treeline'), (9, '?'))
 # {'queue', 'mode', 'map'}
 GAME_TYPES={
@@ -331,7 +332,6 @@ def get_data(url, query, region='NA'):
 	servers=cache.get('servers')
 	server_data=servers.choose_server(region)
 	server=server_data['url']
-	# print 'using server:{}'.format(server)
 
 	def _attempt(server, url):
 		try:
@@ -341,26 +341,24 @@ def get_data(url, query, region='NA'):
 		return res
 	res=_attempt(server, url)
 	if type(res) in (requests.exceptions.Timeout, requests.packages.urllib3.exceptions.TimeoutError, requests.packages.urllib3.exceptions.MaxRetryError):
-		print 'got timeout on:{} - with query:{}'.format(server, query)
+		log_event('warning', datetime.now(timezone('US/Pacific-New')), '', u'got timeout on:{} - with query:{}'.format(server, query))
 		sleep(5)
-		print 'retrying'
 		server_data=servers.check_servers([{'url':server, 'region':region},])
 		server=server_data['url']
 		res=_attempt(server, url)
 		if type(res) in (requests.exceptions.Timeout, requests.packages.urllib3.exceptions.TimeoutError, requests.packages.urllib3.exceptions.MaxRetryError):
-			print 'second error'
+			log_event('error', datetime.now(timezone('US/Pacific-New')), '', u'second error on:{} - with query:{}'.format(server, query))
 			raise ClientEmuError()
 		elif res.status_code==500:
 			raise ClientEmuError()
 	elif res.status_code==500:
-		print 'got 500 error on:{} - with query:{}'.format(server, query)
+		log_event('warning', datetime.now(timezone('US/Pacific-New')), '', u'got 500 error on:{} - with query:{}'.format(server, query))
 		sleep(5)
-		print 'retrying'
 		server_data=servers.check_servers([{'url':server, 'region':region},])
 		server=server_data['url']
 		res=_attempt(server, url)
 		if res in (requests.exceptions.Timeout, requests.packages.urllib3.exceptions.TimeoutError, requests.packages.urllib3.exceptions.MaxRetryError):
-			print 'second error'
+			log_event('error', datetime.now(timezone('US/Pacific-New')), '', u'second error on:{} - with query:{}'.format(server, query))
 			raise ClientEmuError()
 		elif res.status_code==500:
 			raise ClientEmuError()
@@ -417,13 +415,15 @@ def parse_games(games, summoner, full=False, current=None):
 				game.game_mode=10
 			elif ogame['queue_type']=='NIGHTMARE_BOT':
 				game.game_mode=11
+			elif ogame['queue_type']=='ASCENSION':
+				game.game_mode=12
 			elif ogame['queue_type']=='NONE' and ogame['game_type']=='CUSTOM_GAME':
 				game.game_mode=0
 			elif ogame['game_type']=='TUTORIAL_GAME':
 				continue
 			else:
-				print 'couldn\'t figure out game mode for game #{}'.format(game.game_id)
-				print('queue_type:"{}", game_mode:"{}", game_type:"{}", game_map:"{}"'.format(ogame['queue_type'], ogame['game_mode'], ogame['game_type'], ogame['game_map']))
+				log_event('error', datetime.now(timezone('US/Pacific-New')), '', u'couldn\'t figure out game mode for game #{}'.format(game.game_id))
+				log_event('error', datetime.now(timezone('US/Pacific-New')), '', u'queue_type:"{}", game_mode:"{}", game_type:"{}", game_map:"{}"'.format(ogame['queue_type'], ogame['game_mode'], ogame['game_type'], ogame['game_map']))
 			if ogame['game_map'] in (1, 2, 3, 6):
 				game.game_map=1
 			elif ogame['game_map']==8:
@@ -435,8 +435,8 @@ def parse_games(games, summoner, full=False, current=None):
 			elif ogame['game_map']==4:
 				game.game_map=0
 			else:
-				print 'couldn\'t figure out game map for game #{}'.format(game.game_id)
-				print('queue_type:"{}", game_mode:"{}", game_type:"{}", game_map:"{}"'.format(ogame['queue_type'], ogame['game_mode'], ogame['game_type'], ogame['game_map']))
+				log_event('error', datetime.now(timezone('US/Pacific-New')), '', u'couldn\'t figure out game map for game #{}'.format(game.game_id))
+				log_event('error', datetime.now(timezone('US/Pacific-New')), '', u'queue_type:"{}", game_mode:"{}", game_type:"{}", game_map:"{}"'.format(ogame['queue_type'], ogame['game_mode'], ogame['game_type'], ogame['game_map']))
 			if (ogame['team']=='blue' and ogame['stats']['win']==1) or (ogame['team']=='purple' and ogame['stats']['win']==0):
 				game.blue_team_won=True
 			else:
@@ -595,7 +595,8 @@ def parse_ratings(ratings, summoner):
 			game_mode, game_map=RANKED_SOLO_QUEUE_TYPES[rating['queue'].replace('_', '').lower()]
 		else:
 			continue
-		# print(rating)
+		if 'tier' not in rating:
+			rating['tier']=1
 		tmp=pre_ratings.get_or_create(game_mode=game_mode, game_map=game_map, defaults={'summoner':summoner, 'wins':rating['wins'], 'losses':rating['losses']})
 		if tmp[1]==0:
 			r=tmp[0]
@@ -604,8 +605,8 @@ def parse_ratings(ratings, summoner):
 				r.losses=rating['losses']
 				r.rank=rating['league_rank']
 				r.league=rating['name']
-				r.tier=rating['tier']
 				r.division=rating['rank']
+				r.tier=rating['tier']
 				if rating['mini_series'] is None:
 					r.miniseries_target=0
 					r.miniseries_wins=0

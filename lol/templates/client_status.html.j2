@@ -2,14 +2,21 @@
 
 {% block content %}
 		<div class='row col-md-12'>
-				{%- for region, servers in status.iteritems() %}
+				{%- for region, servers in status.iteritems() if servers|length>0 %}
 <pre>{{region}}:{
 	{%- for server in servers %}
 	[{{server.url}}, {% if server.status == 1 %}UP{% else %}DOWN{% endif %}, {{server.last_updated|naturaltime}}, {{server.metadata}}]
 	{%- endfor %}
 }</pre>
-				{% endfor %}
-				queue length:{{queue_len}}<br>
+				{%- endfor %}
 				needed games:{{unfetched_games}}
+				<table class='table table-condensed table-hover table-bordered' style='font-size:x-small;'>
+					<thead><tr><td style='width:15px;'>#</td><td>Time</td><td>Text</td></tr></thead>
+					{%- for event in event_list|reverse() %}
+					<tr {% if event[0]=='error' %}class='danger'{% elif event[0]=='warning' %}class='warning'{% endif %}>
+						<td>{{loop.index}}</td><td>{{event[1]|naturaltime}}</td><td>{{event[3]}}</td>
+					</tr>
+					{%- endfor %}
+				</table>
 		</div>
 {%- endblock %}

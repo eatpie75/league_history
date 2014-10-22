@@ -1,4 +1,3 @@
-from celery.signals import after_task_publish, task_postrun
 from celery.task import task
 from datetime import datetime, timedelta
 from django.core.cache import cache
@@ -6,6 +5,7 @@ from django.db import transaction
 from lol.core.servers import REGIONS
 from lol.core.stats import Stats
 from lol.models import Summoner, SummonerRating, Player, Game, get_data, parse_games, parse_ratings, parse_summoner, parse_runes, parse_masteries, create_summoner
+from lol.utils import log_event
 from pytz import timezone
 
 
@@ -19,7 +19,7 @@ def auto_update():
 		if cache.get('summoner/{}/{}/updating'.format(summoner.region, summoner.account_id)) is None:
 			summoner_auto_task.apply_async(args=[summoner.pk,], priority=5)
 			num+=1
-	print(u'autoupdate added {} summoner(s) to the queue'.format(num))
+	log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'autoupdate added {} summoner(s) to the queue'.format(num))
 
 
 @task(ignore_result=True, priority=3)
@@ -32,12 +32,11 @@ def auto_fill():
 		if cache.get('game/{}/{}/filling'.format(player.game.region, player.game.game_id)) is None:
 			fill_game.apply_async(args=[player.game.pk,], priority=5)
 			num+=1
-	print(u'autofill added {} game(s) to the queue'.format(num))
+			log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'autofill added {} game(s) to the queue'.format(num))
 
 
 @task(ignore_result=True, priority=5)
 def challenger_fill():
-	# print(u'running challenger fill')
 	server_list=cache.get('servers')
 	available_regions=[next(value for value, name in REGIONS if name==region.upper()) for region in server_list.available_regions]
 	summoners=SummonerRating.objects.filter(tier=6, summoner__time_updated__lt=(datetime.now(timezone('UTC')) - timedelta(hours=5)), summoner__region__in=available_regions).select_related('summoner').only('summoner__id', 'summoner__region', 'summoner__account_id')
@@ -52,8 +51,7 @@ def challenger_fill():
 		if cache.get('game/{}/{}/filling'.format(player.game.region, player.game.game_id)) is None:
 			fill_game.apply_async(args=[player.game.pk,], priority=6)
 			game_num+=1
-	print(u'challenger fill added {} summoner(s) and {} game(s) to the queue'.format(summoner_num, game_num))
-	# print(u'challenger fill finished')
+			log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'challenger fill added {} summoner(s) and {} game(s) to the queue'.format(summoner_num, game_num))
 
 
 @task(ignore_result=True, priority=3)
@@ -65,7 +63,7 @@ def test_fill():
 
 @task(ignore_result=True, priority=1)
 def check_servers(**kwargs):
-	print(u'checking all servers')
+	log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'checking all servers')
 	server_list=cache.get('servers')
 	server_list.check_servers(up=kwargs.get('up', True), down=kwargs.get('down', True), unknown=kwargs.get('unknown', True))
 
@@ -74,7 +72,7 @@ def check_servers(**kwargs):
 @transaction.atomic
 def summoner_auto_task(summoner_pk):
 	summoner=Summoner.objects.get(pk=summoner_pk)
-	print u'running autoupdate for:{}'.format(summoner.name)
+	log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'running autoupdate for:{}'.format(summoner.name))
 	query={'accounts':summoner.account_id, 'games':1, 'runes':1, 'masteries':1}
 	data=get_data('mass_update', query, summoner.get_region_display())['accounts'][0]
 	summoner=parse_summoner(data['profile'], summoner)
@@ -89,7 +87,7 @@ def summoner_auto_task(summoner_pk):
 	summoner.save()
 	cache.delete('summoner/{}/{}/updating'.format(summoner.region, summoner.account_id))
 	cache.delete('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
-	print u'finished autoupdate for:{}'.format(summoner.name)
+	log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'finished autoupdate for:{}'.format(summoner.name))
 	return summoner_pk
 
 
@@ -108,7 +106,7 @@ def fill_game(game_pk, auto=False):
 		return tmp
 	game=Game.objects.get(pk=game_pk)
 	if not game.fetched and game.unfetched_players!='':
-		print 'filling game:{}'.format(game.game_id)
+		log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'filling game:{}'.format(game.game_id))
 		tmp=map(int, game.unfetched_players.split(','))
 		num_to_fetch=len(tmp)
 		summoners=Summoner.objects.filter(summoner_id__in=tmp, region=game.region)
@@ -149,9 +147,9 @@ def fill_game(game_pk, auto=False):
 			fill_game.update_state(state='PROGRESS', meta={'current':i, 'total':num_to_fetch})
 		game.fetched=True
 		game.save(force_update=True)
-		print 'finished filling game:{}'.format(game.game_id)
+		log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'finished filling game:{}'.format(game.game_id))
 	elif not game.fetched and game.unfetched_players=='':
-		print 'game was already full'
+		log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'game was already full')
 		game.fetched=True
 		game.save(force_update=True)
 	return game_pk
@@ -166,50 +164,14 @@ def spectate_check(summoner):
 
 @task(ignore_result=True, priority=9)
 def generate_global_stats(key, qs, **kwargs):
-	print 'generating global stats with key:{}'.format(key)
-	print kwargs
+	log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'generating global stats with key:{}'.format(key))
+	log_event('info', datetime.now(timezone('US/Pacific-New')), '', unicode(kwargs))
 	new_qs=Player.objects.all()
 	new_qs.query=qs
 	stats=Stats(new_qs, **kwargs)
 	stats.generate_index()
-	print 'generated, caching'
+	log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'generated, caching')
 	cache.set(key, stats, 60 * 60 * 24)
 	cache.delete(key + '/generating')
-	print 'finished generating global stats with key:{}'.format(key)
+	log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'finished generating global stats with key:{}'.format(key))
 	return True
-
-
-@after_task_publish.connect(sender=summoner_auto_task)
-def summoner_auto_added(sender=None, task_id=None, task=None, args=None, kwargs=None, **kwds):
-	summoner=Summoner.objects.get(pk=args[0])
-	# print '{} added'.format(summoner.name)
-	cache.set('summoner/{}/{}/updating'.format(summoner.region, summoner.account_id), task_id, 60 * 20)
-	if cache.get('queue_len') is None: cache.set('queue_len', 0, timeout=0)
-	cache.incr('queue_len')
-
-
-@task_postrun.connect(sender=summoner_auto_task.name)
-def summoner_auto_finished(sender=None, task_id=None, task=None, args=None, kwargs=None, **kwds):
-	summoner=Summoner.objects.get(pk=args[0])
-	# print '{} done'.format(summoner.name)
-	cache.delete('summoner/{}/{}/updating'.format(summoner.region, summoner.account_id))
-	if cache.get('queue_len') is None: cache.set('queue_len', 1, timeout=0)
-	cache.decr('queue_len')
-
-
-@after_task_publish.connect(sender=fill_game)
-def fill_game_added(sender=None, task_id=None, task=None, args=None, kwargs=None, **kwds):
-	game=Game.objects.get(pk=args[0])
-	# print '{} added'.format(summoner.name)
-	cache.set('game/{}/{}/filling'.format(game.region, game.game_id), task_id, 60 * 10)
-	if cache.get('queue_len') is None: cache.set('queue_len', 0, timeout=0)
-	cache.incr('queue_len')
-
-
-@task_postrun.connect(sender=fill_game.name)
-def fill_game_finished(sender=None, task_id=None, task=None, args=None, kwargs=None, **kwds):
-	game=Game.objects.get(pk=args[0])
-	# print '{} done'.format(summoner.name)
-	cache.delete('game/{}/{}/filling'.format(game.region, game.game_id))
-	if cache.get('queue_len') is None: cache.set('queue_len', 1, timeout=0)
-	cache.decr('queue_len')

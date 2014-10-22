@@ -103,8 +103,8 @@ def prepare_servers():
 		else:
 			if servers.updated<datetime.now(timezone('UTC')) - timedelta(hours=1):
 				servers.check_servers()
-		if cache.get('queue_len') is None:
-			cache.set('queue_len', 0, timeout=0)
+		if cache.get('event_list') is None:
+			cache.set('event_list', [], timeout=0)
 	except ConnectionInterrumped:
 		print 'Couldn\'t connect to redis, lots of things will be broken'
 	return True

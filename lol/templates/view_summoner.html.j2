@@ -1,5 +1,7 @@
 {% extends 'base.html.j2' %}
 
+{% block title %}{{summoner.name}}{%- endblock %}
+
 {% block extra_css %}
 		<link href="{{STATIC_URL}}css/morris.css" rel="stylesheet" type="text/css">
 {%- endblock %}

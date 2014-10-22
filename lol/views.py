@@ -359,13 +359,13 @@ def run_auto(request):
 
 @user_passes_test(lambda u:u.is_superuser)
 def client_status(request):
-	if 'reset_queue_len' in request.GET:
-		cache.set('queue_len', 0)
+	if 'reset_events' in request.GET:
+		cache.set('event_list', [], timeout=0)
 		return HttpResponseRedirect(reverse('lol.views.client_status'))
 	server_list=cache.get('servers')
 	unfetched_games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.utcnow().replace(tzinfo=timezone('UTC')) - timedelta(days=2))).distinct('game').only('pk').count()
-	queue_len=cache.get('queue_len')
-	return render_to_response('client_status.html.j2', {'status':server_list.servers, 'unfetched_games':unfetched_games, 'queue_len':queue_len}, RequestContext(request))
+	event_list=cache.get('event_list')
+	return render_to_response('client_status.html.j2', {'status':server_list.servers, 'unfetched_games':unfetched_games, 'event_list':event_list}, RequestContext(request))
 
 
 @user_passes_test(lambda u:u.is_superuser)
