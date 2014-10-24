@@ -341,24 +341,24 @@ def get_data(url, query, region='NA'):
 		return res
 	res=_attempt(server, url)
 	if type(res) in (requests.exceptions.Timeout, requests.packages.urllib3.exceptions.TimeoutError, requests.packages.urllib3.exceptions.MaxRetryError):
-		log_event('warning', datetime.now(timezone('US/Pacific-New')), '', u'got timeout on:{} - with query:{}'.format(server, query))
+		log_event('warning', datetime.now(timezone('US/Pacific-New')), u'got timeout on:{} - with query:{}'.format(server, query))
 		sleep(5)
 		server_data=servers.check_servers([{'url':server, 'region':region},])
 		server=server_data['url']
 		res=_attempt(server, url)
 		if type(res) in (requests.exceptions.Timeout, requests.packages.urllib3.exceptions.TimeoutError, requests.packages.urllib3.exceptions.MaxRetryError):
-			log_event('error', datetime.now(timezone('US/Pacific-New')), '', u'second error on:{} - with query:{}'.format(server, query))
+			log_event('error', datetime.now(timezone('US/Pacific-New')), u'second error on:{} - with query:{}'.format(server, query))
 			raise ClientEmuError()
 		elif res.status_code==500:
 			raise ClientEmuError()
 	elif res.status_code==500:
-		log_event('warning', datetime.now(timezone('US/Pacific-New')), '', u'got 500 error on:{} - with query:{}'.format(server, query))
+		log_event('warning', datetime.now(timezone('US/Pacific-New')), u'got 500 error on:{} - with query:{}'.format(server, query))
 		sleep(5)
 		server_data=servers.check_servers([{'url':server, 'region':region},])
 		server=server_data['url']
 		res=_attempt(server, url)
 		if res in (requests.exceptions.Timeout, requests.packages.urllib3.exceptions.TimeoutError, requests.packages.urllib3.exceptions.MaxRetryError):
-			log_event('error', datetime.now(timezone('US/Pacific-New')), '', u'second error on:{} - with query:{}'.format(server, query))
+			log_event('error', datetime.now(timezone('US/Pacific-New')), u'second error on:{} - with query:{}'.format(server, query))
 			raise ClientEmuError()
 		elif res.status_code==500:
 			raise ClientEmuError()
@@ -422,8 +422,8 @@ def parse_games(games, summoner, full=False, current=None):
 			elif ogame['game_type']=='TUTORIAL_GAME':
 				continue
 			else:
-				log_event('error', datetime.now(timezone('US/Pacific-New')), '', u'couldn\'t figure out game mode for game #{}'.format(game.game_id))
-				log_event('error', datetime.now(timezone('US/Pacific-New')), '', u'queue_type:"{}", game_mode:"{}", game_type:"{}", game_map:"{}"'.format(ogame['queue_type'], ogame['game_mode'], ogame['game_type'], ogame['game_map']))
+				log_event('error', datetime.now(timezone('US/Pacific-New')), u'couldn\'t figure out game mode for game #{}'.format(game.game_id))
+				log_event('error', datetime.now(timezone('US/Pacific-New')), u'queue_type:"{}", game_mode:"{}", game_type:"{}", game_map:"{}"'.format(ogame['queue_type'], ogame['game_mode'], ogame['game_type'], ogame['game_map']))
 			if ogame['game_map'] in (1, 2, 3, 6):
 				game.game_map=1
 			elif ogame['game_map']==8:
@@ -435,8 +435,8 @@ def parse_games(games, summoner, full=False, current=None):
 			elif ogame['game_map']==4:
 				game.game_map=0
 			else:
-				log_event('error', datetime.now(timezone('US/Pacific-New')), '', u'couldn\'t figure out game map for game #{}'.format(game.game_id))
-				log_event('error', datetime.now(timezone('US/Pacific-New')), '', u'queue_type:"{}", game_mode:"{}", game_type:"{}", game_map:"{}"'.format(ogame['queue_type'], ogame['game_mode'], ogame['game_type'], ogame['game_map']))
+				log_event('error', datetime.now(timezone('US/Pacific-New')), u'couldn\'t figure out game map for game #{}'.format(game.game_id))
+				log_event('error', datetime.now(timezone('US/Pacific-New')), u'queue_type:"{}", game_mode:"{}", game_type:"{}", game_map:"{}"'.format(ogame['queue_type'], ogame['game_mode'], ogame['game_type'], ogame['game_map']))
 			if (ogame['team']=='blue' and ogame['stats']['win']==1) or (ogame['team']=='purple' and ogame['stats']['win']==0):
 				game.blue_team_won=True
 			else:

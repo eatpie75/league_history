@@ -19,7 +19,7 @@ def auto_update():
 		if cache.get('summoner/{}/{}/updating'.format(summoner.region, summoner.account_id)) is None:
 			summoner_auto_task.apply_async(args=[summoner.pk,], priority=5)
 			num+=1
-	log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'autoupdate added {} summoner(s) to the queue'.format(num))
+	log_event('info', datetime.now(timezone('US/Pacific-New')), u'autoupdate added {} summoner(s) to the queue'.format(num))
 
 
 @task(ignore_result=True, priority=3)
@@ -32,7 +32,7 @@ def auto_fill():
 		if cache.get('game/{}/{}/filling'.format(player.game.region, player.game.game_id)) is None:
 			fill_game.apply_async(args=[player.game.pk,], priority=5)
 			num+=1
-			log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'autofill added {} game(s) to the queue'.format(num))
+			log_event('info', datetime.now(timezone('US/Pacific-New')), u'autofill added {} game(s) to the queue'.format(num))
 
 
 @task(ignore_result=True, priority=5)
@@ -51,7 +51,7 @@ def challenger_fill():
 		if cache.get('game/{}/{}/filling'.format(player.game.region, player.game.game_id)) is None:
 			fill_game.apply_async(args=[player.game.pk,], priority=6)
 			game_num+=1
-			log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'challenger fill added {} summoner(s) and {} game(s) to the queue'.format(summoner_num, game_num))
+			log_event('info', datetime.now(timezone('US/Pacific-New')), u'challenger fill added {} summoner(s) and {} game(s) to the queue'.format(summoner_num, game_num))
 
 
 @task(ignore_result=True, priority=3)
@@ -63,7 +63,7 @@ def test_fill():
 
 @task(ignore_result=True, priority=1)
 def check_servers(**kwargs):
-	log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'checking all servers')
+	log_event('info', datetime.now(timezone('US/Pacific-New')), u'checking all servers')
 	server_list=cache.get('servers')
 	server_list.check_servers(up=kwargs.get('up', True), down=kwargs.get('down', True), unknown=kwargs.get('unknown', True))
 
@@ -72,7 +72,7 @@ def check_servers(**kwargs):
 @transaction.atomic
 def summoner_auto_task(summoner_pk):
 	summoner=Summoner.objects.get(pk=summoner_pk)
-	log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'running autoupdate for:{}'.format(summoner.name))
+	log_event('info', datetime.now(timezone('US/Pacific-New')), u'running autoupdate for:{}'.format(summoner.name), {'type':'summoner', 'summoner':{'region':summoner.region, 'account_id':summoner.account_id, 'name':summoner.name}})
 	query={'accounts':summoner.account_id, 'games':1, 'runes':1, 'masteries':1}
 	data=get_data('mass_update', query, summoner.get_region_display())['accounts'][0]
 	summoner=parse_summoner(data['profile'], summoner)
@@ -87,7 +87,7 @@ def summoner_auto_task(summoner_pk):
 	summoner.save()
 	cache.delete('summoner/{}/{}/updating'.format(summoner.region, summoner.account_id))
 	cache.delete('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
-	log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'finished autoupdate for:{}'.format(summoner.name))
+	log_event('info', datetime.now(timezone('US/Pacific-New')), u'finished autoupdate for:{}'.format(summoner.name), {'type':'summoner', 'summoner':{'region':summoner.region, 'account_id':summoner.account_id, 'name':summoner.slug}})
 	return summoner_pk
 
 
@@ -106,7 +106,7 @@ def fill_game(game_pk, auto=False):
 		return tmp
 	game=Game.objects.get(pk=game_pk)
 	if not game.fetched and game.unfetched_players!='':
-		log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'filling game:{}'.format(game.game_id))
+		log_event('info', datetime.now(timezone('US/Pacific-New')), u'filling game:{}'.format(game.game_id), {'type':'game', 'game':{'region':game.region, 'game_id':game.game_id}})
 		tmp=map(int, game.unfetched_players.split(','))
 		num_to_fetch=len(tmp)
 		summoners=Summoner.objects.filter(summoner_id__in=tmp, region=game.region)
@@ -147,9 +147,9 @@ def fill_game(game_pk, auto=False):
 			fill_game.update_state(state='PROGRESS', meta={'current':i, 'total':num_to_fetch})
 		game.fetched=True
 		game.save(force_update=True)
-		log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'finished filling game:{}'.format(game.game_id))
+		log_event('info', datetime.now(timezone('US/Pacific-New')), u'finished filling game:{}'.format(game.game_id), {'type':'game', 'game':{'region':game.region, 'game_id':game.game_id}})
 	elif not game.fetched and game.unfetched_players=='':
-		log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'game was already full')
+		log_event('info', datetime.now(timezone('US/Pacific-New')), u'game was already full', {'type':'game', 'game':{'region':game.region, 'game_id':game.game_id}})
 		game.fetched=True
 		game.save(force_update=True)
 	return game_pk
@@ -164,14 +164,13 @@ def spectate_check(summoner):
 
 @task(ignore_result=True, priority=9)
 def generate_global_stats(key, qs, **kwargs):
-	log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'generating global stats with key:{}'.format(key))
-	log_event('info', datetime.now(timezone('US/Pacific-New')), '', unicode(kwargs))
+	log_event('info', datetime.now(timezone('US/Pacific-New')), u'generating global stats with key:{}'.format(key), {'type':'stats', 'args':kwargs})
 	new_qs=Player.objects.all()
 	new_qs.query=qs
 	stats=Stats(new_qs, **kwargs)
 	stats.generate_index()
-	log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'generated, caching')
+	log_event('info', datetime.now(timezone('US/Pacific-New')), u'generated, caching', {'type':'stats', 'args':kwargs})
 	cache.set(key, stats, 60 * 60 * 24)
 	cache.delete(key + '/generating')
-	log_event('info', datetime.now(timezone('US/Pacific-New')), '', u'finished generating global stats with key:{}'.format(key))
+	log_event('info', datetime.now(timezone('US/Pacific-New')), u'finished generating global stats with key:{}'.format(key), {'type':'stats', 'args':kwargs})
 	return True

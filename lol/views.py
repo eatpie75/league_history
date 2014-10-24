@@ -12,6 +12,7 @@ from django.template import RequestContext
 from django.template.defaultfilters import slugify
 from lol.core.servers import REGIONS
 from lol.models import Summoner, Game, Player, get_data, create_summoner
+from lol.utils import EventList
 from pytz import timezone
 from tasks import summoner_auto_task, fill_game, generate_global_stats, test_fill, check_servers  # , spectate_check
 import json
@@ -145,6 +146,13 @@ def view_game(request, region, game_id):
 	chart_data=players.values()
 	map(lambda x:x.update(gpm=round(x['gold'] / metadata['length'])) if metadata['length']>0 else x.update(gpm=0), chart_data)
 	return render_to_response('view_game.html.j2', {'game':game, 'players':players, 'metadata':metadata, 'update_in_queue':update_in_queue, 'chart_data':json.dumps(list(chart_data))}, RequestContext(request))
+
+
+def view_summoner_redirect(request, region, account_id):
+	sregion=region
+	region=__get_region(sregion)
+	summoner=Summoner.objects.get(account_id=account_id, region=region)
+	return HttpResponseRedirect(summoner.get_absolute_url())
 
 
 # @cache_page(60 * 15)
@@ -364,7 +372,7 @@ def client_status(request):
 		return HttpResponseRedirect(reverse('lol.views.client_status'))
 	server_list=cache.get('servers')
 	unfetched_games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.utcnow().replace(tzinfo=timezone('UTC')) - timedelta(days=2))).distinct('game').only('pk').count()
-	event_list=cache.get('event_list')
+	event_list=EventList(cache.get('event_list')).event_list
 	return render_to_response('client_status.html.j2', {'status':server_list.servers, 'unfetched_games':unfetched_games, 'event_list':event_list}, RequestContext(request))
 
 
