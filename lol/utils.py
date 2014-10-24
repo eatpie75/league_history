@@ -33,13 +33,13 @@ class EventList:
 				if event_type=='summoner':
 					region=REGIONS[data['summoner']['region']][1]
 					url=reverse('view_summoner_redirect', kwargs={'region':region, 'account_id':data['summoner']['account_id']})
-					url=": <a href='{}'>{}</a>".format(url, data['summoner']['name'])
+					url=u": <a href='{}'>{}</a>".format(url, data['summoner']['name'])
 					nevent.append(re.sub(ur':.*?$', url, event_text, flags=re.IGNORECASE | re.DOTALL | re.UNICODE))
 					self.event_list.append(tuple(nevent))
 				elif event_type=='game':
 					region=REGIONS[data['game']['region']][1]
 					url=reverse('view_game', kwargs={'region':region, 'game_id':data['game']['game_id']})
-					url=": <a href='{}'>{}:{}</a>".format(url, region, data['game']['game_id'])
+					url=u": <a href='{}'>{}:{}</a>".format(url, region, data['game']['game_id'])
 					nevent.append(re.sub(ur':.*?$', url, event_text, flags=re.IGNORECASE | re.DOTALL | re.UNICODE))
 					self.event_list.append(tuple(nevent))
 			else:

@@ -87,7 +87,7 @@ def summoner_auto_task(summoner_pk):
 	summoner.save()
 	cache.delete('summoner/{}/{}/updating'.format(summoner.region, summoner.account_id))
 	cache.delete('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
-	log_event('info', datetime.now(timezone('US/Pacific-New')), u'finished autoupdate for:{}'.format(summoner.name), {'type':'summoner', 'summoner':{'region':summoner.region, 'account_id':summoner.account_id, 'name':summoner.slug}})
+	log_event('info', datetime.now(timezone('US/Pacific-New')), u'finished autoupdate for:{}'.format(summoner.name), {'type':'summoner', 'summoner':{'region':summoner.region, 'account_id':summoner.account_id, 'name':summoner.name}})
 	return summoner_pk
 
 
