@@ -409,7 +409,7 @@ def parse_games(games, summoner, full=False, current=None):
 				game.game_mode=7
 			elif ogame['game_mode']=='FIRSTBLOOD' and ogame['queue_type'] in ('FIRSTBLOOD_1x1', 'FIRSTBLOOD_2x2'):
 				game.game_mode=8
-			elif ogame['queue_type']=='SR_6x6':
+			elif ogame['queue_type'] in ('SR_6x6', 'HEXAKILL'):
 				game.game_mode=9
 			elif ogame['queue_type'] in ('URF', 'URF_BOT'):
 				game.game_mode=10
