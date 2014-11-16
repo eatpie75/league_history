@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
-from models import Player, Summoner, Game, SummonerRating
-from tasks import summoner_auto_task, fill_game
+from lol.models import Player, Summoner, Game, SummonerRating
+from lol.tasks import summoner_auto_task, fill_game
 
 
 class PlayerForm(forms.ModelForm):

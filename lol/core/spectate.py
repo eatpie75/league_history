@@ -3,7 +3,7 @@ from django.core.cache import cache
 # from models import Summoner
 
 
-class Spectate:
+class Spectate(object):
 	def __init__(self, name):
 		self.name=name
 		self.status=0
@@ -26,7 +26,8 @@ class Spectate:
 			self.info=data
 
 	def player_info(self, region, account_id):
-		if self.status!=2: return ''
+		if self.status!=2:
+			return ''
 		# summoner=Summoner.objects.get(account_id=account_id, region=region)
 		index=[i for i,x in enumerate(self.info['info']['players']) if x['account_id']==account_id][0]
 		player=self.info['info']['players'][index]

@@ -1,5 +1,5 @@
 from django import forms
-from models import MAPS, MODES
+from lol.models import MAPS, MODES
 
 
 class MapModeForm(forms.Form):

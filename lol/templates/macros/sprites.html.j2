@@ -2,26 +2,26 @@
 {%- if size == 'small' -%}
 <div class='item sprite sprite-items-small-{{id}}' data-item="_{{id}}"{% if style !='' %} style='{{style}}'{% endif %}></div>
 {%- elif size == 'large' -%}
-<img class='item sprite' src='{{STATIC_URL}}img/items/{{id}}.png' data-item="_{{id}}"{% if style !='' %} style='{{style}}'{% endif %}>
+<img class='item sprite' src='{{STATIC_URL}}img/items/{{id}}.png' data-item="_{{id}}"{% if style !='' %} style='{{style}}'{% endif %} alt='Item Icon'>
 {%- endif %}{%- endmacro %}
 
 {%- macro champion(id, size='small', style='') %}
 {%- if size == 'small' -%}
 <div class='sprite sprite-champions-small-{{id}}'{% if style !='' %} style='{{style}}'{% endif %}></div>
 {%- elif size == 'large' -%}
-<img class='sprite' src='{{STATIC_URL}}img/champions/{{id}}.png'{% if style !='' %} style='{{style}}'{% endif %}>
+<img class='sprite' src='{{STATIC_URL}}img/champions/{{id}}.png'{% if style !='' %} style='{{style}}'{% endif %} alt='Champion Icon'>
 {%- endif %}{%- endmacro %}
 
 {%- macro summoner(id, size='small', style='') %}
 {%- if size == 'small' -%}
 <div class='sprite sprite-summoner-small-{{id}}'{% if style !='' %} style='{{style}}'{% endif %}></div>
 {%- elif size == 'large' -%}
-<img class='sprite' src='{{STATIC_URL}}img/summoner/{{id}}.png'{% if style !='' %} style='{{style}}'{% endif %}>
+<img class='sprite' src='{{STATIC_URL}}img/summoner/{{id}}.png'{% if style !='' %} style='{{style}}'{% endif %} alt='Summoner Spell Icon'>
 {%- endif %}{%- endmacro %}
 
 {%- macro profile(id, size='small', style='') %}
 {%- if size == 'small' -%}
 <div class='sprite sprite-champions-small-{{id}}'{% if style !='' %} style='{{style}}'{% endif %}></div>
 {%- elif size == 'large' -%}
-<img class='sprite' src='{{STATIC_URL}}img/profile/{{id}}.png'{% if style !='' %} style='{{style}}'{% endif %}>
+<img class='sprite' src='{{STATIC_URL}}img/profile/{{id}}.png'{% if style !='' %} style='{{style}}'{% endif %} alt='Profile Icon'>
 {%- endif %}{%- endmacro %}

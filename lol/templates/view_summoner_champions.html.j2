@@ -14,76 +14,80 @@
 {%- endblock %}
 
 {% block content %}
-			<div class='summoner-header row col-md-12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{stats.by_count()|first|first}}.png)'>
-				{#- <div class='pull-left sprite sprite-profile-{{summoner.profile_icon}}'></div> #}
-				<div class='pull-left'>{{sprites.profile(summoner.profile_icon, size='large')}}</div>
-				<div class='info-block pull-right'>
-					<div>
-						<b>{{summoner.level}}</b>
-						<small>LEVEL</small>
+			<div class='row'>
+				<div class='summoner-header col-md-12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{stats.by_count()|first|first}}.png)'>
+					{#- <div class='pull-left sprite sprite-profile-{{summoner.profile_icon}}'></div> #}
+					<div class='pull-left'>{{sprites.profile(summoner.profile_icon, size='large')}}</div>
+					<div class='info-block pull-right'>
+						<div>
+							<b>{{summoner.level}}</b>
+							<small>LEVEL</small>
+						</div>
+						<div>
+							<b>{{stats.display_count}}</b>
+							<small>GAMES</small>
+						</div>
 					</div>
-					<div>
-						<b>{{stats.display_count}}</b>
-						<small>GAMES</small>
+					<div class='name-block'>
+						<b>{{summoner.name}}</b>
+						{#- <span id='spectate-info'><a href='{{spectate.url}}'>{{spectate.player_info(summoner.region, summoner.account_id)}}</a></span> #}
 					</div>
-				</div>
-				<div class='name-block'>
-					<b>{{summoner.name}}</b>
-					{#- <span id='spectate-info'><a href='{{spectate.url}}'>{{spectate.player_info(summoner.region, summoner.account_id)}}</a></span> #}
-				</div>
-				<div class='league-block'>
-					{%- if rating.tier %}
-					<img src='{{STATIC_URL}}img/leagues/{{rating.tier}}-{{rating.division}}.png' title='Division {{rating.division}} {{rating.get_tier_display()}}'>
-					<b>{{rating.get_division_display()}}</b>
-					{%- else %}
-					<img src='{{STATIC_URL}}img/leagues/0.png' title='Unranked'>
-					{%- endif %}
-				</div>
-				<div class='bottom-right' id='last-updated-block'>
-					{%- if not update_in_queue and summoner.time_updated|timediff > 60*30 %}
-					<a href='javascript:void(0);' id='force-update'>
+					<div class='league-block'>
+						{%- if rating.tier %}
+						<img src='{{STATIC_URL}}img/leagues/{{rating.tier}}-{{rating.division}}.png' title='Division {{rating.division}} {{rating.get_tier_display()}}' alt='League Icon'>
+						<b>{{rating.get_division_display()}}</b>
+						{%- else %}
+						<img src='{{STATIC_URL}}img/leagues/0.png' title='Unranked' alt='League Icon'>
+						{%- endif %}
+					</div>
+					<div class='bottom-right' id='last-updated-block'>
+						{%- if not update_in_queue and summoner.time_updated|timediff > 60*30 %}
+						<a href='javascript:void(0);' id='force-update'>
+							<small id='last-updated'>LAST UPDATED:{% if not update_in_queue %}{{summoner.time_updated|naturaltime|upper}}{% else %}{{update_in_queue}}{% endif %}</small>
+						</a>
+						{%- else %}
 						<small id='last-updated'>LAST UPDATED:{% if not update_in_queue %}{{summoner.time_updated|naturaltime|upper}}{% else %}{{update_in_queue}}{% endif %}</small>
-					</a>
-					{%- else %}
-					<small id='last-updated'>LAST UPDATED:{% if not update_in_queue %}{{summoner.time_updated|naturaltime|upper}}{% else %}{{update_in_queue}}{% endif %}</small>
-					{%- endif %}
+						{%- endif %}
+					</div>
+					<ul class='mynav mynav-tabs'>
+						<li><a href='{{summoner.get_absolute_url()}}'>OVERVIEW</a></li>
+						<li><a href='{{summoner.get_games_url()}}'>GAMES</a></li>
+						<li class='active'><a href='{{summoner.get_champions_url()}}'>CHAMPIONS</a></li>
+					</ul>
 				</div>
-				<ul class='mynav mynav-tabs'>
-					<li><a href='{{summoner.get_absolute_url()}}'>OVERVIEW</a></li>
-					<li><a href='{{summoner.get_games_url()}}'>GAMES</a></li>
-					<li class='active'><a href='{{summoner.get_champions_url()}}'>CHAMPIONS</a></li>
-				</ul>
 			</div>
-			<div class='row col-md-12' id='games'>
-				<table class='table table-condensed' style='table-layout:fixed;'>
-					<thead>
-						<tr>
-							<th style='width:115px;' class='table-sort' data-column='name'><span>CHAMPION<small></small></span></th>
-							<th style='width:75px;' class='table-sort active' data-column='total'><span>PLAYED<small class='glyphicon glyphicon-arrow-down'></small></span></th>
-							<th style='width:60px;' class='table-sort' data-column='won'><span>WON<small></small></span></th>
-							<th style='width:60px;' class='table-sort' data-column='lost'><span>LOST<small></small></span></th>
-							<th style='width:65px;' class='table-sort' data-column='percent' data-spec-order='swin'><span>WIN %<small></small></span></th>
-							<th style='width:95px;' class='table-sort' data-column='avg_kills'><span>AVG KILLS<small></small></span></th>
-							<th style='width:140px;' class='table-sort' data-column='avg_deaths'><span>AVG DEATHS<small></small></span></th>
-							<th style='width:60px' class='table-sort' data-column='kdr'><span>KDR<small></small></span></th>
-							<th style='width:95px;' class='table-sort' data-column='avg_cs'><span>AVG CS<small></small></span></th>
-							<th style='width:70;' class='table-sort' data-column='avg_gold'><span>AVG GOLD<small></small></span></th>
-						</tr>
-					</thead>
-					<tbody class='cbody'>{% for champ in stats.by_count() %}
-						<tr class='sort'>
-							<td class='name'>{{champions[champ.0]}}</td>
-							<td class='total'>{{champ.1.count}}</td>
-							<td class='won'>{{champ.1.won}}</td>
-							<td class='lost'>{{champ.1.lost}}</td>
-							<td class='percent'>{{champ.1.won|get_percent(champ.1.count)}}</td>
-							<td class='avg_kills'>{{champ.1.avg_kills}}</td>
-							<td class='avg_deaths'>{{champ.1.avg_deaths}}</td>
-							<td class='kdr'>{{champ.1.kdr}}</td>
-							<td class='avg_cs'>{{champ.1.avg_cs}}</td>
-							<td class='avg_gold'>{{champ.1.avg_gold}}</td>
-						</tr>
-					{% endfor %}</tbody>
-				</table>
+			<div class='row'>
+				<div class='col-md-12' id='games'>
+					<table class='table table-condensed' style='table-layout:fixed;'>
+						<thead>
+							<tr>
+								<th style='width:115px;' class='table-sort' data-column='name'><span>CHAMPION<small></small></span></th>
+								<th style='width:80px;' class='table-sort active' data-column='total'><span>PLAYED<small class='glyphicon glyphicon-arrow-down'></small></span></th>
+								<th style='width:60px;' class='table-sort' data-column='won'><span>WON<small></small></span></th>
+								<th style='width:60px;' class='table-sort' data-column='lost'><span>LOST<small></small></span></th>
+								<th style='width:70px;' class='table-sort' data-column='percent' data-spec-order='swin'><span>WIN %<small></small></span></th>
+								<th style='width:100px;' class='table-sort' data-column='avg_kills'><span>AVG KILLS<small></small></span></th>
+								<th style='width:140px;' class='table-sort' data-column='avg_deaths'><span>AVG DEATHS<small></small></span></th>
+								<th style='width:60px' class='table-sort' data-column='kdr'><span>KDR<small></small></span></th>
+								<th style='width:95px;' class='table-sort' data-column='avg_cs'><span>AVG CS<small></small></span></th>
+								<th style='width:70px;' class='table-sort' data-column='avg_gold'><span>AVG GOLD<small></small></span></th>
+							</tr>
+						</thead>
+						<tbody class='cbody'>{% for champ in stats.by_count() %}
+							<tr class='sort'>
+								<td class='name'>{{champions[champ.0]}}</td>
+								<td class='total'>{{champ.1.count}}</td>
+								<td class='won'>{{champ.1.won}}</td>
+								<td class='lost'>{{champ.1.lost}}</td>
+								<td class='percent'>{{champ.1.won|get_percent(champ.1.count)}}</td>
+								<td class='avg_kills'>{{champ.1.avg_kills}}</td>
+								<td class='avg_deaths'>{{champ.1.avg_deaths}}</td>
+								<td class='kdr'>{{champ.1.kdr}}</td>
+								<td class='avg_cs'>{{champ.1.avg_cs}}</td>
+								<td class='avg_gold'>{{champ.1.avg_gold}}</td>
+							</tr>
+						{% endfor %}</tbody>
+					</table>
+				</div>
 			</div>
 {%- endblock %}

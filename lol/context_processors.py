@@ -1,5 +1,5 @@
 from django.conf import settings
-from models import GAME_TYPES, RANKED_SOLO_QUEUE_TYPES, RANKED_GAME_TYPES
+from lol.models import GAME_TYPES, RANKED_SOLO_QUEUE_TYPES, RANKED_GAME_TYPES
 
 
 def ajax_base(request):

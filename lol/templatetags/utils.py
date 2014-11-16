@@ -44,7 +44,8 @@ def number_to_rank(number):
 	tier=number // 500 + 1
 	division=(number - (tier - 1) * 500) // 100
 	rank=100 - (number - (tier - 1) * 500 - division * 100)
-	if tier==6: division=4
+	if tier==6:
+		division=4
 	return {'tier':int(tier), 'division':int(5 - division), 'rank':int(rank)}
 
 

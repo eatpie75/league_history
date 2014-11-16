@@ -1,4 +1,3 @@
-from core.stats import Stats
 # from core.spectate import Spectate
 from datetime import datetime, timedelta
 from django.contrib.auth.decorators import user_passes_test
@@ -11,10 +10,11 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.defaultfilters import slugify
 from lol.core.servers import REGIONS
+from lol.core.stats import Stats
 from lol.models import Summoner, Game, Player, get_data, create_summoner
+from lol.tasks import summoner_auto_task, fill_game, generate_global_stats, test_fill, check_servers  # , spectate_check
 from lol.utils import EventList
 from pytz import timezone
-from tasks import summoner_auto_task, fill_game, generate_global_stats, test_fill, check_servers  # , spectate_check
 import json
 
 
@@ -175,7 +175,8 @@ def view_summoner(request, region, account_id, slug):
 		else:
 			return '?'
 	else: update_in_queue=False
-	if summoner.slug!=slug: return HttpResponseRedirect(summoner.get_absolute_url())
+	if summoner.slug!=slug:
+		return HttpResponseRedirect(summoner.get_absolute_url())
 	rating=summoner.get_rating()
 	games=Player.objects.filter(summoner=summoner).select_related('game')
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
@@ -198,7 +199,8 @@ def view_summoner_games(request, region, account_id, slug):
 	sregion=region
 	region=__get_region(sregion)
 	summoner=Summoner.objects.get(account_id=account_id, region=region)
-	if summoner.slug!=slug: return HttpResponseRedirect(summoner.get_games_url())
+	if summoner.slug!=slug:
+		return HttpResponseRedirect(summoner.get_games_url())
 	rating=summoner.get_rating()
 	games=Player.objects.filter(summoner=summoner).select_related('game')
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
@@ -211,11 +213,12 @@ def view_summoner_games(request, region, account_id, slug):
 
 # @cache_page(60 * 15)
 def view_summoner_champions(request, region, account_id, slug):
-	from core.champions import CHAMPIONS
+	from lol.core.champions import CHAMPIONS
 	sregion=region
 	region=__get_region(sregion)
 	summoner=Summoner.objects.get(account_id=account_id, region=region)
-	if summoner.slug!=slug: return HttpResponseRedirect(summoner.get_champions_url())
+	if summoner.slug!=slug:
+		return HttpResponseRedirect(summoner.get_champions_url())
 	rating=summoner.get_rating()
 	games=Player.objects.filter(summoner=summoner).select_related('game')
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
@@ -230,7 +233,8 @@ def view_summoner_inventory(request, region, account_id, slug):
 	sregion=region
 	region=__get_region(sregion)
 	summoner=Summoner.objects.get(account_id=account_id, region=region)
-	if summoner.slug!=slug: return HttpResponseRedirect(summoner.get_absolute_url())
+	if summoner.slug!=slug:
+		return HttpResponseRedirect(summoner.get_absolute_url())
 	rating=summoner.get_rating()
 	games=Player.objects.filter(summoner=summoner).select_related('game')
 	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
@@ -241,11 +245,12 @@ def view_summoner_inventory(request, region, account_id, slug):
 	return render_to_response('view_summoner_inventory.html.j2', {'summoner':summoner, 'rating':rating, 'stats':stats}, RequestContext(request))
 
 
-def view_summoner_specific_champion(request, sregion, acctid, slug, champion, champion_slug):
-	from core.champions import CHAMPIONS
-	region=__get_region(sregion)
-	summoner=Summoner.objects.get(account_id=acctid, region=region)
-	if slugify(summoner.name)!=slug: return HttpResponseRedirect(reverse('view_summoner_specific_champion', args=[sregion, acctid, slugify(summoner.name), champion, champion_slug]))
+def view_summoner_specific_champion(request, region, account_id, slug, champion, champion_slug):
+	from lol.core.champions import CHAMPIONS
+	region=__get_region(region)
+	summoner=Summoner.objects.get(account_id=account_id, region=region)
+	if slugify(summoner.name)!=slug:
+		return HttpResponseRedirect(reverse('view_summoner_specific_champion', args=[region, account_id, slugify(summoner.name), champion, champion_slug]))
 	rating=summoner.get_rating()
 	games=Player.objects.filter(summoner=summoner, champion_id=champion).select_related()
 	stats=Stats(games, champion)
@@ -254,7 +259,7 @@ def view_summoner_specific_champion(request, sregion, acctid, slug, champion, ch
 
 # @cache_page(60 * 60)
 def view_all_champions(request):
-	from core.champions import CHAMPIONS
+	from lol.core.champions import CHAMPIONS
 	from lol.forms import MapModeForm
 
 	form=MapModeForm(request.GET)
@@ -266,12 +271,14 @@ def view_all_champions(request):
 		key+='/' + form.cleaned_data['game_map']
 		games=games.filter(game__game_map=form.cleaned_data['game_map'])
 		count=count.filter(game_map=form.cleaned_data['game_map'])
-	else: key+='/-1'
+	else:
+		key+='/-1'
 	if form.cleaned_data['game_mode'] not in ('', '-1'):
 		key+='/' + form.cleaned_data['game_mode']
 		games=games.filter(game__game_mode=form.cleaned_data['game_mode'])
 		count=count.filter(game_mode=form.cleaned_data['game_mode'])
-	else: key+='/-1'
+	else:
+		key+='/-1'
 	stats=cache.get(key)
 	if stats is None:
 		generating=True
@@ -285,8 +292,8 @@ def view_all_champions(request):
 
 # @cache_page(60 * 60)
 def view_champion(request, champion_id, champion_slug):
-	from core.champions import CHAMPIONS
-	from core.items import ITEMS
+	from lol.core.champions import CHAMPIONS
+	from lol.core.items import ITEMS
 	from lol.forms import MapModeForm
 
 	champion_id=int(champion_id)
@@ -315,8 +322,8 @@ def view_champion(request, champion_id, champion_slug):
 
 # @cache_page(60 * 60)
 def view_champion_items(request, champion_id, champion_slug):
-	from core.champions import CHAMPIONS
-	from core.items import ITEMS
+	from lol.core.champions import CHAMPIONS
+	from lol.core.items import ITEMS
 	from lol.forms import MapModeForm
 
 	champion_id=int(champion_id)
@@ -378,9 +385,9 @@ def client_status(request):
 
 @user_passes_test(lambda u:u.is_superuser)
 def test_items(request):
-	from core.items import ITEMS
-
+	from lol.core.items import ITEMS
 	from lol.models import SummonerRating
+
 	summoners=SummonerRating.objects.filter(tier=6, summoner__time_updated__lt=(datetime.now(timezone('UTC')) - timedelta(hours=3)), summoner__region__in=[0, 1]).select_related('summoner').only('summoner__id')
 	players=Player.objects.filter(game__fetched=False, game__time__gt=(datetime.now(timezone('UTC')) - timedelta(days=2)), game__region__in=[0, 1], summoner__in=summoners).distinct('game').order_by().only('game')
 	# print(len(summoners))

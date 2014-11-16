@@ -106,7 +106,7 @@ def fill_game(game_pk, auto=False):
 		return tmp
 	game=Game.objects.get(pk=game_pk)
 	if not game.fetched and game.unfetched_players!='':
-		log_event('info', datetime.now(timezone('US/Pacific-New')), u'filling game:{}'.format(game.game_id), {'type':'game', 'game':{'region':game.region, 'game_id':game.game_id}})
+		log_event('info', datetime.now(timezone('US/Pacific-New')), u'filling game: {}/{}'.format(game.region, game.game_id), {'type':'game', 'game':{'region':game.region, 'game_id':game.game_id}})
 		tmp=map(int, game.unfetched_players.split(','))
 		num_to_fetch=len(tmp)
 		summoners=Summoner.objects.filter(summoner_id__in=tmp, region=game.region)
@@ -147,7 +147,7 @@ def fill_game(game_pk, auto=False):
 			fill_game.update_state(state='PROGRESS', meta={'current':i, 'total':num_to_fetch})
 		game.fetched=True
 		game.save(force_update=True)
-		log_event('info', datetime.now(timezone('US/Pacific-New')), u'finished filling game:{}'.format(game.game_id), {'type':'game', 'game':{'region':game.region, 'game_id':game.game_id}})
+		log_event('info', datetime.now(timezone('US/Pacific-New')), u'finished filling game: {}/{}'.format(game.region, game.game_id), {'type':'game', 'game':{'region':game.region, 'game_id':game.game_id}})
 	elif not game.fetched and game.unfetched_players=='':
 		log_event('info', datetime.now(timezone('US/Pacific-New')), u'game was already full', {'type':'game', 'game':{'region':game.region, 'game_id':game.game_id}})
 		game.fetched=True

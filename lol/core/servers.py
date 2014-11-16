@@ -14,7 +14,7 @@ class NoServersAvailable(Exception):
 	pass
 
 
-class Server_List:
+class ServerList(object):
 	"""
 	Statuses:{-1:Unknown, 0:Down, 1:Up}
 	"""
@@ -50,7 +50,8 @@ class Server_List:
 		index=self.find_by_url(region, url)
 		for prop, val in data.iteritems():
 			self.servers[region][index]['metadata'][prop]=val
-		if save: self.save()
+		if save:
+			self.save()
 
 	def check_servers(self, server=None, **kwargs):
 		def __check(server):
@@ -94,12 +95,12 @@ class Server_List:
 
 
 def prepare_servers():
-	print('running server prep')
+	print 'running server prep'
 	try:
 		servers=cache.get('servers')
 		if servers is None:
-			sl=Server_List(settings.LOL_CLIENT_SERVERS)
-			sl.save()
+			server_list=ServerList(settings.LOL_CLIENT_SERVERS)
+			server_list.save()
 		else:
 			if servers.updated<datetime.now(timezone('UTC')) - timedelta(hours=1):
 				servers.check_servers()

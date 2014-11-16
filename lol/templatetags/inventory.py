@@ -44,5 +44,5 @@ def rune_summary(runepage):
 
 
 @library.filter
-def rune_stat_str(id):
-	return RUNE_STATS[id]
+def rune_stat_str(rune_id):
+	return RUNE_STATS[rune_id]

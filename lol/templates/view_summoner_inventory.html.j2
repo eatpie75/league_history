@@ -8,62 +8,73 @@
 {%- endblock %}
 
 {% block content %}
-			<div class='summoner-header row col-md-12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{stats.by_count()|first|first}}.png)'>
-				{#- <div class='pull-left sprite sprite-profile-{{summoner.profile_icon}}'></div> #}
-				<div class='pull-left'>{{sprites.profile(summoner.profile_icon, size='large')}}</div>
-				<div class='info-block pull-right'>
-					<div>
-						<b>{{summoner.level}}</b>
-						<small>LEVEL</small>
+			<div class='row'>
+				<div class='summoner-header col-md-12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{stats.by_count()|first|first}}.png)'>
+					{#- <div class='pull-left sprite sprite-profile-{{summoner.profile_icon}}'></div> #}
+					<div class='pull-left'>{{sprites.profile(summoner.profile_icon, size='large')}}</div>
+					<div class='info-block pull-right'>
+						<div>
+							<b>{{summoner.level}}</b>
+							<small>LEVEL</small>
+						</div>
+						<div>
+							<b>{{stats.display_count}}</b>
+							<small>GAMES</small>
+						</div>
 					</div>
-					<div>
-						<b>{{stats.display_count}}</b>
-						<small>GAMES</small>
+					<div class='name-block'>
+						<b>{{summoner.name}}</b>
+						{#- <span id='spectate-info'><a href='{{spectate.url}}'>{{spectate.player_info(summoner.region, summoner.account_id)}}</a></span> #}
 					</div>
-				</div>
-				<div class='name-block'>
-					<b>{{summoner.name}}</b>
-					{#- <span id='spectate-info'><a href='{{spectate.url}}'>{{spectate.player_info(summoner.region, summoner.account_id)}}</a></span> #}
-				</div>
-				<div class='league-block'>
-					{%- if rating.tier %}
-					<img src='{{STATIC_URL}}img/leagues/{{rating.tier}}-{{rating.division}}.png' title='Division {{rating.division}} {{rating.get_tier_display()}}'>
-					<b>{{rating.get_division_display()}}</b>
-					{%- else %}
-					<img src='{{STATIC_URL}}img/leagues/0.png' title='Unranked'>
-					{%- endif %}
-				</div>
-				<div class='bottom-right' id='last-updated-block'>
-					{%- if not update_in_queue and summoner.time_updated|timediff > 60*30 %}
-					<a href='javascript:void(0);' id='force-update'>
+					<div class='league-block'>
+						{%- if rating.tier %}
+						<img src='{{STATIC_URL}}img/leagues/{{rating.tier}}-{{rating.division}}.png' title='Division {{rating.division}} {{rating.get_tier_display()}}' alt='League Icon'>
+						<b>{{rating.get_division_display()}}</b>
+						{%- else %}
+						<img src='{{STATIC_URL}}img/leagues/0.png' title='Unranked' alt='League Icon'>
+						{%- endif %}
+					</div>
+					<div class='bottom-right' id='last-updated-block'>
+						{%- if not update_in_queue and summoner.time_updated|timediff > 60*30 %}
+						<a href='javascript:void(0);' id='force-update'>
+							<small id='last-updated'>LAST UPDATED:{% if not update_in_queue %}{{summoner.time_updated|naturaltime|upper}}{% else %}{{update_in_queue}}{% endif %}</small>
+						</a>
+						{%- else %}
 						<small id='last-updated'>LAST UPDATED:{% if not update_in_queue %}{{summoner.time_updated|naturaltime|upper}}{% else %}{{update_in_queue}}{% endif %}</small>
-					</a>
-					{%- else %}
-					<small id='last-updated'>LAST UPDATED:{% if not update_in_queue %}{{summoner.time_updated|naturaltime|upper}}{% else %}{{update_in_queue}}{% endif %}</small>
-					{%- endif %}
-				</div>
-				<ul class='mynav mynav-tabs'>
-					<li class='active'><a href='{{summoner.get_absolute_url()}}'>OVERVIEW</a></li>
-					<li><a href='{{summoner.get_games_url()}}'>GAMES</a></li>
-					<li><a href='{{summoner.get_champions_url()}}'>CHAMPIONS</a></li>
-				</ul>
-			</div>
-			<div class='row col-md-12'>{% set runes, masteries = summoner.get_runes()|rune_summary, summoner.get_masteries() %}
-				<div class='tabbable tabs-left'>
-					<ul class='col-md-2 rune-nav rune-nav-tabs'>{% for page in runes %}
-						<li{% if page.active %} class='active'{% endif %}><a href='#runetab{{loop.index0}}' data-toggle='tab'>{{page.name}}</a></li>
-					{% endfor %}</ul>
-					<div class='tab-content'>{% for page in runes %}
-						<div class='tab-pane{% if page.active %} active{% endif %}' id='runetab{{loop.index0}}'>
-							<div class='col-md-5' style='margin-left:0;'>{% for stat, amount in page.stats.iteritems() %}
-							<b>{{stat|rune_stat_str}}</b><br>
-							{{amount}}<hr>
-						{% endfor %}</div>
-							<div class='col-md-5' style='margin-left:0;'>{% for id, rune in page.runes.iteritems() %}
-								<b>{{rune.count}}</b><small>x</small>{{rune.name}}<br>
-							{% endfor %}</div>
+						{%- endif %}
 					</div>
-					{% endfor %}</div>
+					<ul class='mynav mynav-tabs'>
+						<li class='active'><a href='{{summoner.get_absolute_url()}}'>OVERVIEW</a></li>
+						<li><a href='{{summoner.get_games_url()}}'>GAMES</a></li>
+						<li><a href='{{summoner.get_champions_url()}}'>CHAMPIONS</a></li>
+					</ul>
+				</div>
+			</div>
+			{%- set runes, masteries = summoner.get_runes()|rune_summary, summoner.get_masteries() %}
+			<div class='row tabbable tabs-left'>
+				<ul class='col-md-2 rune-nav rune-nav-tabs'>
+					{%- for page in runes %}
+					<li {%- if page.active %} class='active'{% endif %}><a href='#runetab{{loop.index0}}' data-toggle='tab'>{{page.name}}</a></li>
+					{%- endfor %}
+				</ul>
+				<div class='col-md-10 tab-content'>
+					{%- for page in runes %}
+					<div class='tab-pane{% if page.active %} active{% endif %}' id='runetab{{loop.index0}}'>
+						<div class='row'>
+							<div class='col-md-5' style='margin-left:0;'>
+								{%- for stat, amount in page.stats.iteritems() %}
+								<b>{{stat|rune_stat_str}}</b><br>
+								{{amount}}<hr>
+								{%- endfor %}
+							</div>
+							<div class='col-md-5' style='margin-left:0;'>
+								{%- for id, rune in page.runes.iteritems() %}
+								<b>{{rune.count}}</b><small>x</small>{{rune.name}}<br>
+								{%- endfor %}
+							</div>
+						</div>
+					</div>
+					{%- endfor %}
 				</div>
 			</div>
 {%- endblock %}

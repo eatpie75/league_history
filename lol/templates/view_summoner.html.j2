@@ -27,47 +27,49 @@
 {%- endblock %}
 
 {% block content %}
-			<div class='summoner-header row col-md-12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{stats.by_count()|first|first}}.png)'>
-				{#- <div class='pull-left sprite sprite-profile-{{summoner.profile_icon}}'></div> #}
-				<div class='pull-left'>{{sprites.profile(summoner.profile_icon, size='large')}}</div>
-				<div class='info-block pull-right'>
-					<div>
-						<b>{{summoner.level}}</b>
-						<small>LEVEL</small>
+			<div class='row'>
+				<div class='summoner-header col-md-12' style='background-image:url({{STATIC_URL}}img/champion-backgrounds/{{stats.by_count()|first|first}}.png)'>
+					{#- <div class='pull-left sprite sprite-profile-{{summoner.profile_icon}}'></div> #}
+					<div class='pull-left'>{{sprites.profile(summoner.profile_icon, size='large')}}</div>
+					<div class='info-block pull-right'>
+						<div>
+							<b>{{summoner.level}}</b>
+							<small>LEVEL</small>
+						</div>
+						<div>
+							<b>{{stats.display_count}}</b>
+							<small>GAMES</small>
+						</div>
 					</div>
-					<div>
-						<b>{{stats.display_count}}</b>
-						<small>GAMES</small>
+					<div class='name-block'>
+						<b>{{summoner.name}}</b>
+						{#- <span id='spectate-info'><a href='{{spectate.url}}'>{{spectate.player_info(summoner.region, summoner.account_id)}}</a></span> #}
 					</div>
-				</div>
-				<div class='name-block'>
-					<b>{{summoner.name}}</b>
-					{#- <span id='spectate-info'><a href='{{spectate.url}}'>{{spectate.player_info(summoner.region, summoner.account_id)}}</a></span> #}
-				</div>
-				<div class='league-block'>
-					{%- if rating.tier %}
-					<img src='{{STATIC_URL}}img/leagues/{{rating.tier}}-{{rating.division}}.png' title='Division {{rating.division}} {{rating.get_tier_display()}}'>
-					<b>{{rating.get_division_display()}}</b>
-					{%- else %}
-					<img src='{{STATIC_URL}}img/leagues/0.png' title='Unranked'>
-					{%- endif %}
-				</div>
-				<div class='bottom-right' id='last-updated-block'>
-					{%- if not update_in_queue and summoner.time_updated|timediff > 60*30 %}
-					<a href='javascript:void(0);' id='force-update'>
+					<div class='league-block'>
+						{%- if rating.tier %}
+						<img src='{{STATIC_URL}}img/leagues/{{rating.tier}}-{{rating.division}}.png' title='Division {{rating.division}} {{rating.get_tier_display()}}' alt='League Icon'>
+						<b>{{rating.get_division_display()}}</b>
+						{%- else %}
+						<img src='{{STATIC_URL}}img/leagues/0.png' title='Unranked' alt='League Icon'>
+						{%- endif %}
+					</div>
+					<div class='bottom-right' id='last-updated-block'>
+						{%- if not update_in_queue and summoner.time_updated|timediff > 60*30 %}
+						<a href='javascript:void(0);' id='force-update'>
+							<small id='last-updated'>LAST UPDATED:{% if not update_in_queue %}{{summoner.time_updated|naturaltime|upper}}{% else %}{{update_in_queue}}{% endif %}</small>
+						</a>
+						{%- else %}
 						<small id='last-updated'>LAST UPDATED:{% if not update_in_queue %}{{summoner.time_updated|naturaltime|upper}}{% else %}{{update_in_queue}}{% endif %}</small>
-					</a>
-					{%- else %}
-					<small id='last-updated'>LAST UPDATED:{% if not update_in_queue %}{{summoner.time_updated|naturaltime|upper}}{% else %}{{update_in_queue}}{% endif %}</small>
-					{%- endif %}
+						{%- endif %}
+					</div>
+					<ul class='mynav mynav-tabs'>
+						<li class='active'><a href='{{summoner.get_absolute_url()}}'>OVERVIEW</a></li>
+						<li><a href='{{summoner.get_games_url()}}'>GAMES</a></li>
+						<li><a href='{{summoner.get_champions_url()}}'>CHAMPIONS</a></li>
+					</ul>
 				</div>
-				<ul class='mynav mynav-tabs'>
-					<li class='active'><a href='{{summoner.get_absolute_url()}}'>OVERVIEW</a></li>
-					<li><a href='{{summoner.get_games_url()}}'>GAMES</a></li>
-					<li><a href='{{summoner.get_champions_url()}}'>CHAMPIONS</a></li>
-				</ul>
 			</div>
-			<div class='row col-md-12'>
+			<div class='row'>
 				<div class='col-md-9' id='games'>
 					<table class='game-list table table-condensed'>
 						<thead>
@@ -94,7 +96,7 @@
 									{{sprites.item(item)}}
 									{%- endfor %}
 								</td>
-								<td>{{player.game.time|date('M d')}}
+								<td>{{player.game.time|date('M d')}}</td>
 								<td><a href='{{player.game.get_absolute_url()}}'>&raquo;</a>{% if (player.game.game_mode, player.game.game_map) in GAME_TYPES.RANKED_GAME_TYPES %}<small class='glyphicon glyphicon-ok' title='Ranked'></small>{% endif %}</td>
 							</tr>{% endfor %}
 						</tbody>
@@ -118,18 +120,24 @@
 					</div>{% endfor %}
 				</div>
 			</div>
-			<div class='row col-md-12'>
-				<div id='elo-graph' style='height:340px;width:100%;margin:6px 0 0 0;' class='col-md-12'></div>
+			<div class='row'>
+				<div class='col-md-12'>
+					<div class='row'>
+						<div class='col-md-12' id='elo-graph' style='height:340px;width:100%;margin:6px 0 0 0;'></div>
+					</div>
+				</div>
 			</div>
 			{{stats.index.friends}}
 			{%- if user.is_staff and rating.tier %}
-			<div class='row col-md-12'>
-				<pre>
-					Rank:{{rating.rank}}
-					Wins:{{rating.wins}}
-					Losses:{{rating.losses}}
-					Miniseries:{Target:{{rating.miniseries_target}}, Wins:{{rating.miniseries_wins}}, Losses:{{rating.miniseries_losses}}}
-				</pre>
+			<div class='row'>
+				<div class='col-md-12'>
+					<pre>
+						Rank:{{rating.rank}}
+						Wins:{{rating.wins}}
+						Losses:{{rating.losses}}
+						Miniseries:{Target:{{rating.miniseries_target}}, Wins:{{rating.miniseries_wins}}, Losses:{{rating.miniseries_losses}}}
+					</pre>
+				</div>
 			</div>
 			{%- endif %}
 {%- endblock %}

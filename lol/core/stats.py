@@ -1,11 +1,11 @@
-from champions import CHAMPIONS
+from lol.core.champions import CHAMPIONS
 from datetime import datetime, timedelta
 from lol.models import Player, SummonerRating, Summoner
 from pytz import timezone
 import json
 
 
-class Queryset_Manager:
+class QuerysetManager(object):
 	def __init__(self, queryset, chunksize=5000):
 		self.queryset=queryset.order_by('pk')
 		self.chunksize=chunksize
@@ -31,7 +31,7 @@ class Queryset_Manager:
 					yield row
 
 
-class Stats:
+class Stats(object):
 		def __init__(self, games, **kwargs):
 			self.qs=games.only('summoner__id', 'game', 'champion_id', 'won', 'items', 'kills', 'deaths', 'assists', 'minion_kills', 'neutral_minions_killed', 'gold', 'summoner_spell1', 'summoner_spell2', 'tier', 'division', 'rank', 'blue_team')
 			# .defer(
@@ -42,7 +42,7 @@ class Stats:
 			# 	'champion_level',
 			# 	'summoner__runes', 'summoner__masteries'
 			# )
-			self.games=Queryset_Manager(self.qs)
+			self.games=QuerysetManager(self.qs)
 			self.indexed=False
 			self.items_indexed=False
 			self.index={'champions':{}, 'global_stats':{}}
@@ -71,7 +71,7 @@ class Stats:
 			self.qs=Player.objects.all()
 			self.qs.query=state['qs']
 			if not self.indexed or (not self.items_indexed and self.index_items):
-				self.games=Queryset_Manager(self.qs)
+				self.games=QuerysetManager(self.qs)
 
 		def __repr__(self):
 			if self.champion is not None:
@@ -175,7 +175,8 @@ class Stats:
 		def __index_items(self, stats, game):
 			for item in game.get_items:
 				item=int(item)
-				if item in (0, 2003, 2004, 2009, 2037, 2038, 2039, 2040, 2042, 2043, 2044, 2047, 2048, 2050): continue
+				if item in (0, 2003, 2004, 2009, 2037, 2038, 2039, 2040, 2042, 2043, 2044, 2047, 2048, 2050):
+					continue
 				if item not in stats['champions'][game.champion_id]['items']:
 					stats['champions'][game.champion_id]['items'][item]={
 						'count':0,
@@ -257,9 +258,9 @@ class Stats:
 				if self.global_stats:
 					stats=self.__index_global_stats(stats, game)
 			if self.index_league and self.summoner_pk:
-				sr=SummonerRating.objects.get(summoner=self.summoner_pk, game_map=1, game_mode=3)
-				if sr.tier is not None:
-					stats['elo'][date.strftime('%Y-%m-%d')]={'count':1, 'total':sr.rank_to_number, 'avg':sr.rank_to_number}
+				summoner_rating=SummonerRating.objects.get(summoner=self.summoner_pk, game_map=1, game_mode=3)
+				if summoner_rating.tier is not None:
+					stats['elo'][date.strftime('%Y-%m-%d')]={'count':1, 'total':summoner_rating.rank_to_number, 'avg':summoner_rating.rank_to_number}
 			# self.index={'champions':champions, 'elo':sorted(elo.iteritems(), key=lambda x:x[0]), 'history':sorted(history.iteritems(), key=lambda x:x[0])[:-1], 'global_stats':global_stats}
 			stats['history']=sorted(stats['history'].iteritems(), key=lambda x:x[0])[:-1]
 			stats['elo']=sorted(stats['elo'].iteritems(), key=lambda x:x[0])
@@ -267,27 +268,32 @@ class Stats:
 				stats=self.__process_friends(stats)
 			self.index=stats
 			self.indexed=True
-			if self.index_items: self.items_indexed=True
+			if self.index_items:
+				self.items_indexed=True
 			self.__update_count()
-			# self.games=Queryset_Manager(self.qs)
+			# self.games=QuerysetManager(self.qs)
 
 		def __champions(self):
-			if not self.indexed: self.__index()
+			if not self.indexed:
+				self.__index()
 			return self.index['champions']
 		champions=property(__champions)
 
 		def generate_index(self):
-			if not self.indexed: self.__index()
+			if not self.indexed:
+				self.__index()
 			return True
 
 		def by_name(self):
 			def __get_name(c):
 				return CHAMPIONS[c[0]]
-			if not self.indexed: self.__index()
+			if not self.indexed:
+				self.__index()
 			return sorted(self.index['champions'].iteritems(), key=__get_name)
 
 		def by_count(self):
-			if not self.indexed: self.__index()
+			if not self.indexed:
+				self.__index()
 			return sorted(self.index['champions'].iteritems(), key=lambda g:g[1]['count'], reverse=True)
 
 		def best_ratio(self, minimum=None):
@@ -296,14 +302,17 @@ class Stats:
 					return g[1]['won'] - g[1]['lost']
 				else:
 					return -100 - (g[1]['won'] - g[1]['lost'])
-			if not self.indexed: self.__index()
+			if not self.indexed:
+				self.__index()
 			if minimum is None:
 				minimum=round(self.count * 0.04)
 			return sorted(self.index['champions'].iteritems(), key=bsort, reverse=True)
 
 		def items_most_used(self, champion_id=None):
-			if not self.items_indexed: self.__index()
-			if champion_id is None: champion_id=self.champion
+			if not self.items_indexed:
+				self.__index()
+			if champion_id is None:
+				champion_id=self.champion
 			return sorted(self.index['champions'][champion_id]['items'].iteritems(), key=lambda g:g[1]['count'], reverse=True)
 
 		def items_best_ratio(self, champion_id=None, minimum=None):
@@ -312,8 +321,10 @@ class Stats:
 					return g[1]['won'] - g[1]['lost']
 				else:
 					return -1000 + (g[1]['won'] - g[1]['lost'])
-			if not self.items_indexed: self.__index()
-			if champion_id is None: champion_id=self.champion
+			if not self.items_indexed:
+				self.__index()
+			if champion_id is None:
+				champion_id=self.champion
 			if minimum is None:
 				minimum=round(self.index['champions'][champion_id]['count'] * 0.05)
 			return sorted(self.index['champions'][champion_id]['items'].iteritems(), key=bsort, reverse=True)

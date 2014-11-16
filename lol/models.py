@@ -10,7 +10,7 @@ import requests
 import json
 
 MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (7, 'One For All'), (8, 'Showdown'), (9, 'Hexakill'), (10, 'URF'), (11, 'Nightmare Bot'), (12, 'Ascension'), (99, '?'))
-MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Howling Abyss'), (4, 'Twisted Treeline'), (9, '?'))
+MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Howling Abyss'), (4, 'Twisted Treeline'), (5, 'New Summoners Rift'), (9, '?'))
 # {'queue', 'mode', 'map'}
 GAME_TYPES={
 	'rankedpremade5x5':(4,1), 'rankedteam5x5':(5,1), 'rankedpremade3x3':(4,4), 'rankedteam3x3':(5,4),
@@ -279,7 +279,8 @@ class Player(models.Model):
 	@property
 	def length(self):
 		ip=self.ip_earned - self.boosted_ip_earned if self.ip_earned - self.boosted_ip_earned<=145 else (self.ip_earned - self.boosted_ip_earned) - 150
-		if self.game.game_mode not in (2, 3, 4, 5): return 0
+		if self.game.game_mode not in (2, 3, 4, 5):
+			return 0
 		if self.game.game_map in (1,4):  # classic, twisted treeline
 			base=18 if self.won else 16
 			mingain=2.26975458333333 if self.won else 1.38803291666667
@@ -422,10 +423,12 @@ def parse_games(games, summoner, full=False, current=None):
 			elif ogame['game_type']=='TUTORIAL_GAME':
 				continue
 			else:
-				log_event('error', datetime.now(timezone('US/Pacific-New')), u'couldn\'t figure out game mode for game #{}'.format(game.game_id))
+				log_event('error', datetime.now(timezone('US/Pacific-New')), u'couldn\'t figure out game mode for game: {}/{}'.format(game.region, game.game_id))
 				log_event('error', datetime.now(timezone('US/Pacific-New')), u'queue_type:"{}", game_mode:"{}", game_type:"{}", game_map:"{}"'.format(ogame['queue_type'], ogame['game_mode'], ogame['game_type'], ogame['game_map']))
 			if ogame['game_map'] in (1, 2, 3, 6):
 				game.game_map=1
+			elif ogame['game_map']==11:
+				game.game_map=5
 			elif ogame['game_map']==8:
 				game.game_map=2
 			elif ogame['game_map'] in (7, 12):
@@ -435,7 +438,7 @@ def parse_games(games, summoner, full=False, current=None):
 			elif ogame['game_map']==4:
 				game.game_map=0
 			else:
-				log_event('error', datetime.now(timezone('US/Pacific-New')), u'couldn\'t figure out game map for game #{}'.format(game.game_id))
+				log_event('error', datetime.now(timezone('US/Pacific-New')), u'couldn\'t figure out game map for game: {}/{}'.format(game.region, game.game_id))
 				log_event('error', datetime.now(timezone('US/Pacific-New')), u'queue_type:"{}", game_mode:"{}", game_type:"{}", game_map:"{}"'.format(ogame['queue_type'], ogame['game_mode'], ogame['game_type'], ogame['game_map']))
 			if (ogame['team']=='blue' and ogame['stats']['win']==1) or (ogame['team']=='purple' and ogame['stats']['win']==0):
 				game.blue_team_won=True

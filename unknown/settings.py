@@ -193,6 +193,6 @@ INSTALLED_APPS = (
 )
 
 try:
-	from settings_local import *
+	from unknown.settings_local import *
 except ImportError:
 	pass

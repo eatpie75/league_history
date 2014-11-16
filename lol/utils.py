@@ -15,7 +15,7 @@ def log_event(level, time, text, data={}):
 	return True
 
 
-class EventList:
+class EventList(object):
 	def __init__(self, event_list):
 		if event_list is None:
 			event_list=[]
@@ -39,7 +39,7 @@ class EventList:
 				elif event_type=='game':
 					region=REGIONS[data['game']['region']][1]
 					url=reverse('view_game', kwargs={'region':region, 'game_id':data['game']['game_id']})
-					url=u": <a href='{}'>{}:{}</a>".format(url, region, data['game']['game_id'])
+					url=u": <a href='{}'>{}/{}</a>".format(url, region, data['game']['game_id'])
 					nevent.append(re.sub(ur':.*?$', url, event_text, flags=re.IGNORECASE | re.DOTALL | re.UNICODE))
 					self.event_list.append(tuple(nevent))
 			else:
