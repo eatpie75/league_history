@@ -165,16 +165,16 @@ TEMPLATE_CONTEXT_PROCESSORS=(
 	"lol.context_processors.game_types"
 )
 
-ROOT_URLCONF = 'unknown.urls'
+ROOT_URLCONF = 'league_history.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'unknown.wsgi.application'
+WSGI_APPLICATION = 'league_history.wsgi.application'
 
 TEMPLATE_DIRS = (
 	# Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
 	# Always use forward slashes, even on Windows.
 	# Don't forget to use absolute paths, not relative paths.
-	# os.path.join(PROJECT_DIR, 'unknown', 'templates'),
+	# os.path.join(PROJECT_DIR, 'league_history', 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -195,6 +195,6 @@ INSTALLED_APPS = (
 )
 
 try:
-	from unknown.settings_local import *
+	from league_history.settings_local import *
 except ImportError:
 	pass
