@@ -1,17 +1,40 @@
+from django.conf import settings
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from lol.core.servers import REGIONS
+from redis.exceptions import ConnectionError
 import re
 
 
+def get_cached_value(key, default=None):
+	try:
+		value=cache.get(key)
+	except ConnectionError:
+		if settings.NO_CACHE:
+			value=default
+		else:
+			raise ConnectionError
+	return value
+
+
+def set_cached_value(key, value, timeout=None):
+	try:
+		cache.set(key, value, timeout)
+	except ConnectionError:
+		if settings.NO_CACHE:
+			return True
+		else:
+			raise ConnectionError
+
+
 def log_event(level, time, text, data={}):
-	event_list=cache.get('event_list')
+	event_list=get_cached_value('event_list')
 	if event_list is None:
 		event_list=[]
 	if len(event_list)>=25:
 		del event_list[0:len(event_list) - 24]
 	event_list.append((level, time, text, data))
-	cache.set('event_list', event_list)
+	set_cached_value('event_list', event_list)
 	return True
 
 

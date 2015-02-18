@@ -1,8 +1,6 @@
 # from core.spectate import Spectate
 from datetime import datetime, timedelta
 from django.contrib.auth.decorators import user_passes_test
-from django.core.cache import cache
-# from django.views.decorators.cache import cache_page
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -13,7 +11,7 @@ from lol.core.servers import REGIONS
 from lol.core.stats import Stats
 from lol.models import Summoner, Game, Player, get_data, create_summoner
 from lol.tasks import summoner_auto_task, fill_game, generate_global_stats, test_fill, check_servers  # , spectate_check
-from lol.utils import EventList
+from lol.utils import EventList, get_cached_value, set_cached_value
 from pytz import timezone
 import json
 
@@ -73,7 +71,7 @@ def view_game(request, region, game_id):
 	metadata={'map':game.get_game_map_display(), 'mode':modes[game.game_mode], 'ranked':True if game.game_mode in (3,4,5) else False, 'invalid':game.invalid, 'length':-1}
 	update_in_queue=False
 	if game.fetched is False:
-		updating=cache.get('game/{}/{}/filling'.format(game.region, game.game_id))
+		updating=get_cached_value('game/{}/{}/filling'.format(game.region, game.game_id))
 		if updating is not None:
 			updating=fill_game.AsyncResult(updating)
 			if updating.state=='PROGRESS':
@@ -179,17 +177,17 @@ def view_summoner(request, region, account_id, slug):
 		return HttpResponseRedirect(summoner.get_absolute_url())
 	rating=summoner.get_rating()
 	games=Player.objects.filter(summoner=summoner).select_related('game')
-	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
+	stats=get_cached_value('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats is None:
 		stats=Stats(games, summoner_name=summoner.name, summoner_pk=summoner.pk, index_league=True, index_items=False)
 		stats.generate_index()
-		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60 * 60)
-	# spectate=cache.get('summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id))
+		set_cached_value('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60 * 60)
+	# spectate=get_cached_value('summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id))
 	# if spectate==None:
 	# 	result=spectate_check(summoner)
 	# 	spectate=Spectate('summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id))
 	# 	spectate.parse(result)
-	# 	cache.set('summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id), spectate, 60*5)
+	# 	set_cached_value('summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id), spectate, 60*5)
 
 	return render_to_response('view_summoner.html.j2', {'games':games, 'summoner':summoner, 'rating':rating, 'stats':stats, 'update_in_queue':update_in_queue, 'spectate':None}, RequestContext(request))
 
@@ -203,11 +201,11 @@ def view_summoner_games(request, region, account_id, slug):
 		return HttpResponseRedirect(summoner.get_games_url())
 	rating=summoner.get_rating()
 	games=Player.objects.filter(summoner=summoner).select_related('game')
-	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
+	stats=get_cached_value('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats is None:
 		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
-		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60 * 60)
+		set_cached_value('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60 * 60)
 	return render_to_response('view_summoner_games.html.j2', {'games':Paginator(games, 10).page(1), 'summoner':summoner, 'rating':rating, 'stats':stats}, RequestContext(request))
 
 
@@ -221,11 +219,11 @@ def view_summoner_champions(request, region, account_id, slug):
 		return HttpResponseRedirect(summoner.get_champions_url())
 	rating=summoner.get_rating()
 	games=Player.objects.filter(summoner=summoner).select_related('game')
-	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
+	stats=get_cached_value('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats is None:
 		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
-		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60 * 60)
+		set_cached_value('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60 * 60)
 	return render_to_response('view_summoner_champions.html.j2', {'games':games, 'summoner':summoner, 'rating':rating, 'stats':stats, 'champions':CHAMPIONS}, RequestContext(request))
 
 
@@ -237,11 +235,11 @@ def view_summoner_inventory(request, region, account_id, slug):
 		return HttpResponseRedirect(summoner.get_absolute_url())
 	rating=summoner.get_rating()
 	games=Player.objects.filter(summoner=summoner).select_related('game')
-	stats=cache.get('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
+	stats=get_cached_value('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id))
 	if stats is None:
 		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
-		cache.set('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60 * 60)
+		set_cached_value('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60 * 60)
 	return render_to_response('view_summoner_inventory.html.j2', {'summoner':summoner, 'rating':rating, 'stats':stats}, RequestContext(request))
 
 
@@ -279,11 +277,11 @@ def view_all_champions(request):
 		count=count.filter(game_mode=form.cleaned_data['game_mode'])
 	else:
 		key+='/-1'
-	stats=cache.get(key)
+	stats=get_cached_value(key)
 	if stats is None:
 		generating=True
 		if cache.get(key + '/generating') is None:
-			cache.set(key + '/generating', True, 60 * 10)
+			set_cached_value(key + '/generating', True, 60 * 10)
 			generate_global_stats.delay(key, games.query, display_count=count.count(), champion_history=True, global_stats=True, index_items=False)
 	else:
 		generating=False
@@ -309,11 +307,11 @@ def view_champion(request, champion_id, champion_slug):
 		key+='/' + form.cleaned_data['game_mode']
 		games=games.filter(game__game_mode=form.cleaned_data['game_mode'])
 	else: key+='/-1'
-	stats=cache.get(key)
+	stats=get_cached_value(key)
 	if stats is None:
 		generating=True
-		if cache.get(key + '/generating') is None:
-			cache.set(key + '/generating', True, 60 * 10)
+		if get_cached_value(key + '/generating') is None:
+			set_cached_value(key + '/generating', True, 60 * 10)
 			generate_global_stats.delay(key, games.query, champion=champion_id, champion_history=True, index_items=True)
 	else:
 		generating=False
@@ -339,11 +337,11 @@ def view_champion_items(request, champion_id, champion_slug):
 		key+='/' + form.cleaned_data['game_mode']
 		games=games.filter(game__game_mode=form.cleaned_data['game_mode'])
 	else: key+='/-1'
-	stats=cache.get(key)
+	stats=get_cached_value(key)
 	if stats is None:
 		generating=True
-		if cache.get(key + '/generating') is None:
-			cache.set(key + '/generating', True, 60 * 10)
+		if get_cached_value(key + '/generating') is None:
+			set_cached_value(key + '/generating', True, 60 * 10)
 			generate_global_stats.delay(key, games.query, champion=champion_id, champion_history=True, index_items=True)
 	else:
 		generating=False
@@ -375,11 +373,11 @@ def run_auto(request):
 @user_passes_test(lambda u:u.is_superuser)
 def client_status(request):
 	if 'reset_events' in request.GET:
-		cache.set('event_list', [], timeout=0)
+		set_cached_value('event_list', [], timeout=0)
 		return HttpResponseRedirect(reverse('lol.views.client_status'))
-	server_list=cache.get('servers')
+	server_list=get_cached_value('servers')
 	unfetched_games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.utcnow().replace(tzinfo=timezone('UTC')) - timedelta(days=2))).distinct('game').only('pk').count()
-	event_list=EventList(cache.get('event_list')).event_list
+	event_list=EventList(get_cached_value('event_list')).event_list
 	return render_to_response('client_status.html.j2', {'status':server_list.servers, 'unfetched_games':unfetched_games, 'event_list':event_list}, RequestContext(request))
 
 

@@ -5,7 +5,7 @@ from django.db import transaction
 from lol.core.servers import REGIONS
 from lol.core.stats import Stats
 from lol.models import Summoner, SummonerRating, Player, Game, get_data, parse_games, parse_ratings, parse_summoner, parse_runes, parse_masteries, create_summoner
-from lol.utils import log_event
+from lol.utils import log_event, get_cached_value, set_cached_value
 from pytz import timezone
 
 
@@ -16,7 +16,7 @@ def auto_update():
 	summoners=Summoner.objects.filter(update_automatically=True, time_updated__lt=(datetime.now(timezone('UTC')) - timedelta(hours=3)), region__in=available_regions).only('pk', 'region', 'account_id')
 	num=0
 	for summoner in summoners:
-		if cache.get('summoner/{}/{}/updating'.format(summoner.region, summoner.account_id)) is None:
+		if get_cached_value('summoner/{}/{}/updating'.format(summoner.region, summoner.account_id)) is None:
 			summoner_auto_task.apply_async(args=[summoner.pk,], priority=5)
 			num+=1
 	log_event('info', datetime.now(timezone('US/Pacific-New')), u'autoupdate added {} summoner(s) to the queue'.format(num))
@@ -29,7 +29,7 @@ def auto_fill():
 	games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.now(timezone('UTC')) - timedelta(days=2)), game__region__in=available_regions).distinct('game').order_by().only('game')
 	num=0
 	for player in games:
-		if cache.get('game/{}/{}/filling'.format(player.game.region, player.game.game_id)) is None:
+		if get_cached_value('game/{}/{}/filling'.format(player.game.region, player.game.game_id)) is None:
 			fill_game.apply_async(args=[player.game.pk,], priority=5)
 			num+=1
 			log_event('info', datetime.now(timezone('US/Pacific-New')), u'autofill added {} game(s) to the queue'.format(num))
@@ -37,18 +37,18 @@ def auto_fill():
 
 @task(ignore_result=True, priority=5)
 def challenger_fill():
-	server_list=cache.get('servers')
+	server_list=get_cached_value('servers')
 	available_regions=[next(value for value, name in REGIONS if name==region.upper()) for region in server_list.available_regions]
 	summoners=SummonerRating.objects.filter(tier=6, summoner__time_updated__lt=(datetime.now(timezone('UTC')) - timedelta(hours=5)), summoner__region__in=available_regions).select_related('summoner').only('summoner__id', 'summoner__region', 'summoner__account_id')
 	games=Player.objects.filter(game__fetched=False, game__time__gt=(datetime.now(timezone('UTC')) - timedelta(days=2)), game__region__in=available_regions, summoner__in=summoners).distinct('game').order_by().only('game')
 	summoner_num=0
 	game_num=0
 	for summoner in summoners:
-		if cache.get('summoner/{}/{}/updating'.format(summoner.summoner.region, summoner.summoner.account_id)) is None:
+		if get_cached_value('summoner/{}/{}/updating'.format(summoner.summoner.region, summoner.summoner.account_id)) is None:
 			summoner_auto_task.apply_async(args=[summoner.summoner.pk,], priority=6)
 			summoner_num+=1
 	for player in games:
-		if cache.get('game/{}/{}/filling'.format(player.game.region, player.game.game_id)) is None:
+		if get_cached_value('game/{}/{}/filling'.format(player.game.region, player.game.game_id)) is None:
 			fill_game.apply_async(args=[player.game.pk,], priority=6)
 			game_num+=1
 			log_event('info', datetime.now(timezone('US/Pacific-New')), u'challenger fill added {} summoner(s) and {} game(s) to the queue'.format(summoner_num, game_num))
@@ -64,7 +64,7 @@ def test_fill():
 @task(ignore_result=True, priority=1)
 def check_servers(**kwargs):
 	log_event('info', datetime.now(timezone('US/Pacific-New')), u'checking all servers')
-	server_list=cache.get('servers')
+	server_list=get_cached_value('servers')
 	server_list.check_servers(up=kwargs.get('up', True), down=kwargs.get('down', True), unknown=kwargs.get('unknown', True))
 
 
@@ -170,7 +170,7 @@ def generate_global_stats(key, qs, **kwargs):
 	stats=Stats(new_qs, **kwargs)
 	stats.generate_index()
 	log_event('info', datetime.now(timezone('US/Pacific-New')), u'generated, caching', {'type':'stats', 'args':kwargs})
-	cache.set(key, stats, 60 * 60 * 24)
+	set_cached_value(key, stats, 60 * 60 * 24)
 	cache.delete(key + '/generating')
 	log_event('info', datetime.now(timezone('US/Pacific-New')), u'finished generating global stats with key:{}'.format(key), {'type':'stats', 'args':kwargs})
 	return True

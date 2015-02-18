@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
-from django.core.cache import cache
 from django.db import models, transaction
 from django.utils.text import slugify
 from lol.core.servers import prepare_servers, REGIONS
-from lol.utils import log_event
+from lol.utils import log_event, get_cached_value, set_cached_value
 from pytz import timezone
 from time import sleep
 import requests
@@ -83,7 +82,7 @@ class Summoner(models.Model):
 	@property
 	def needs_update(self):
 		if self.time_updated<(datetime.now(timezone('UTC')) - timedelta(hours=1)):
-			updating=cache.get('summoner/{}/{}/updating'.format(self.region, self.account_id))
+			updating=get_cached_value('summoner/{}/{}/updating'.format(self.region, self.account_id))
 			if updating is not None:
 				return updating
 			else:
@@ -330,7 +329,7 @@ class ClientEmuError(Exception):
 
 
 def get_data(url, query, region='NA'):
-	servers=cache.get('servers')
+	servers=get_cached_value('servers')
 	server_data=servers.choose_server(region)
 	server=server_data['url']
 
