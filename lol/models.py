@@ -8,7 +8,10 @@ from time import sleep
 import requests
 import json
 
-MODES=((0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (7, 'One For All'), (8, 'Showdown'), (9, 'Hexakill'), (10, 'URF'), (11, 'Nightmare Bot'), (12, 'Ascension'), (99, '?'))
+MODES=(
+	(0, 'Custom'), (1, 'Bot'), (2, 'Normal'), (3, 'Solo'), (4, 'Premade'), (5, 'Team'), (6, 'Aram'), (7, 'One For All'), (8, 'Showdown'),
+	(9, 'Hexakill'), (10, 'URF'), (11, 'Nightmare Bot'), (12, 'Ascension'), (13, 'King Poro'), (99, '?')
+)
 MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Howling Abyss'), (4, 'Twisted Treeline'), (5, 'New Summoners Rift'), (9, '?'))
 # {'queue', 'mode', 'map'}
 GAME_TYPES={
@@ -280,7 +283,7 @@ class Player(models.Model):
 		ip=self.ip_earned - self.boosted_ip_earned if self.ip_earned - self.boosted_ip_earned<=145 else (self.ip_earned - self.boosted_ip_earned) - 150
 		if self.game.game_mode not in (2, 3, 4, 5):
 			return 0
-		if self.game.game_map in (1,4):  # classic, twisted treeline
+		if self.game.game_map in (1, 4, 5):  # classic, twisted treeline
 			base=18 if self.won else 16
 			mingain=2.26975458333333 if self.won else 1.38803291666667
 			max_length=55
@@ -417,6 +420,8 @@ def parse_games(games, summoner, full=False, current=None):
 				game.game_mode=11
 			elif ogame['queue_type']=='ASCENSION':
 				game.game_mode=12
+			elif ogame['queue_type']=='KING_PORO':
+				game.game_mode=13
 			elif ogame['queue_type']=='NONE' and ogame['game_type']=='CUSTOM_GAME':
 				game.game_mode=0
 			elif ogame['game_type']=='TUTORIAL_GAME':
