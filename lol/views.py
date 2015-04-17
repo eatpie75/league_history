@@ -280,7 +280,7 @@ def view_all_champions(request):
 	stats=get_cached_value(key)
 	if stats is None:
 		generating=True
-		if cache.get(key + '/generating') is None:
+		if get_cached_value(key + '/generating') is None:
 			set_cached_value(key + '/generating', True, 60 * 10)
 			generate_global_stats.delay(key, games.query, display_count=count.count(), champion_history=True, global_stats=True, index_items=False)
 	else:
