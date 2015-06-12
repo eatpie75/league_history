@@ -1,4 +1,4 @@
-{% extends 'base.html.j2' %}
+{% extends 'base.jinja' %}
 
 {% block title %}{{summoner.name}}{%- endblock %}
 
@@ -127,17 +127,4 @@
 					</div>
 				</div>
 			</div>
-			{{stats.index.friends}}
-			{%- if user.is_staff and rating.tier %}
-			<div class='row'>
-				<div class='col-md-12'>
-					<pre>
-						Rank:{{rating.rank}}
-						Wins:{{rating.wins}}
-						Losses:{{rating.losses}}
-						Miniseries:{Target:{{rating.miniseries_target}}, Wins:{{rating.miniseries_wins}}, Losses:{{rating.miniseries_losses}}}
-					</pre>
-				</div>
-			</div>
-			{%- endif %}
 {%- endblock %}

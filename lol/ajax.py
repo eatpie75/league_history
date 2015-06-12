@@ -28,7 +28,7 @@ def summoner_games(request, region, account_id):
 		games=paginator.page(1)
 	except EmptyPage:
 		games=paginator.page(paginator.num_pages)
-	return render_to_response('ajax/summoner_games.html.j2', {'summoner':summoner, 'games':games}, RequestContext(request), content_type='text/html')
+	return render_to_response('ajax/summoner_games.jinja', {'summoner':summoner, 'games':games}, RequestContext(request), content_type='text/html')
 
 
 def force_update(request, region, account_id):

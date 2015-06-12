@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from django.db import models, transaction
 from django.utils.text import slugify
+from lol.core.game_types import GAME_TYPES, RANKED_SOLO_QUEUE_TYPES, RANKED_GAME_TYPES
 from lol.core.servers import prepare_servers, REGIONS
 from lol.utils import log_event, get_cached_value, set_cached_value
 from pytz import timezone
@@ -14,14 +15,6 @@ MODES=(
 )
 MAPS=((0, 'Old Twisted Treeline'), (1, 'Summoners Rift'), (2, 'Dominion'), (3, 'Howling Abyss'), (4, 'Twisted Treeline'), (5, 'New Summoners Rift'), (9, '?'))
 # {'queue', 'mode', 'map'}
-GAME_TYPES={
-	'rankedpremade5x5':(4,1), 'rankedteam5x5':(5,1), 'rankedpremade3x3':(4,4), 'rankedteam3x3':(5,4),
-	'unranked':(2,1), 'odinunranked':(2,2),
-	'rankedsolo5x5':(3,1), 'coopvsai':(1,1),
-	'oneforall_5x5':(7,1),
-	'oldrankedpremade3x3':(4,0), 'oldrankedteam3x3':(5,0)}
-RANKED_SOLO_QUEUE_TYPES={'rankedpremade5x5':(5,1), 'rankedpremade3x3':(5,4), 'rankedsolo5x5':(3,1)}
-RANKED_GAME_TYPES=((4,1), (5,1), (4,4), (5,4), (3,1))
 TIERS=((1, 'BRONZE'), (2, 'SILVER'), (3, 'GOLD'), (4, 'PLATINUM'), (5, 'DIAMOND'), (6, 'CHALLENGER'))
 DIVISIONS=((1, 'I'), (2, 'II'), (3, 'III'), (4, 'IV'), (5, 'V'))
 

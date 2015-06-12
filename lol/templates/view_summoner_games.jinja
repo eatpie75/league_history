@@ -1,4 +1,4 @@
-{% extends 'base.html.j2' %}
+{% extends 'base.jinja' %}
 
 {% block post_scripts %}
 		{%- if debug %}
@@ -60,9 +60,9 @@
 			<div class='row'>
 				<div class='col-md-12' id='games'>
 					<div style='height:406px;'>
-						{% include 'macros/game_list_extended.html.j2' with context %}
+						{% include 'macros/game_list_extended.jinja' with context %}
 					</div>
-					{% from 'macros/paginator.html.j2' import summoner_games %}{{summoner_games(games)}}
+					{% from 'macros/paginator.jinja' import summoner_games %}{{summoner_games(games)}}
 				</div>
 			</div>
 {%- endblock %}

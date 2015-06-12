@@ -42,7 +42,7 @@ def search(request, name):
 			except:
 				print 'something broke'
 	summoners=Summoner.objects.filter(name__iexact=name).defer('masteries', 'runes')
-	return render_to_response('search.html.j2', {'summoners':summoners}, RequestContext(request))
+	return render_to_response('search.jinja', RequestContext(request).update(request, {'summoners':summoners}))
 
 
 # @cache_page(60 * 2)
@@ -60,7 +60,7 @@ def game_list(request):
 	else:
 		games=games[:50]
 		players=Player.objects.filter(game__pk__in=games).only('game', 'summoner').select_related('summoner__name', 'summoner__account_id', 'summoner__region', 'summoner__update_automatically', 'game__pk')
-	return render_to_response('game_list.html.j2', {'games':games, 'players':players}, RequestContext(request))
+	return render_to_response('game_list.jinja', RequestContext(request).update({'games':games, 'players':players}))
 
 
 # @cache_page(60 * 60)
@@ -143,7 +143,7 @@ def view_game(request, region, game_id):
 		metadata['avg_elo']=round((metadata['stats']['winner']['avg_elo'] + metadata['stats']['loser']['avg_elo']) / 2)
 	chart_data=players.values()
 	map(lambda x:x.update(gpm=round(x['gold'] / metadata['length'])) if metadata['length']>0 else x.update(gpm=0), chart_data)
-	return render_to_response('view_game.html.j2', {'game':game, 'players':players, 'metadata':metadata, 'update_in_queue':update_in_queue, 'chart_data':json.dumps(list(chart_data))}, RequestContext(request))
+	return render_to_response('view_game.jinja', RequestContext(request).update({'game':game, 'players':players, 'metadata':metadata, 'update_in_queue':update_in_queue, 'chart_data':json.dumps(list(chart_data))}))
 
 
 def view_summoner_redirect(request, region, account_id):
@@ -189,7 +189,7 @@ def view_summoner(request, region, account_id, slug):
 	# 	spectate.parse(result)
 	# 	set_cached_value('summoner/{}/{}/spectate'.format(summoner.region, summoner.account_id), spectate, 60*5)
 
-	return render_to_response('view_summoner.html.j2', {'games':games, 'summoner':summoner, 'rating':rating, 'stats':stats, 'update_in_queue':update_in_queue, 'spectate':None}, RequestContext(request))
+	return render_to_response('view_summoner.jinja', RequestContext(request).update({'games':games, 'summoner':summoner, 'rating':rating, 'stats':stats, 'update_in_queue':update_in_queue, 'spectate':None}))
 
 
 # @cache_page(60 * 15)
@@ -206,7 +206,7 @@ def view_summoner_games(request, region, account_id, slug):
 		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
 		set_cached_value('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60 * 60)
-	return render_to_response('view_summoner_games.html.j2', {'games':Paginator(games, 10).page(1), 'summoner':summoner, 'rating':rating, 'stats':stats}, RequestContext(request))
+	return render_to_response('view_summoner_games.jinja', RequestContext(request).update({'games':Paginator(games, 10).page(1), 'summoner':summoner, 'rating':rating, 'stats':stats}))
 
 
 # @cache_page(60 * 15)
@@ -224,7 +224,7 @@ def view_summoner_champions(request, region, account_id, slug):
 		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
 		set_cached_value('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60 * 60)
-	return render_to_response('view_summoner_champions.html.j2', {'games':games, 'summoner':summoner, 'rating':rating, 'stats':stats, 'champions':CHAMPIONS}, RequestContext(request))
+	return render_to_response('view_summoner_champions.jinja', RequestContext(request).update({'games':games, 'summoner':summoner, 'rating':rating, 'stats':stats, 'champions':CHAMPIONS}))
 
 
 def view_summoner_inventory(request, region, account_id, slug):
@@ -240,7 +240,7 @@ def view_summoner_inventory(request, region, account_id, slug):
 		stats=Stats(games, summoner_name=summoner.name, index_items=False)
 		stats.generate_index()
 		set_cached_value('summoner/{}/{}/stats'.format(summoner.region, summoner.account_id), stats, 60 * 60)
-	return render_to_response('view_summoner_inventory.html.j2', {'summoner':summoner, 'rating':rating, 'stats':stats}, RequestContext(request))
+	return render_to_response('view_summoner_inventory.jinja', {'summoner':summoner, 'rating':rating, 'stats':stats}, RequestContext(request))
 
 
 def view_summoner_specific_champion(request, region, account_id, slug, champion, champion_slug):
@@ -285,7 +285,7 @@ def view_all_champions(request):
 			generate_global_stats.delay(key, games.query, display_count=count.count(), champion_history=True, global_stats=True, index_items=False)
 	else:
 		generating=False
-	return render_to_response('view_all_champions.html.j2', {'stats':stats, 'champions':CHAMPIONS, 'form':form, 'generating':generating}, RequestContext(request))
+	return render_to_response('view_all_champions.jinja', {'stats':stats, 'champions':CHAMPIONS, 'form':form, 'generating':generating}, RequestContext(request))
 
 
 # @cache_page(60 * 60)
@@ -315,7 +315,7 @@ def view_champion(request, champion_id, champion_slug):
 			generate_global_stats.delay(key, games.query, champion=champion_id, champion_history=True, index_items=True)
 	else:
 		generating=False
-	return render_to_response('view_champion.html.j2', {'stats':stats, 'champion_id':champion_id, 'champion':CHAMPIONS[champion_id], 'items':ITEMS, 'form':form, 'generating':generating}, RequestContext(request))
+	return render_to_response('view_champion.jinja', {'stats':stats, 'champion_id':champion_id, 'champion':CHAMPIONS[champion_id], 'items':ITEMS, 'form':form, 'generating':generating}, RequestContext(request))
 
 
 # @cache_page(60 * 60)
@@ -345,7 +345,7 @@ def view_champion_items(request, champion_id, champion_slug):
 			generate_global_stats.delay(key, games.query, champion=champion_id, champion_history=True, index_items=True)
 	else:
 		generating=False
-	return render_to_response('view_champion_items.html.j2', {'stats':stats, 'champion_id':champion_id, 'champion':CHAMPIONS[champion_id], 'items':ITEMS, 'form':form, 'generating':generating}, RequestContext(request))
+	return render_to_response('view_champion_items.jinja', {'stats':stats, 'champion_id':champion_id, 'champion':CHAMPIONS[champion_id], 'items':ITEMS, 'form':form, 'generating':generating}, RequestContext(request))
 
 
 @user_passes_test(lambda u:u.is_superuser)
@@ -367,7 +367,7 @@ def run_auto(request):
 	else:
 		for summoner in summoners:
 			summoner_auto_task.delay(summoner.pk)
-	return render_to_response('run_auto.html.j2', {'summoners':summoners}, RequestContext(request))
+	return render_to_response('run_auto.jinja', {'summoners':summoners}, RequestContext(request))
 
 
 @user_passes_test(lambda u:u.is_superuser)
@@ -378,7 +378,7 @@ def client_status(request):
 	server_list=get_cached_value('servers')
 	unfetched_games=Player.objects.filter(summoner__update_automatically=True, game__fetched=False, game__time__gt=(datetime.utcnow().replace(tzinfo=timezone('UTC')) - timedelta(days=2))).distinct('game').only('pk').count()
 	event_list=EventList(get_cached_value('event_list')).event_list
-	return render_to_response('client_status.html.j2', {'status':server_list.servers, 'unfetched_games':unfetched_games, 'event_list':event_list}, RequestContext(request))
+	return render_to_response('client_status.jinja', {'status':server_list.servers, 'unfetched_games':unfetched_games, 'event_list':event_list}, RequestContext(request))
 
 
 @user_passes_test(lambda u:u.is_superuser)
@@ -393,4 +393,4 @@ def test_items(request):
 		# print(wat.summoner.id, wat.summoner.region)
 		pass
 
-	return render_to_response('test_items.html.j2', {'items':ITEMS}, RequestContext(request))
+	return render_to_response('test_items.jinja', {'items':ITEMS}, RequestContext(request))
